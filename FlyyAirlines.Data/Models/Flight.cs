@@ -13,10 +13,10 @@ namespace FlyyAirlines.Models
             Reservations = new HashSet<Reservation>();
         }
         [Key]
-        public int FlightsId { get; set; }
+        public Guid FlightsId { get; set; }
         public string FlightName { get; set; }
-        public string Country { get; set; }
-        public string City { get; set; }
+        public string[] From { get; set; }
+        public string[] To { get; set; }
         public DateTime DepartureDate { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }

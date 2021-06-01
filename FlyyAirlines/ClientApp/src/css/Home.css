@@ -1,0 +1,35 @@
+﻿
+.newsCard {
+    width: 250px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+.flexNewsList {
+    list-style-type:none;
+    display:flex;
+    font-size: 14px;
+    text-align : center !important; 
+    justify-content: space-between;
+    margin-top:15px;
+}
+
+.quickReservations {
+    background: purple;
+    padding: 15px;
+    width: 210px;
+    border-radius: 15px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.quickReservations form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.quickReservations form input {
+    width:180px;
+}
+
+.searchDiv {
+    background-image: url("../images/airplane.jpg");
+    width: 100%;
+}

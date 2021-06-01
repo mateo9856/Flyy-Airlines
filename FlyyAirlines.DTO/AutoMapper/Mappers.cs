@@ -7,10 +7,10 @@ namespace FlyyAirlines.DTO.AutoMapper
     {
         public Mappers()
         {
-            CreateMap<User, UserDTO>();
             CreateMap<Reservation, ReservationDTO>();
             CreateMap<Flight, FlightDTO>();
-            CreateMap<Employee, EmployeeDTO>();
+            CreateMap<Employee, EmployeeAddDTO>();
+            
         }
     }
 }

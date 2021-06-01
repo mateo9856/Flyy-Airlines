@@ -1,9 +1,8 @@
 ﻿using FlyyAirlines.Models;
+using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.FlightsAirplanes;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -14,22 +13,34 @@ namespace FlyyAirlines.Controllers
     public class FlightsController : ControllerBase
     {
         private readonly IAirplanesFlightsData _planesData;
-        public FlightsController(IAirplanesFlightsData planesData)
+        private readonly IMainRepository<Flight> _mainPlanes;
+        private readonly IMainRepository<Airplane> _mainAirplanes;
+        public FlightsController(IAirplanesFlightsData planesData, IMainRepository<Flight> mainPlanes, IMainRepository<Airplane> mainAirplanes)
         {
             _planesData = planesData;
+            _mainPlanes = mainPlanes;
+            _mainAirplanes = mainAirplanes;
         }
-        [Route("AirplanesFlights")]
+        [Route("GetFlights")]
         [HttpGet]
-        public ActionResult GetAirplanesAndFlights()
+        public IActionResult GetFlights()
         {
-            var GetAll = _planesData.GetAll();
-            return Ok(GetAll);
+            var GetFlights = _mainPlanes.GetAll();
+            return Ok(GetFlights);
+        }
+
+        [Route("GetAirplanes")]
+        [HttpGet]
+        public IActionResult GetAirplanes()
+        {
+            var GetAirplanes = _mainAirplanes.GetAll();
+            return Ok(GetAirplanes);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetFlight(int id)
+        public async Task<ActionResult> GetFlight(Guid id)
         {
-            var GetFlight = await _planesData.GetFlight(id);
+            var GetFlight = await _mainPlanes.Get(id);
             if(GetFlight == null)
             {
                 return NotFound();
@@ -38,9 +49,9 @@ namespace FlyyAirlines.Controllers
         }
         [Route("Airplane")]
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetAirplane(int id)
+        public async Task<ActionResult> GetAirplane(Guid id)
         {
-            var GetAirplane = await _planesData.GetAirplane(id);
+            var GetAirplane = await _mainAirplanes.Get(id);
             if (GetAirplane == null)
             {
                 return NotFound();
@@ -48,38 +59,47 @@ namespace FlyyAirlines.Controllers
             return Ok(GetAirplane);
         }
 
+        [Route("Airplane")]
         [HttpPost]
-        public ActionResult Post([FromBody] Flight flight)
+        public IActionResult AddPlane(Airplane airplane)
+        {
+            if(airplane == null)
+            {
+                return BadRequest();
+            }
+            _mainAirplanes.Add(airplane);
+            return CreatedAtAction("Get", new { id = airplane.AirplaneId }, airplane);
+        }
+
+
+        [HttpPost]
+        public IActionResult AddFlight([FromBody] Flight flight)
         {
             if(flight == null)
             {
                 return BadRequest();
             }
-            var AddFlight = _planesData.AddFlight(flight);
+            _mainPlanes.Add(flight);
             return CreatedAtAction("Get", new { id = flight.FlightsId }, flight);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, Flight flight)
+        public IActionResult Put(Guid id, Flight flight)
         {
             if (id != flight.FlightsId)
             {
                 return BadRequest();
             }
 
-            var Edit = await _planesData.EditFlight(flight);
-            if(Edit == null)
-            {
-                return BadRequest();
-            }
+            _mainPlanes.Update(flight);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteFlight(Guid id)
         {
-            var Flight = await _planesData.GetFlight(id);
-            await _planesData.RemoveFlight(Flight);
+            var Flight = await _mainPlanes.Get(id);
+            await _mainPlanes.Delete(Flight);
             return NoContent();
         }
     }

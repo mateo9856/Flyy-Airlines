@@ -1,11 +1,8 @@
 ﻿using FlyyAirlines.Models;
-using FlyyAirlines.Repository.Users;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using FlyyAirlines.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -16,62 +13,48 @@ namespace FlyyAirlines.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserData _userData;
-        public UsersController(IUserData userData)
+        private readonly IMainRepository<User> _userData;
+        public UsersController(IMainRepository<User> userData)
         {
             _userData = userData;
         }
-        
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult> GetUsers()
+        public IActionResult GetUsers()
         {
             try
             {
-                var GetUsers = await _userData.GetUsers();
+                var GetUsers = _userData.GetAll();
                 return Ok(GetUsers);
             } catch(Exception)
             {
                 return BadRequest();
             }
         }
-
+        [Authorize]
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public ActionResult Get(string id)
         {
             try
             {
-                var GetUser = _userData.GetUser(id);
+                var GetUser = _userData.Get(id);
                 return Ok(GetUser);
             } catch(Exception)
             {
                 return NotFound();
             }
         }
-
-        [HttpPost]
-        public async Task<ActionResult<User>> Post([FromBody] User user)
-        {
-            var AddUser = await _userData.RegisterUser(user);
-            if(AddUser == true)
-            {
-                return CreatedAtAction("Get", new { id = user.Id }, user);
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
+        
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
-            var getUser = _userData.GetUser(id);
+            var getUser = await _userData.Get(id);
             if(getUser == null)
             {
                 return NotFound();
             }
-            await _userData.RemoveUser(getUser);
+            await _userData.Delete(getUser);
             return NoContent();
         }
     }

@@ -14,11 +14,12 @@ namespace FlyyAirlines.Models
         [Key]
         public override string Id { get; set; }
         public override string UserName { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
         public override string Email { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public bool IsEmployee { get; set; }
-
         public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }

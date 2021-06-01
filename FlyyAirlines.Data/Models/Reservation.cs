@@ -9,7 +9,7 @@ namespace FlyyAirlines.Models
     public class Reservation
     {
         [Key]
-        public int ReservationId { get; set; }
+        public Guid ReservationId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public int PersonIdentify { get; set; }

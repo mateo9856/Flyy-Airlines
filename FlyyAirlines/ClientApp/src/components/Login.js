@@ -1,34 +1,69 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
+import { withRouter } from "react-router-dom";
 //informacje jak wysyla sie fetcha - nie trzeba podawac localhost itp wewnatrz metody a tylko sciezke dalsza czyli np. ('api/Users')
-export class Login extends Component {
+import '../css/Login.css';
+import Auth from "../Auth";
+import Cookies from 'js-cookie';
+class Login extends PureComponent {
 
   constructor(props) {
     super(props);
       this.state = {
           email: "",
-          password: ""
+          password: "",
+          loginSuccesful: false,
       };
-  }
-
-    handleSubmit = (e) => {
-        const sendValues = {
-            email: this.state.email,
-            password: this.state.password
+    }
+    componentDidMount() {
+        console.log("Mounted");
+    }
+    componentDidUpdate() {
+        console.log("Updated");
+        if (this.state.loginSuccesful) {
+            console.log(this.state.loginSuccesful)
+            this.RedirectToHome();
         }
-        e.preventDefault();
-        console.log("test");
+    }
+
+        request(val) {
         fetch('api/account/login', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(sendValues)
+            body: JSON.stringify(val)
         })
             .then(res => res.json())
-            .then(res => console.log(res));
+            .then(res => {
+                localStorage.setItem('login', JSON.stringify(res))
+                Auth.login();
+                Auth.getUserRole();
+                this.setState({
+                    loginSuccesful: true
+                })
+            }).catch(err => console.log(err))
+            
     }
 
+     handleSubmit = (e) => {
+        e.preventDefault();
+        const sendValues = {
+            email: this.state.email,
+            password: this.state.password
+        }
+         this.request(sendValues);
+    }
+
+    RedirectToHome = () => {
+        Auth.login();
+        this.props.handleLogin(true);
+        const { history } = this.props;
+        history.push('/');
+        console.log(Auth.authenticated)
+        this.props.history.push("/");
+    }
+    
     WriteValue = (e) => {
         console.log(e.target.name);
         console.log(e.target.value);
@@ -37,21 +72,23 @@ export class Login extends Component {
         })
     }
 
-  render() {
+    render() {
+        const { history } = this.props;
       return (
-          <>
-              <form onSubmit={this.handleSubmit}>
+          <div className="form-box">
+              <form className = "registerLoginForm" onSubmit={this.handleSubmit}>
                   <label>
-                      <b>Login</b>
-                      <input type="text" name="email" value={this.state.email} onChange={this.WriteValue} />
+
+                      <input type="text" placeholder="E-mail" className="input-field" name="email" value={this.state.email} onChange={this.WriteValue} />
                   </label>
                   <label>
-                      <b>Haslo</b>
-                      <input type="text" name="password" value={this.state.password} onChange={this.WriteValue} />
+                      
+                      <input type="text" placeholder="Password" className = "input-field" name="password" value={this.state.password} onChange={this.WriteValue} />
                   </label>
-                  <input type="submit" value="Zaloguj!" onSubmit={this.handleSubmit} />
+                  <input type="submit" className="submit-btn" value="Zaloguj!" onSubmit={this.handleSubmit} />
               </form>
-          </>
+          </div>
         );
   }
 }
+export const Log = withRouter(Login);

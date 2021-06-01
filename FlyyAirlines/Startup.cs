@@ -1,20 +1,21 @@
 using AutoMapper;
 using FlyyAirlines.DTO.AutoMapper;
 using FlyyAirlines.Models;
+using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.Employees;
 using FlyyAirlines.Repository.FlightsAirplanes;
 using FlyyAirlines.Repository.Reservations;
-using FlyyAirlines.Repository.Users;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 
 namespace FlyyAirlines
 {
@@ -38,18 +39,35 @@ namespace FlyyAirlines
             }).AddEntityFrameworkStores<AppDBContext>()
             .AddDefaultTokenProviders();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    options.SlidingExpiration = true;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                });
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JWT:ValidAudience"],
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                };
+            });
 
             services.AddControllers();
             services.AddDbContext<AppDBContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("FlyyAirlines"), b => b.MigrationsAssembly("FlyyAirlines")));
             
-            services.AddScoped<IUserData, UserData>();
+            services.AddScoped<IMainRepository<User>, MainRepository<User>>();
+            services.AddScoped<IMainRepository<Reservation>, MainRepository<Reservation>>();
+            services.AddScoped<IMainRepository<Flight>, MainRepository<Flight>>();
+            services.AddScoped<IMainRepository<Airplane>, MainRepository<Airplane>>();
+            services.AddScoped<IMainRepository<Employee>, MainRepository<Employee>>();
             services.AddScoped<IReserveData, ReserveData>();
             services.AddScoped<IAirplanesFlightsData, AirplanesFlightsData>();
             services.AddScoped<IEmployeeData, EmployeeData>();
@@ -59,6 +77,11 @@ namespace FlyyAirlines
             {
                 configuration.RootPath = "ClientApp/build";
             });
+        }
+
+        private void MainRepository<T>()
+        {
+            throw new NotImplementedException();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
@@ -81,21 +104,21 @@ namespace FlyyAirlines
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
-            {
+            {//tymczasowy config samego API rozbudowaæ na nowo
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseReactDevelopmentServer(npmScript: "start");
+            //    }
+            //});
             serviceProvider.GetRequiredService<AppDBContext>().Database.EnsureCreated();
         }
     }

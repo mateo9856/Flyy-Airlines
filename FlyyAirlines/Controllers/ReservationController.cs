@@ -1,75 +1,60 @@
 ﻿using FlyyAirlines.Models;
+using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.Reservations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 
 namespace FlyyAirlines.Controllers
 {
+    [Authorize(Roles = "User")]
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationController : ControllerBase
     {
         private readonly IReserveData _reserveData;
-        public ReservationController(IReserveData reserveData)
+        private readonly IMainRepository<Reservation> _mainReserves;
+        public ReservationController(IReserveData reserveData, IMainRepository<Reservation> mainRepository)
         {
             _reserveData = reserveData;
+            _mainReserves = mainRepository;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()//wszystkie rezerwacje usera(po autoryzacji!)
-        {
-            return new string[] { "value1", "value2" };
-        }
-
+        [Authorize(Roles = "User")]
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> Get(Guid id)
         {
-            var GetReservation = await _reserveData.GetReservation(id);
+            var GetReservation = await _mainReserves.Get(id);
             return Ok(GetReservation);
         }
 
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] Reservation reservation)
         {
-            var AddReserve = _reserveData.AddReservation(reservation);
-            if (AddReserve != null)
-            {
-                return CreatedAtAction("Get", new { id = reservation.ReservationId }, reservation);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            await _mainReserves.Add(reservation);
+            return CreatedAtAction("Get", new { id = reservation.ReservationId }, reservation);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, Reservation reservation)
+        public IActionResult Put(Guid id, Reservation reservation)
         {
             if (id != reservation.ReservationId)
             {
                 return BadRequest();
             }
 
-            var Edit = await _reserveData.EditReserve(reservation);
-            if(Edit == true)
-            {
-                return NoContent();
-            } else
-            {
-                return BadRequest();
-            }
+             _mainReserves.Update(reservation);
+            return NoContent();
             
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            var Reserve = await _reserveData.GetReservation(id);
-            await _reserveData.RemoveReservation(Reserve);
+            var Reserve = await _mainReserves.Get(id);
+            await _mainReserves.Delete(Reserve);
             return NoContent();
         }
     }

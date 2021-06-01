@@ -1,9 +1,8 @@
 ﻿using FlyyAirlines.Models;
+using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.Employees;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
@@ -13,21 +12,24 @@ namespace FlyyAirlines.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeData _employeeData;
-        public EmployeesController(IEmployeeData employeeData)
+        private readonly IMainRepository<Employee> _mainEmployee;
+        public EmployeesController(IEmployeeData employeeData, IMainRepository<Employee> mainEmployee)
         {
             _employeeData = employeeData;
+            _mainEmployee = mainEmployee;
         }
 
         [HttpGet]
-        public ActionResult GetEmployees()
+        public IActionResult GetEmployees()
         {
-            return Ok(_employeeData.GetEmployees());
+            var GetAll = _mainEmployee.GetAll();
+            return Ok(GetAll);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetEmployee(int id)
+        public async Task<ActionResult> GetEmployee(Guid id)
         {
-            var GetEmployee = await _employeeData.GetEmployee(id);
+            var GetEmployee = await _mainEmployee.Get(id);
             return Ok(GetEmployee);
         }
 
@@ -38,27 +40,27 @@ namespace FlyyAirlines.Controllers
             {
                 return BadRequest();
             }
-            await _employeeData.AddEmployee(employee);
+            await _mainEmployee.Add(employee);
             return CreatedAtAction("Get", new { id = employee.EmployeeId }, employee);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Employee employee)
+        public IActionResult Put(Guid id, [FromBody] Employee employee)
         {
             if (id != employee.EmployeeId)
             {
                 return BadRequest();
             }
 
-            await _employeeData.UpdateData(employee);
+            _mainEmployee.Update(employee);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            var Emp = await _employeeData.GetEmployee(id);
-            await _employeeData.RemoveEmployee(Emp);
+            var Emp = await _mainEmployee.Get(id);
+            await _mainEmployee.Delete(Emp);
             return NoContent();
         }
     }

@@ -1,16 +1,18 @@
 ﻿using FlyyAirlines.Data.Models;
 using FlyyAirlines.DTO;
 using FlyyAirlines.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+
 
 namespace FlyyAirlines.Controllers
 {
@@ -22,10 +24,16 @@ namespace FlyyAirlines.Controllers
 
         private readonly SignInManager<User> _signInManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        private readonly AppDBContext _dbContext;
+
+        private readonly IConfiguration _configuration;
+
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, AppDBContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _configuration = configuration;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
@@ -54,11 +62,11 @@ namespace FlyyAirlines.Controllers
                 Email = userRegisterDto.Email,
                 UserName = userRegisterDto.UserName,
                 Password = userRegisterDto.Password,
-                IsEmployee = false
+                Role = Roles.User
             };
 
             var result = await _userManager.CreateAsync(newUser, userRegisterDto.Password);
-            //przerobic baze zeby user nie mial relacji z employees
+            
             if(result.Succeeded)
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
@@ -77,21 +85,30 @@ namespace FlyyAirlines.Controllers
 
         [Route("addEmployee")]
         [HttpPost]
-        public async Task<IActionResult> RegisterEmployee([FromBody] UserRegisterDTO userRegisterDto)
+        public async Task<IActionResult> RegisterEmployee([FromBody] EmployeeAddDTO userRegisterDto)
         {
             var userExists = await _userManager.FindByEmailAsync(userRegisterDto.Email);
             if (userExists != null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { StatusCode = "Error", Message = "User already exists!" });
             }
-
+            string newId = Guid.NewGuid().ToString();
             var newUser = new User()
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = newId,
                 Email = userRegisterDto.Email,
                 UserName = userRegisterDto.UserName,
                 Password = userRegisterDto.Password,
-                IsEmployee = true
+                Role = Roles.Employee
+            };
+            var newEmployee = new Employee()
+            {
+                User = newUser,
+                Name = userRegisterDto.Name,
+                Surname = userRegisterDto.Surname,
+                WorkPosition = userRegisterDto.WorkPosition,
+                EmployeeId = Guid.NewGuid()
+                
             };
 
             var result = await _userManager.CreateAsync(newUser, userRegisterDto.Password);
@@ -102,6 +119,10 @@ namespace FlyyAirlines.Controllers
                 await _userManager.ConfirmEmailAsync(newUser, token);
 
                 await _userManager.AddToRoleAsync(newUser, Roles.Employee);
+
+                await _dbContext.AddAsync(newEmployee);
+
+                await _dbContext.SaveChangesAsync();
 
                 return Ok(new ResponseDTO { StatusCode = "Success", Message = "Employee Registration Succesful" });
             }
@@ -127,7 +148,8 @@ namespace FlyyAirlines.Controllers
                 Email = userRegisterDto.Email,
                 UserName = userRegisterDto.UserName,
                 Password = userRegisterDto.Password,
-                IsEmployee = true
+                Role = Roles.Admin
+                
             };
 
             var result = await _userManager.CreateAsync(newUser, userRegisterDto.Password);
@@ -149,46 +171,46 @@ namespace FlyyAirlines.Controllers
 
         [Route("login")]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDto)
-        {//mechanika działa trzeba ja zmodelować na lepsza i pamietac o przerobieniu bazy
-            var foundUser = await _userManager.FindByEmailAsync(userLoginDto.Email);
-            if(foundUser == null)
-            {
-                return new BadRequestObjectResult(new { Message = "Login failed" });
-            }
-            var result = await _signInManager.PasswordSignInAsync(foundUser, userLoginDto.Password, true, false);
-            if(result.Succeeded)
-            {
-                Claim[] claims = new Claim[]
-                {
-                    new Claim(ClaimTypes.Email, foundUser.Email),
-                    new Claim(ClaimTypes.Name, foundUser.UserName)
-                };
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                return Ok(new ResponseDTO {StatusCode="Success", Message = "Log in succesful" });
-            }
-            else
-            {
-                return new BadRequestObjectResult(new { Message = "Login failed" });
-            }
-        }
 
-        [HttpPost]
-        [Route("logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
         {
-            if(HttpContext.Request.Cookies.Count > 0)
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var siteCookies = HttpContext.Request.Cookies.Where(c => c.Key.Contains(".AspNetCore.") || c.Key.Contains("Microsoft.Authentication"));
-                foreach (var cookie in siteCookies)
-                {
-                    Response.Cookies.Delete(cookie.Key);
-                }
-            }
+                var userRoles = await _userManager.GetRolesAsync(user);
 
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Ok(new ResponseDTO { StatusCode = "Success", Message = "Log out succesful" });
+                var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
+                    expires: DateTime.Now.AddHours(3),
+                    claims: authClaims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                    );
+
+                return Ok(new
+                {
+                    id = user.Id,
+                    user = user.UserName,
+                    userRole = userRoles[0],
+                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    expiration = token.ValidTo
+                });
+            }
+            return Unauthorized();
         }
+
     }
 }
