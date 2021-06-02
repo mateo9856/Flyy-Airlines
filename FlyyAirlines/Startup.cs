@@ -69,6 +69,7 @@ namespace FlyyAirlines
             services.AddScoped<IMainRepository<Airplane>, MainRepository<Airplane>>();
             services.AddScoped<IMainRepository<Employee>, MainRepository<Employee>>();
             services.AddScoped<IReserveData, ReserveData>();
+            services.AddScoped<IAirplanesFlightsData, AirplanesFlightsData>();
             services.AddScoped<IEmployeeData, EmployeeData>();
             services.AddSingleton(mapper);
             
