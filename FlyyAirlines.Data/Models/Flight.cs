@@ -15,8 +15,10 @@ namespace FlyyAirlines.Models
         [Key]
         public Guid FlightsId { get; set; }
         public string FlightName { get; set; }
-        public string[] From { get; set; }
-        public string[] To { get; set; }
+        public string FromCountry { get; set; }
+        public string FromCity { get; set; }
+        public string ToCountry { get; set; }
+        public string ToCity { get; set; }
         public DateTime DepartureDate { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }
