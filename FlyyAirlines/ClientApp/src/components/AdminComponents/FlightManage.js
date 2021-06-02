@@ -22,7 +22,6 @@ const FlightManage = (props) => {
         if (props.selectedManage === "remove") {
             GetFlights();
         } else if (props.selectedManage === "addFlightPlane") {
-            //implementacja airplanes i formularz select dobierający samolot do wylotu i fetch na airplaneflight(mozliwa nowa metoda do api)
             GetAirplanes();
             GetFlights();
             setAirplaneDatas("3");
@@ -40,7 +39,7 @@ const FlightManage = (props) => {
         console.log(airplanesList);
     }
 
-    const AddFlight = (e) => {//działa dopracować godzine i zrobic usuwanie jeszcze dzis
+    const AddFlight = (e) => {
         e.preventDefault();
         fetch('api/Flights', {
             method: 'POST',
@@ -68,7 +67,6 @@ const FlightManage = (props) => {
     }
 
     const SubmitRemoveFlight = () => {
-        //po zaimplementowaniu checkboxów
     }
 
     const AddAirplane = (e) => {
@@ -109,7 +107,7 @@ const FlightManage = (props) => {
         const filterAirplane = airplanesList.filter(filter => filter.airplaneId === parseInt(airplaneDatas, 10));
         const postData = {
             flightsId: filterFlight[0].flightsId,
-            airplaneId: filterAirplane[0].airplaneId,//projekt do przemodelowania!!!! na zaliczenie napisac sam front od jutra rozpoczac prace nad cala struktura napisac prostym sposobem samym js
+            airplaneId: filterAirplane[0].airplaneId,
         }
         fetch('api/Flights/AirplaneFlight', {
             method: 'POST',

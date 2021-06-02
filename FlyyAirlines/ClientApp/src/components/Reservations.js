@@ -59,7 +59,7 @@ export class Reservations extends Component {
             this.setState({
                 reservationForm: {
                     ...this.state.reservationForm,
-                    [e.target.name]: e.target.value//działa dodać samoloty i loty z relacjami by pobierane były ilości miejsc w samolotach!
+                    [e.target.name]: e.target.value
                 }  
             })
         }

@@ -23,7 +23,7 @@ export class NavMenu extends Component {
         })
     }
 
-    componentDidUpdate() {//nie updatuje stanu nava i pogrzebac w app
+    componentDidUpdate() {
         console.log("NavMenu updated")
         if (this.state.logged != Auth.authenticated) {
             this.setState({

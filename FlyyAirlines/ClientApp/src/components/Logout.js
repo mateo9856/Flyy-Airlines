@@ -7,10 +7,9 @@ export const Logout = (props) => {
     useEffect(() => {
         Auth.logout();
         props.handleLogout(false);
-        history.push('/');//WYLOGOWANIE DZIAŁA POPRAWIĆ TO Z LOGINEM!!!
+        history.push('/');
     }, [])
 
-    //zaktualizowac caly komponent app!
 
     return (
         <>

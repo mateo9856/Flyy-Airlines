@@ -69,7 +69,6 @@ export class Home extends Component {
                           </label>
                           <label htmlFor="destiantion">
                                   <input type="text" onChange={this.handleChange} placeholder="Destination" value={this.state.destinationValue} />
-                                  {/*Zmienie tu na selecta i option po dodaniu lotnisk*/}
                           </label>
                           <label htmlFor="departure">
                               <input type="date" placeholder="Departure date" value={this.state.departureDate} />
@@ -81,7 +80,6 @@ export class Home extends Component {
               <section className="bestFlights">
                   <h4 style={{ marginTop: "15px" }}>Najpopularniejsze loty</h4>
                   <div className="bestFlightsFlex">
-                      {/*Implementacja wartoœci tablicy z 3 najpopularniejszymi wylotami!  Pobraæ z API*/ }
                   </div>
               </section>
               <section className="moreInformations">
@@ -97,7 +95,6 @@ export class Home extends Component {
                           ))}
                       </ul>
                   </div>
-                  {/*Implementacja 3 artyku³ów u¿ywaj¹c mapa*/ }
               </section>
           </div>
     );

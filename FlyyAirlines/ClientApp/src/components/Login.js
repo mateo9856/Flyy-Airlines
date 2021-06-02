@@ -1,6 +1,5 @@
 import React, { Component, PureComponent } from 'react';
 import { withRouter } from "react-router-dom";
-//informacje jak wysyla sie fetcha - nie trzeba podawac localhost itp wewnatrz metody a tylko sciezke dalsza czyli np. ('api/Users')
 import '../css/Login.css';
 import Auth from "../Auth";
 import Cookies from 'js-cookie';

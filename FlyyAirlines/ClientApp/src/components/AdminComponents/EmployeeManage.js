@@ -40,7 +40,7 @@ const EmployeeManage = (props) => {
                 .then(response => response.json())
                 .then(() => {
                     alert("Umysłowy dodany");
-                    props.exit();//dodac jeszcze usuwanie userów z tabeli AspNetUsers
+                    props.exit();
                 })
                 .catch(error => console.error('Unable to add item.', error));
             return;
