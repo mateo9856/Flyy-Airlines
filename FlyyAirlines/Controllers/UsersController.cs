@@ -18,7 +18,7 @@ namespace FlyyAirlines.Controllers
         {
             _userData = userData;
         }
-        [Authorize(Roles = "Admin")]//wywala forbidden
+        [Authorize(Roles = "Admin")]//zwraca forbidden
         [Authorize(Roles = "SuperAdmin")]
         [HttpGet]
         public IActionResult GetUsers()
