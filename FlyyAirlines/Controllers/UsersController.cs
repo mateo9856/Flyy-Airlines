@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace FlyyAirlines.Controllers
 {
     [Authorize]
@@ -44,7 +42,20 @@ namespace FlyyAirlines.Controllers
                 return NotFound();
             }
         }
-        
+
+        [Authorize(Roles = "Admin, SuperAdmin")]//sprobowac zmodyfikowac to w account 
+        [HttpPut("{id}")]
+        public IActionResult Put(string id, User user)
+        {
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            _userData.Update(user);
+            return NoContent();
+        }
+
         [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id)
