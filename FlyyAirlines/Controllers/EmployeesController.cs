@@ -1,12 +1,14 @@
 ﻿using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.Employees;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
@@ -19,6 +21,7 @@ namespace FlyyAirlines.Controllers
             _mainEmployee = mainEmployee;
         }
 
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpGet]
         public IActionResult GetEmployees()
         {
@@ -33,6 +36,7 @@ namespace FlyyAirlines.Controllers
             return Ok(GetEmployee);
         }
 
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] Employee employee)
         {
@@ -44,6 +48,7 @@ namespace FlyyAirlines.Controllers
             return CreatedAtAction("Get", new { id = employee.EmployeeId }, employee);
         }
 
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
         public IActionResult Put(Guid id, [FromBody] Employee employee)
         {
@@ -56,6 +61,7 @@ namespace FlyyAirlines.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {

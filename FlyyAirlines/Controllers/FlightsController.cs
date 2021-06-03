@@ -1,6 +1,7 @@
 ﻿using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.FlightsAirplanes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FlightsController : ControllerBase
@@ -21,6 +23,8 @@ namespace FlyyAirlines.Controllers
             _mainPlanes = mainPlanes;
             _mainAirplanes = mainAirplanes;
         }
+
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [Route("GetFlights")]
         [HttpGet]
         public IActionResult GetFlights()
@@ -29,6 +33,7 @@ namespace FlyyAirlines.Controllers
             return Ok(GetFlights);
         }
 
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [Route("GetAirplanes")]
         [HttpGet]
         public IActionResult GetAirplanes()
@@ -59,6 +64,7 @@ namespace FlyyAirlines.Controllers
             return Ok(GetAirplane);
         }
 
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [Route("Airplane")]
         [HttpPost]
         public IActionResult AddPlane(Airplane airplane)
@@ -71,7 +77,7 @@ namespace FlyyAirlines.Controllers
             return CreatedAtAction("Get", new { id = airplane.AirplaneId }, airplane);
         }
 
-
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost]
         public IActionResult AddFlight([FromBody] Flight flight)
         {
@@ -83,6 +89,7 @@ namespace FlyyAirlines.Controllers
             return CreatedAtAction("Get", new { id = flight.FlightsId }, flight);
         }
 
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
         public IActionResult Put(Guid id, Flight flight)
         {
@@ -95,6 +102,7 @@ namespace FlyyAirlines.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFlight(Guid id)
         {

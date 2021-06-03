@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -31,7 +32,6 @@ namespace FlyyAirlines.Controllers
                 return BadRequest();
             }
         }
-        [Authorize]
         [HttpGet("{id}")]
         public ActionResult Get(string id)
         {
@@ -45,7 +45,7 @@ namespace FlyyAirlines.Controllers
             }
         }
         
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id)
         {

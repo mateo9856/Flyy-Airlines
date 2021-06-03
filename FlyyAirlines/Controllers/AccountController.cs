@@ -83,7 +83,7 @@ namespace FlyyAirlines.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { StatusCode = "Error", Message = "User creation failed! Please check user details and try again." });
             }
         }
-
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [Route("addEmployee")]
         [HttpPost]
         public async Task<IActionResult> RegisterEmployee([FromBody] EmployeeAddDTO userRegisterDto)
