@@ -18,7 +18,8 @@ namespace FlyyAirlines.Controllers
         {
             _userData = userData;
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]//wywala forbidden
+        [Authorize(Roles = "SuperAdmin")]
         [HttpGet]
         public IActionResult GetUsers()
         {
