@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../AppContext";
-import Users from "../models/Users";
+
 import "../css/Login.css";
 import { useHistory } from "react-router";
 import FetchDatas from "../FetchDatas";

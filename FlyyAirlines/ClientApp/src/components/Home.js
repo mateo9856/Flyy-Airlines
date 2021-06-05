@@ -3,7 +3,6 @@ import "../css/Home.css";
 import JoinTheClub from "../images/joinTheClub.jpg";
 import Ecology from "../images/ecology.jpg";
 import Progress from "../images/progress.jpg";
-import Flights from "../models/Flights";
 import FetchDatas from "../FetchDatas";
 
 const quickNews = [
@@ -38,7 +37,6 @@ const Home = () => {
     const [isSearched, setIsSearched] = useState(false);
     const [Flights, setFlights] = useState([]);
     const [searchedFlight, setSearchedFlight] = useState([]);
-    const searchValues = removeDuplicates();
     const [datas, setDatas] = useState({
         leavingValue: "",
         destinationValue: "",
@@ -65,14 +63,14 @@ const Home = () => {
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="leavings">
                                 <select value={datas.leavingValue} className="form-select form-select-sm" name="leavingValue" onChange={handleChange}>
-                                    {searchValues.map((flight) => (
+                                    {Flights.map((flight) => (
                                         <option value={flight}>{flight}</option>
                                     ))}
                                 </select>
                             </label>
                             <label htmlFor="destiantion">
                                 <select className="form-select form-select-sm" style={{ marginTop: "10px" }} value={datas.destinationValue} name="destinationValue" onChange={handleChange}>
-                                    {searchValues.map((flight) => (
+                                    {Flights.map((flight) => (
                                         <option value={flight}>{flight}</option>
                                     ))}
                                 </select>

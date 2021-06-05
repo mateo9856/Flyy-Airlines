@@ -9,8 +9,8 @@ import {
     NavLink,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { AppContext } from "../src/AppContext";
-import "./css/Home.css";
+import { AppContext } from "../AppContext";
+import "../css/Home.css";
 
 const NavMenu = () => {
     const [context, setContext] = useContext(AppContext);

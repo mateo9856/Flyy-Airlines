@@ -1,5 +1,4 @@
 ﻿import React, { useState } from 'react'
-import "react-datepicker/dist/react-datepicker.css";
 import EmployeeManage from './AdminComponents/EmployeeManage';
 import FlightManage from './AdminComponents/FlightManage';
 

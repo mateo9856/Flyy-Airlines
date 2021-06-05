@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import "../css/Register.css";
 import FetchDatas from "../FetchDatas";
-import Users from "../models/Users";
+
 const Register = () => {
     const [data, setData] = useState({
         email: "",

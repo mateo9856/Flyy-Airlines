@@ -1,7 +1,6 @@
 ﻿import React, { useEffect, useState } from "react";
 import FetchDatas from "../../FetchDatas";
-import Airplanes from "../../models/Airplanes";
-import Flights from "../../models/Flights";
+
 const convertToDateTimeString = (val) => {
     const convertDate = val.split("-");
     const convertDayAndTime = convertDate[2].split("T");
@@ -26,7 +25,7 @@ const FlightManage = (props) => {
         toCountry: "",
         toCity: "",
         departureDate: new Date(),
-        airplane: Airplanes[0],
+        airplane: airplanesList[0],
     });
     const [flightsList, setFlightsList] = useState([]);
     const [airplanesList, setAirplanesList] = useState([]);
@@ -35,7 +34,12 @@ const FlightManage = (props) => {
         numberOfSeats: "",
     });
 
+    const GetAirplanes = () => {
+        FetchDatas.Get('api/Flight/GetAirplanes', setAirplanesList)
+    }
+
     useEffect(() => {
+        GetAirplanes();
         if (props.selectedManage === "remove") {
             GetFlights();
         }
@@ -171,7 +175,7 @@ const FlightManage = (props) => {
                                 onChange={handleChange}
                                 class="form-control"
                             >
-                                {Airplanes.map((air) => (
+                                {airplanesList.map((air) => (
                                     <option value={air.id}>{air.planeName}</option>
                                 ))}
                             </select>

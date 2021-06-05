@@ -1,5 +1,4 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Employees } from '../../models/Employee';
 import "../../css/Admin.css";
 import FetchDatas from '../../FetchDatas';
 
@@ -30,15 +29,7 @@ const EmployeeManage = (props) => {
     const AddEmployee = (e) => {
         e.preventDefault();
         if (employeeUser) {
-            Employees.push({
-                id: Employees.length,
-                name: employeeDatas.name,
-                surname: employeeDatas.surname,
-                workPosition: employeeDatas.workPosition,
-                Role: "Employee",
-                login: employeeDatas.login,
-                password: employeeDatas.password,
-            })
+            FetchDatas.Post("api/Employees", {})
         } else {
             FetchDatas.Post('api/Employees', {
                 name: employeeDatas.name,
@@ -49,7 +40,7 @@ const EmployeeManage = (props) => {
         alert("Dodano")
     }
     const RemoveEmployee = (id) => {
-        FetchDatas.Delete(url + id);
+        FetchDatas.Delete("api/Employees" + id);
     }
 
     const handleChange = (e) => {

@@ -1,11 +1,17 @@
 import React, { Component, useState, useEffect, AppContext } from 'react';
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 import { ProtectedRoute } from './ProtectedRoute';
 import Home from './components/Home';
+import { Container } from "reactstrap";
+import NavMenu from "./components/NavMenu";
 import AboutUs from './components/AboutUs';
+import ReservationComponent from "./components/Reservations";
 import Admin from './components/Admin';
+import Login from "./components/Login";
+import Register from "./components/Register";
+import FlightComponent from "./components/Flights";
 import './custom.css'
-import { Logout } from './components/Logout';
+
 
 const CheckIsLocalStorage = () => {
     try {
@@ -46,11 +52,9 @@ function App() {
                         <Route exact path='/' component={Home} />
                         <Route path='/aboutus' component={AboutUs} />
                         <Route path='/reservations' component={ReservationComponent} />
-                        <Route path='/checkReservation' component={CheckReserve} />
                         <Route path='/flights' component={FlightComponent} />
                         <Route path='/login' component={Login} />
                         <Route path='/register' component={Register} />
-                        <Route path='/logout' component={Logout} />
                         <ProtectedRoute path='/Admin' component={Admin} />
                     </Switch>
                 </Container>

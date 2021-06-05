@@ -1,6 +1,5 @@
-﻿import React, { useEffect } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import FetchDatas from '../FetchDatas';
-import Flights from "../models/Flights";
 
 const convertToName = (string) => {
     let stringName = "";
