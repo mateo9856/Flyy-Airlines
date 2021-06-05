@@ -1,16 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect, AppContext } from 'react';
 import { Route } from 'react-router';
 import { ProtectedRoute } from './ProtectedRoute';
-import { Home } from './components/Home';
-import { Log } from './components/Login';
-import { Reg } from './components/Register';
-import { AboutUs } from './components/AboutUs';
-import { Reservations } from './components/Reservations';
-import { Flights } from './components/Flights';
-import { NotFound } from './components/NotFound';
-import { Admin } from './components/Admin';
+import Home from './components/Home';
+import AboutUs from './components/AboutUs';
+import Admin from './components/Admin';
 import './custom.css'
-import RegisterSubmit from './components/RegisterSubmit';
 import { Logout } from './components/Logout';
 
 const CheckIsLocalStorage = () => {
