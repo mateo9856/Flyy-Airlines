@@ -1,102 +1,77 @@
-import React, { Component } from 'react';
-import Auth from '../Auth';
-import "../css/Home.css";
-import { JoinTheClub } from "../images/joinTheClub.jpg";
-import { Ecology } from "../images/ecology.jpg";
-import { Progress } from "../images/progress.jpg"
-export class Home extends Component {
-  static displayName = Home.name;
-    constructor(props) {
-        super(props);
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../AppContext";
+import Users from "../models/Users";
+import "../css/Login.css";
+import { useHistory } from "react-router";
 
-        this.quickNews = [
-            {
-                id: 0,
-                title: "Klub Flyy!",
-                content: "Do³¹cz do klubu Flyy! Airlines, dodatkowe zni¿ki oraz promocje...",
-                img: JoinTheClub
-            },
-            {
-                id: 1,
-                title: "Bêdziesz EKO!",
-                content: "Samoloty naszych linii lotniczych przechodz¹ najnowsze normy emisji spalin",
-                img: Ecology
-            },
-            {
-                id: 2,
-                title: "Jesteœmy coraz lepsi!",
-                content: "Nasze linie stale rozwijaj¹ siê o wyloty do innych pañstw i miast.",
-                img: Progress
-            }
-        ]
+const Login = () => {
+    const [context, setContext] = useContext(AppContext);
+    const history = useHistory();
+    const [datas, setDatas] = useState({
+        email: "",
+        password: "",
+    });
 
-        this.state = {
-            leavingValue: "",
-            destinationValue: "",
-            departureDate: this.getActualDate()
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const findUser = Users.filter((user) => user.login === datas.email);
+        const newDatas = {
+            isLogged: true,
+            userData: findUser[0],
+            userRole: findUser[0].role,
+        };
+
+        if (findUser.length > 0) {
+            setContext(newDatas);
+            localStorage.setItem("loginData", JSON.stringify(newDatas));
+            history.push("/");
+        } else {
+            return "niezalogowany";
         }
-    }
+    };
 
-    getActualDate() {
-        let date = new Date().toLocaleDateString();
-        date = date.split('');
-        for (let i = 0; i < date.length; i++) {
-            if (date[i] === ".") {
-                date[i] = "-"
-            }
-        }
-        date.join('');
-        return date;
-    }
+    const handleChange = (e) => {
+        setDatas({
+            ...datas,
+            [e.target.name]: e.target.value,
+        });
+    };
 
-    handleChange = (e) => {
-
-    }
-
-    handleSubmit() {
-
-    }
-
-  render () {
-      return (
-          <div className="homePage">
-              <div className = "searchDiv">
-              <div className="quickNotifications">
-                  <div className="quickReservations">
-                      <form onSubmit={this.handleSubmit.bind(this)}>
-                              <label htmlFor="leavings">
-                                  <input type="text" onChange={this.handleChange} placeholder="Leaving from" value={this.state.leavingValue} />
-                          </label>
-                          <label htmlFor="destiantion">
-                                  <input type="text" onChange={this.handleChange} placeholder="Destination" value={this.state.destinationValue} />
-                          </label>
-                          <label htmlFor="departure">
-                              <input type="date" placeholder="Departure date" value={this.state.departureDate} />
-                          </label>
-                      </form>
-                      </div>
-                      </div>
-              </div>
-              <section className="bestFlights">
-                  <h4 style={{ marginTop: "15px" }}>Najpopularniejsze loty</h4>
-                  <div className="bestFlightsFlex">
-                  </div>
-              </section>
-              <section className="moreInformations">
-                  <h4>Wiadomoœci</h4>
-                  <div className="quickNewsFlex">
-                      <ul className = "flexNewsList">
-                          {this.quickNews.map(news => (
-                              <li key={news.id} className="newsCard">
-                                  <img src={news.img} className="imgNewsStyle" alt="image" />
-                                  <h5>{news.title}</h5>
-                                  <p>{news.content}</p>
-                              </li>    
-                          ))}
-                      </ul>
-                  </div>
-              </section>
-          </div>
+    return (
+        <div>
+            <h4 className="text-center">Zaloguj siê do Flyy!</h4>
+            <div className="form-box">
+                <form className="registerLoginForm" onSubmit={handleSubmit}>
+                    <label>
+                        <input
+                            type="text"
+                            placeholder="E-mail"
+                            className="input-field"
+                            name="email"
+                            value={datas.email}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <label>
+                        <input
+                            type="text"
+                            placeholder="Password"
+                            className="input-field"
+                            name="password"
+                            value={datas.password}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <input
+                        style={{ marginTop: "15px", color: "white" }}
+                        type="submit"
+                        className="submit-btn"
+                        value="Zaloguj!"
+                    />
+                </form>
+            </div>
+        </div>
     );
-  }
-}
+};
+
+export default Login;

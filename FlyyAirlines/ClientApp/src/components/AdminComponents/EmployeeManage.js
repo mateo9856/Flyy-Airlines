@@ -1,16 +1,17 @@
 ﻿import React, { useEffect, useState } from 'react';
-import FetchDatas from "../../FetchDatas"
+import { Employees } from '../../models/Employee';
+import "../../css/Admin.css";
+
 const EmployeeManage = (props) => {
     const [employeeDatas, setEmployeeDatas] = useState({
         name: "",
         surname: "",
         workPosition: "",
+        Role: "Employee",
+        login: "",
+        password: "",
+
     });
-    const [employeeUserData, setEmployeeUserData] = useState({
-        email: "",
-        userName: "",
-        password: ""
-    })
 
     const [employeesList, setEmployeesList] = useState({});
     const [employeeUser, setEmployeeUser] = useState(false);
@@ -22,70 +23,46 @@ const EmployeeManage = (props) => {
     }, [])
 
     const GetEmployees = () => {
-        FetchDatas.GetLists('api/Employees', setEmployeesList);
+        setEmployeesList(Employees.filter(val => val.workPosition != "IT Admin"));
     }
 
     const AddEmployee = (e) => {
         e.preventDefault();
         if (employeeUser) {
-            const sendedValue = { ...employeeDatas, ...employeeUserData };
-            fetch('api/Account/addEmployee', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(sendedValue)
+            Employees.push({
+                id: Employees.length,
+                name: employeeDatas.name,
+                surname: employeeDatas.surname,
+                workPosition: employeeDatas.workPosition,
+                Role: "Employee",
+                login: employeeDatas.login,
+                password: employeeDatas.password,
             })
-                .then(response => response.json())
-                .then(() => {
-                    alert("Umysłowy dodany");
-                    props.exit();
-                })
-                .catch(error => console.error('Unable to add item.', error));
-            return;
+        } else {
+            Employees.push({
+                id: Employees.length,
+                name: employeeDatas.name,
+                surname: employeeDatas.surname,
+                workPosition: employeeDatas.workPosition,
+                Role: "Employee",
+                login: "",
+                password: ""
+            })
         }
-        
-
-        fetch('api/Employees', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(employeeDatas)
-        })
-            .then(response => response.json())
-            .then(() => {
-                alert("Element added");
-                props.exit();
-            })
-            .catch(error => console.error('Unable to add item.', error));
+        alert("Dodano")
     }
-    const RemoveEmployee = (e) => {
-        e.preventDefault();
-        console.log(e.target.name);
-        FetchDatas.delete("api/Employees/" + e.target.name);
+    const RemoveEmployee = (id) => {
+        const findIndexToDelete = Employees.findIndex(el => el.id === id);
+        Employees.splice(findIndexToDelete, 1);
         alert("Element deleted")
         props.exit();
     }
 
-    const SubmitRemoveEmployees = (e) => {
-        e.preventDefault();
-    }
-
     const handleChange = (e) => {
-        setEmployeeDatas({//przetestowac to pozniej i dodac rowniez pracownikow do users inna metoda
+        setEmployeeDatas({
             ...employeeDatas,
             [e.target.name]: e.target.value
         });
-    }
-
-    const handleEmployeeChange = (e) => {
-        setEmployeeUserData({
-            ...employeeUserData,
-            [e.target.name]: e.target.value
-        })
     }
 
     return (
@@ -93,46 +70,57 @@ const EmployeeManage = (props) => {
             {props.selectedManage === "addEmployee" ?
                 <div>
                     <form onSubmit={AddEmployee}>
-                        <input type="checkbox" checked={employeeUser} onChange={(e) => setEmployeeUser(e.target.checked)} />Employee User
-                        Employee name
-                    <input type="text" onChange={handleChange} value={employeeDatas.name} name="name" />
-                        Surname
-                        <input type="text" onChange={handleChange} value={employeeDatas.surname} name="surname" />
-                        Work Position
-                        <input type="text" onChange={handleChange} value={employeeDatas.workPosition} name="workPosition" />
-                        {employeeUser ? <label>
-                            Email:
-                            <input type="text" name="email" value={employeeUserData.email} onChange={handleEmployeeChange} />
-                            Login:
-                            <input type="text" name="userName" value={employeeUserData.userName} onChange={handleEmployeeChange} />
-                            Hasło:
-                            <input type="password" name="password" value={employeeUserData.password} onChange={handleEmployeeChange} />
-                        </label> : ""}
-                        <input type="submit" value="Dodaj" />
+                        <div className="form-check">
+                            <input className="checkBoxAddEmployee" type="checkbox" checked={employeeUser} onChange={(e) => setEmployeeUser(e.target.checked)} />
+                            <label>Employee User</label>
+                        </div><br />
+                        <div className="form-group">
+                            Nazwisko
+                        <input className="form-control" type="text" onChange={handleChange} value={employeeDatas.name} name="name" />
+                        </div><br />
+                        <div className="form-group">
+                            Imię
+                        <input className="form-control" type="text" onChange={handleChange} value={employeeDatas.surname} name="surname" />
+                        </div><br />
+                        <div className="form-group">
+                            Stanowisko
+                        <input className="form-control" type="text" onChange={handleChange} value={employeeDatas.workPosition} name="workPosition" />
+                        </div><br />
+                        {employeeUser ? <div>
+                            <div className="form-group">
+                                Login:
+                            <input className="form-control" type="text" name="login" value={employeeDatas.login} onChange={handleChange} />
+                            </div><br />
+                            <div className="form-group">
+                                Hasło:
+                            <input className="form-control" type="password" name="password" value={employeeDatas.password} onChange={handleChange} />
+                            </div><br />
+                        </div> : ""}
+                        <input className="btn btn-primary" type="submit" value="Dodaj" />
                     </form>
                 </div> : ""}
             {props.selectedManage === "removeEmployee" ?
                 <div>
-                    <form onSubmit={SubmitRemoveEmployees}>
+                    <form>
                         <table className="table">
                             <thead className="thead-dark">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Surname</th>
-                                    <th scope="col">Work Position</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Nazwisko</th>
+                                    <th scope="col">Imię</th>
+                                    <th scope="col">Stanowisko</th>
+                                    <th scope="col">Akcja</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {employeesList.length > 0 ?
                                     employeesList.map(list => (
                                         <tr>
-                                            <th scope="row">{list.employeeId}</th>
+                                            <th scope="row">{list.id}</th>
                                             <td>{list.name}</td>
                                             <td>{list.surname}</td>
                                             <td>{list.workPosition}</td>
-                                            <td><button name={list.employeeId} onClick={RemoveEmployee}>Delete</button></td>
+                                            <td><button className="btn btn-outline-primary" name={list.employeeId} onClick={() => RemoveEmployee(list.id)}>Delete</button></td>
                                         </tr>
                                     ))
                                     : ""}
@@ -143,6 +131,6 @@ const EmployeeManage = (props) => {
                 </div>
                 : ""}
         </>
-        )
+    )
 }
 export default EmployeeManage;

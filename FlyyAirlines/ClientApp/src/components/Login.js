@@ -1,93 +1,77 @@
-import React, { Component, PureComponent } from 'react';
-import { withRouter } from "react-router-dom";
-import '../css/Login.css';
-import Auth from "../Auth";
-import Cookies from 'js-cookie';
-class Login extends PureComponent {
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../AppContext";
+import Users from "../models/Users";
+import "../css/Login.css";
+import { useHistory } from "react-router";
 
-  constructor(props) {
-    super(props);
-      this.state = {
-          email: "",
-          password: "",
-          loginSuccesful: false,
-      };
-    }
-    componentDidMount() {
-        console.log("Mounted");
-    }
-    componentDidUpdate() {
-        console.log("Updated");
-        if (this.state.loginSuccesful) {
-            console.log(this.state.loginSuccesful)
-            this.RedirectToHome();
-        }
-    }
+const Login = () => {
+    const [context, setContext] = useContext(AppContext);
+    const history = useHistory();
+    const [datas, setDatas] = useState({
+        email: "",
+        password: "",
+    });
 
-        request(val) {
-        fetch('api/account/login', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(val)
-        })
-            .then(res => res.json())
-            .then(res => {
-                localStorage.setItem('login', JSON.stringify(res))
-                Auth.login();
-                Auth.getUserRole();
-                this.setState({
-                    loginSuccesful: true
-                })
-            }).catch(err => console.log(err))
-            
-    }
-
-     handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        const sendValues = {
-            email: this.state.email,
-            password: this.state.password
+        const findUser = Users.filter((user) => user.login === datas.email);
+        const newDatas = {
+            isLogged: true,
+            userData: findUser[0],
+            userRole: findUser[0].role,
+        };
+
+        if (findUser.length > 0) {
+            setContext(newDatas);
+            localStorage.setItem("loginData", JSON.stringify(newDatas));
+            history.push("/");
+        } else {
+            return "niezalogowany";
         }
-         this.request(sendValues);
-    }
+    };
 
-    RedirectToHome = () => {
-        Auth.login();
-        this.props.handleLogin(true);
-        const { history } = this.props;
-        history.push('/');
-        console.log(Auth.authenticated)
-        this.props.history.push("/");
-    }
-    
-    WriteValue = (e) => {
-        console.log(e.target.name);
-        console.log(e.target.value);
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
+    const handleChange = (e) => {
+        setDatas({
+            ...datas,
+            [e.target.name]: e.target.value,
+        });
+    };
 
-    render() {
-        const { history } = this.props;
-      return (
-          <div className="form-box">
-              <form className = "registerLoginForm" onSubmit={this.handleSubmit}>
-                  <label>
+    return (
+        <div>
+            <h4 className="text-center">Zaloguj siê do Flyy!</h4>
+            <div className="form-box">
+                <form className="registerLoginForm" onSubmit={handleSubmit}>
+                    <label>
+                        <input
+                            type="text"
+                            placeholder="E-mail"
+                            className="input-field"
+                            name="email"
+                            value={datas.email}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <label>
+                        <input
+                            type="text"
+                            placeholder="Password"
+                            className="input-field"
+                            name="password"
+                            value={datas.password}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <input
+                        style={{ marginTop: "15px", color: "white" }}
+                        type="submit"
+                        className="submit-btn"
+                        value="Zaloguj!"
+                    />
+                </form>
+            </div>
+        </div>
+    );
+};
 
-                      <input type="text" placeholder="E-mail" className="input-field" name="email" value={this.state.email} onChange={this.WriteValue} />
-                  </label>
-                  <label>
-                      
-                      <input type="text" placeholder="Password" className = "input-field" name="password" value={this.state.password} onChange={this.WriteValue} />
-                  </label>
-                  <input type="submit" className="submit-btn" value="Zaloguj!" onSubmit={this.handleSubmit} />
-              </form>
-          </div>
-        );
-  }
-}
-export const Log = withRouter(Login);
+export default Login;

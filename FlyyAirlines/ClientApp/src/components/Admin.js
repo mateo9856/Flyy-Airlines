@@ -1,10 +1,9 @@
 ﻿import React, { useState } from 'react'
-import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import EmployeeManage from './AdminComponents/EmployeeManage';
 import FlightManage from './AdminComponents/FlightManage';
 
-export const Admin = (props) => {
+const Admin = (props) => {
     const [activeManage, setActiveManage] = useState("");
 
     const resetValues = () => {
@@ -13,30 +12,30 @@ export const Admin = (props) => {
 
     return (
         <>
-        <h1>Admin</h1>
-            <div>
-                <h3>Quick Panel</h3>
-                <ul style={{ listStyleType: "none" }} className = "manageCheckList">
-                    <li><button onClick={() => setActiveManage("add")}>Dodaj wylot</button></li>
-                    <li><button onClick={() => setActiveManage("remove")}>Usuń wylot</button></li>
-                    <li><button onClick={() => setActiveManage("addPlane")}>Dodaj samolot</button></li>
-                    <li><button onClick={() => setActiveManage("addEmployee")}>Dodaj pracownika</button></li>
-                    <li><button onClick={() => setActiveManage("removeEmployee")}>Usuń pracownika</button></li>
-                    <li><button onClick={() => setActiveManage("addFlightPlane")}>Dodaj samolot do wylotu</button></li>
+            <h1 className="text-center">Admin panel</h1>
+            <div className="col-sm-12">
+                <ul style={{ listStyleType: "none" }} className="gridAdminBtn d-flex flex-wrap justify-content-around">
+                    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("add")}>Dodaj wylot</button></li>
+                    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("remove")}>Usuń wylot</button></li>
+                    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("addPlane")}>Dodaj samolot</button></li>
+                    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("addEmployee")}>Dodaj pracownika</button></li>
+                    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("removeEmployee")}>Usuń pracownika</button></li>
                 </ul>
-                {activeManage === "add" ?
-                    <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}
-                {activeManage === "remove" ?
-                    <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}
-                {activeManage === "addEmployee" ?
-                    <EmployeeManage selectedManage={activeManage} exit={resetValues} /> : ""}
-                {activeManage === "addPlane" ?
-                    <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}
-                {activeManage === "removeEmployee" ?
-                    <EmployeeManage selectedManage={activeManage} exit={resetValues} /> : ""}
-                {activeManage === "addFlightPlane" ?
-                    <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}
-        </div>
+                <div className="text-center">
+                    {activeManage === "add" ?
+                        <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}
+                    {activeManage === "remove" ?
+                        <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}
+                    {activeManage === "addEmployee" ?
+                        <EmployeeManage selectedManage={activeManage} exit={resetValues} /> : ""}
+                    {activeManage === "addPlane" ?
+                        <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}
+                    {activeManage === "removeEmployee" ?
+                        <EmployeeManage selectedManage={activeManage} exit={resetValues} /> : ""}
+                </div>
+            </div>
         </>
-        )
+    )
 }
+
+export default Admin;
