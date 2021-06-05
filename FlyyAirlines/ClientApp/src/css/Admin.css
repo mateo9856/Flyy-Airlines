@@ -1,0 +1,14 @@
+.gridAdminBtn {
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 10px;
+    grid-gap: 20px;
+}
+
+.buttWidth {
+    min-width: 130px;
+}
+
+.checkBoxAddEmployee {
+    margin-right: 5px;
+}
