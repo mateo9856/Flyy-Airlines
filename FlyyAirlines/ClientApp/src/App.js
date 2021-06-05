@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect, AppContext } from 'react';
-import { Route, Switch } from 'react-router';
+import React, { Component, useState, useEffect, useContext } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import Home from './components/Home';
 import { Container } from "reactstrap";
@@ -11,7 +11,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import FlightComponent from "./components/Flights";
 import './custom.css'
-
+import { AppContext } from "./AppContext";
 
 const CheckIsLocalStorage = () => {
     try {

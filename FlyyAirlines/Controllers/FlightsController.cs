@@ -62,7 +62,7 @@ namespace FlyyAirlines.Controllers
             return Ok(GetAirplane);
         }
 
-        [Authorize(Roles = "Admin, SuperAdmin")]
+        //[Authorize(Roles = "Admin, SuperAdmin")]
         [Route("Airplane")]
         [HttpPost]
         public IActionResult AddPlane(Airplane airplane)
@@ -75,7 +75,7 @@ namespace FlyyAirlines.Controllers
             return CreatedAtAction("Get", new { id = airplane.AirplaneId }, airplane);
         }
 
-        [Authorize(Roles = "Admin, SuperAdmin")]
+        //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost]
         public IActionResult AddFlight([FromBody] Flight flight)
         {
@@ -87,7 +87,7 @@ namespace FlyyAirlines.Controllers
             return CreatedAtAction("Get", new { id = flight.FlightsId }, flight);
         }
 
-        [Authorize(Roles = "Admin, SuperAdmin")]
+        //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
         public IActionResult Put(Guid id, Flight flight)
         {
@@ -100,7 +100,7 @@ namespace FlyyAirlines.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin, SuperAdmin")]
+        //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFlight(Guid id)
         {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -17,7 +17,7 @@ namespace FlyyAirlines.Controllers
         {
             _userData = userData;
         }
-        [Authorize(Roles = "Admin, SuperAdmin")]
+        //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpGet]
         public IActionResult GetUsers()
         {
@@ -43,7 +43,7 @@ namespace FlyyAirlines.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin, SuperAdmin")]//sprobowac zmodyfikowac to w account 
+        //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
         public IActionResult Put(string id, User user)
         {
@@ -56,7 +56,7 @@ namespace FlyyAirlines.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin, SuperAdmin")]
+        //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id)
         {
