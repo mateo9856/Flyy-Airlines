@@ -15,21 +15,18 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const datas = FetchDatas.Post('api/account/login')
-        console.log(datas);
-        //const newDatas = {
-        //    isLogged: true,
-        //    userData: findUser[0],
-        //    userRole: findUser[0].role,
-        //};
-
-        //if (findUser.length > 0) {
-        //    setContext(newDatas);
-        //    localStorage.setItem("loginData", JSON.stringify(newDatas));
-        //    history.push("/");
-        //} else {
-        //    return "niezalogowany";
-        //}
+        const data = FetchDatas.Post('api/account/login', datas);
+        if (data) {//przerobic by w calym axiosie bo jest asynchroniczne i najpierw jest undefined
+            console.log(data.data)
+            const loginData = {
+                isLogged: true,
+                userData: data.data,
+                userRole: data.data.userRole
+            }
+            setContext(loginData)
+            localStorage.setItem("loginUser", JSON.stringify(loginData))
+            history.push("/")
+        }
     };
 
     const handleChange = (e) => {

@@ -31,7 +31,8 @@ const quickNews = [
 const Home = () => {
 
     useEffect(() => {
-        FetchDatas.Get('api/Flights/GetFlights', setFlights);
+        const datas = FetchDatas.Get('api/Flights/GetFlights', setFlights);
+        console.log(datas);
     }, [])
 
     const [isSearched, setIsSearched] = useState(false);
@@ -60,23 +61,24 @@ const Home = () => {
                 <div className="quickNotifications d-flex justify-content-beetween">
                     <div className="quickReservations">
                         <h6 className="text-white text-center text-uppercase">Szybie wyszukiwanie</h6>
-                        <form onSubmit={handleSubmit}>
-                            <label htmlFor="leavings">
-                                <select value={datas.leavingValue} className="form-select form-select-sm" name="leavingValue" onChange={handleChange}>
-                                    {Flights.map((flight) => (
-                                        <option value={flight}>{flight}</option>
-                                    ))}
-                                </select>
-                            </label>
-                            <label htmlFor="destiantion">
-                                <select className="form-select form-select-sm" style={{ marginTop: "10px" }} value={datas.destinationValue} name="destinationValue" onChange={handleChange}>
-                                    {Flights.map((flight) => (
-                                        <option value={flight}>{flight}</option>
-                                    ))}
-                                </select>
-                            </label>
-                            <input style={{ marginTop: "10px" }} className="btn btn-primary" type="submit" value="Wyszukaj!" />
-                        </form>
+                        {Flights.length > 0 &&
+                            <form onSubmit={handleSubmit}>
+                                <label htmlFor="leavings">
+                                    <select value={datas.leavingValue} className="form-select form-select-sm" name="leavingValue" onChange={handleChange}>
+                                        {Flights.map((flight) => (
+                                            <option value={flight}>{flight}</option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <label htmlFor="destiantion">
+                                    <select className="form-select form-select-sm" style={{ marginTop: "10px" }} value={datas.destinationValue} name="destinationValue" onChange={handleChange}>
+                                        {Flights.map((flight) => (
+                                            <option value={flight}>{flight}</option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <input style={{ marginTop: "10px" }} className="btn btn-primary" type="submit" value="Wyszukaj!" />
+                            </form> }
                     </div>
                     {isSearched ? <div className="searchSubmit">
                         <button className="exitBtn" onClick={() => setIsSearched(false)}>X</button>

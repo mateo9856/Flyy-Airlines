@@ -11,8 +11,8 @@ class FetchDatas {
     async Get(url, state) {
         await axios.get(url)
             .then(res => {
-                state(res);
-                console.log(res);
+                state(res.data);
+                console.log(res.data);
             })
     }
     async Post(url, val) {

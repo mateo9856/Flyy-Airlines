@@ -11,15 +11,18 @@ const Register = () => {
         name: "",
         surname: "",
     });
-
+    //sprawdzic!
     const history = useHistory();
 
     const checkObjValueIsNotEmpty = (obj) => {
         for (var key in obj) {
             if (obj.hasOwnProperty(key))
                 return true;
+            else {
+                return false;
+                break;
+            }
         }
-        return false;
     }
 
     const handleChange = (e) => {
@@ -31,16 +34,17 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        FetchDatas.Post("api/account/register", {
-            email: data.email,
-            userName: data.userName,
-            password: data.password,
-            name: data.name,
-            surname: data.surname
-        })
+
 
         if (checkObjValueIsNotEmpty(data)) {
             alert("Zarejestrowany! Mo¿esz siê zalogowaæ")
+            FetchDatas.Post("api/account/register", {
+                email: data.email,
+                userName: data.userName,
+                password: data.password,
+                name: data.name,
+                surname: data.surname
+            })
             history.push('/')
         } else {
             alert("U¿ytkownik niezarejestrowany!")
@@ -57,7 +61,7 @@ const Register = () => {
                             className="input-field"
                             placeholder="E-mail"
                             type="text"
-                            name="login"
+                            name="email"
                             value={data.email}
                             onChange={handleChange}
                             required
