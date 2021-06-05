@@ -1,21 +1,33 @@
-﻿class FetchDatas {
-    async delete(url) {
-        await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Content-type': 'application/json'
-            }
-        }).catch(err => console.error(err));
-        return "Element deleted";
+﻿import axios from 'axios';
+
+class FetchDatas {
+    async Delete(url) {
+        await axios.delete(url).
+            then(res => {
+                console.log(res);
+            })
     }
 
-    async GetLists(url, state) {
-        fetch(url)
-            .then(res => res.json())
-            .then(res => state(res))
-            .catch(err => alert(err))
+    async Get(url, state) {
+        await axios.get(url)
+            .then(res => {
+                state(res);
+                console.log(res);
+            })
+    }
+    async Post(url, val) {
+        await axios.post(url, val)
+            .then(res => {
+                console.log(res);
+            })
     }
 
+    async Put(url, val) {
+        await axios.put(url, val)
+            .then(res => {
+                console.log(res);
+            })
+    }
 }
 
 export default new FetchDatas();

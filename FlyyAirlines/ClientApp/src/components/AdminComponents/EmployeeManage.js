@@ -1,6 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { Employees } from '../../models/Employee';
 import "../../css/Admin.css";
+import FetchDatas from '../../FetchDatas';
 
 const EmployeeManage = (props) => {
     const [employeeDatas, setEmployeeDatas] = useState({
@@ -23,7 +24,7 @@ const EmployeeManage = (props) => {
     }, [])
 
     const GetEmployees = () => {
-        setEmployeesList(Employees.filter(val => val.workPosition != "IT Admin"));
+        FetchDatas.Get('api/Employees', setEmployeesList);
     }
 
     const AddEmployee = (e) => {
@@ -39,23 +40,16 @@ const EmployeeManage = (props) => {
                 password: employeeDatas.password,
             })
         } else {
-            Employees.push({
-                id: Employees.length,
+            FetchDatas.Post('api/Employees', {
                 name: employeeDatas.name,
                 surname: employeeDatas.surname,
-                workPosition: employeeDatas.workPosition,
-                Role: "Employee",
-                login: "",
-                password: ""
+                workPosition: employeeDatas.workPosition
             })
         }
         alert("Dodano")
     }
     const RemoveEmployee = (id) => {
-        const findIndexToDelete = Employees.findIndex(el => el.id === id);
-        Employees.splice(findIndexToDelete, 1);
-        alert("Element deleted")
-        props.exit();
+        FetchDatas.Delete(url + id);
     }
 
     const handleChange = (e) => {

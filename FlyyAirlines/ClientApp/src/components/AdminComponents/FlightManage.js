@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from "react";
+import FetchDatas from "../../FetchDatas";
 import Airplanes from "../../models/Airplanes";
 import Flights from "../../models/Flights";
-//zrobic formatowanie
 const convertToDateTimeString = (val) => {
     const convertDate = val.split("-");
     const convertDayAndTime = convertDate[2].split("T");
@@ -42,32 +42,26 @@ const FlightManage = (props) => {
     }, []);
 
     const GetFlights = () => {
-        setFlightsList(Flights);
+        FetchDatas.Get('api/Flights/GetFlights', setFlightsList);
+        FetchDatas.Get('api/Flights/GetAirplanes', setAirplanesList)
     };
 
     const AddFlight = (e) => {
         e.preventDefault();
-        Flights.push({
-            id: Flights.length,
+        FetchDatas.Post('api/Flights', {
             flightName: flightDatas.flightName,
-            from: {
-                city: flightDatas.city,
-                country: flightDatas.country,
-            },
-            to: {
-                city: flightDatas.toCity,
-                country: flightDatas.toCountry,
-            },
-            departureDate: flightDatas.departureDate,
-            reservedPlaces: [],
-            airplane: flightDatas.airplane,
-        });
+            fromCountry: flightDatas.country,
+            fromCity: flightDatas.city,
+            toCountry: flightDatas.toCountry,
+            toCity: flightDatas.toCity,
+            departureDate: flightDatas.departureDate
+        })
         alert("Dodano!");
     };
 
     const RemoveFlight = (e) => {
         e.preventDefault();
-        Flights.splice(parseInt(e.target.name, 10), 1);
+        FetchDatas.Delete('api/Flights/' + e.target.name)
         setFlightsList({});
         alert("Element usunięto!");
         props.exit();
@@ -75,8 +69,7 @@ const FlightManage = (props) => {
 
     const AddAirplane = (e) => {
         e.preventDefault();
-        Airplanes.push({
-            id: Airplanes.length,
+        FetchDatas.Post('api/Flights/Airplane', {
             planeName: airplaneDatas.planeName,
             numberOfSeats: airplaneDatas.numberOfSeats
         })
@@ -91,9 +84,7 @@ const FlightManage = (props) => {
                 [e.target.name]: buildStringDate,
             });
         } else if (e.target.name === "airplane") {
-            const findArray = Airplanes.filter(
-                (val) => val.id === parseInt(e.target.value, 10)
-            );
+            const findArray = FetchDatas.Get('api/Flights/Airplane' + e.target.value)
             setFlightDatas({
                 ...flightDatas,
                 [e.target.name]: findArray,
@@ -135,7 +126,7 @@ const FlightManage = (props) => {
                                 className="form-control"
                                 type="text"
                                 onChange={handleChange}
-                                value={flightDatas.country}
+                                value={flightDatas.fromCountry}
                                 name="country"
                             />
                         </div>
@@ -146,7 +137,7 @@ const FlightManage = (props) => {
                                 className="form-control"
                                 type="text"
                                 onChange={handleChange}
-                                value={flightDatas.city}
+                                value={flightDatas.fromCity}
                                 name="city"
                             />
                         </div>

@@ -49,7 +49,7 @@ namespace FlyyAirlines.Controllers
         }
         [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] UserRegisterDTO userRegisterDto)//dopracować rejestracje 
+        public async Task<IActionResult> Register([FromBody] UserRegisterDTO userRegisterDto)
         {
             var userExists = await _userManager.FindByEmailAsync(userRegisterDto.Email);
             if(userExists != null)
@@ -172,7 +172,6 @@ namespace FlyyAirlines.Controllers
 
         [Route("login")]
         [HttpPost]
-
         public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);

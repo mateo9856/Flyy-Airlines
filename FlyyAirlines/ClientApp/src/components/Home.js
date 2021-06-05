@@ -1,77 +1,118 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../AppContext";
-import Users from "../models/Users";
-import "../css/Login.css";
-import { useHistory } from "react-router";
+import React, { useEffect, useState } from "react";
+import "../css/Home.css";
+import JoinTheClub from "../images/joinTheClub.jpg";
+import Ecology from "../images/ecology.jpg";
+import Progress from "../images/progress.jpg";
+import Flights from "../models/Flights";
+import FetchDatas from "../FetchDatas";
 
-const Login = () => {
-    const [context, setContext] = useContext(AppContext);
-    const history = useHistory();
+const quickNews = [
+    {
+        id: 0,
+        title: "Klub Flyy!",
+        content:
+            "Do³¹cz do klubu Flyy! Airlines, dodatkowe zni¿ki oraz promocje...",
+        img: JoinTheClub,
+    },
+    {
+        id: 1,
+        title: "Bêdziesz EKO!",
+        content:
+            "Samoloty naszych linii lotniczych przechodz¹ najnowsze normy emisji spalin",
+        img: Ecology,
+    },
+    {
+        id: 2,
+        title: "Jesteœmy coraz lepsi!",
+        content:
+            "Nasze linie stale rozwijaj¹ siê o wyloty do innych pañstw i miast.",
+        img: Progress,
+    },
+];
+const Home = () => {
+
+    useEffect(() => {
+        FetchDatas.Get('api/Flights/GetFlights', setFlights);
+    }, [])
+
+    const [isSearched, setIsSearched] = useState(false);
+    const [Flights, setFlights] = useState([]);
+    const [searchedFlight, setSearchedFlight] = useState([]);
+    const searchValues = removeDuplicates();
     const [datas, setDatas] = useState({
-        email: "",
-        password: "",
+        leavingValue: "",
+        destinationValue: "",
     });
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        const findUser = Users.filter((user) => user.login === datas.email);
-        const newDatas = {
-            isLogged: true,
-            userData: findUser[0],
-            userRole: findUser[0].role,
-        };
-
-        if (findUser.length > 0) {
-            setContext(newDatas);
-            localStorage.setItem("loginData", JSON.stringify(newDatas));
-            history.push("/");
-        } else {
-            return "niezalogowany";
-        }
+        setIsSearched(true);
+        const getFlight = Flights.filter(t => t.fromCity === datas.leavingValue && t.toCity === datas.destinationValue);
+        setSearchedFlight(getFlight);
     };
-
     const handleChange = (e) => {
         setDatas({
             ...datas,
-            [e.target.name]: e.target.value,
-        });
+            [e.target.name]: e.target.value
+        })
     };
 
     return (
-        <div>
-            <h4 className="text-center">Zaloguj siê do Flyy!</h4>
-            <div className="form-box">
-                <form className="registerLoginForm" onSubmit={handleSubmit}>
-                    <label>
-                        <input
-                            type="text"
-                            placeholder="E-mail"
-                            className="input-field"
-                            name="email"
-                            value={datas.email}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <input
-                            type="text"
-                            placeholder="Password"
-                            className="input-field"
-                            name="password"
-                            value={datas.password}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <input
-                        style={{ marginTop: "15px", color: "white" }}
-                        type="submit"
-                        className="submit-btn"
-                        value="Zaloguj!"
-                    />
-                </form>
+        <div className="homePage">
+            <div className="searchDiv">
+                <div className="quickNotifications d-flex justify-content-beetween">
+                    <div className="quickReservations">
+                        <h6 className="text-white text-center text-uppercase">Szybie wyszukiwanie</h6>
+                        <form onSubmit={handleSubmit}>
+                            <label htmlFor="leavings">
+                                <select value={datas.leavingValue} className="form-select form-select-sm" name="leavingValue" onChange={handleChange}>
+                                    {searchValues.map((flight) => (
+                                        <option value={flight}>{flight}</option>
+                                    ))}
+                                </select>
+                            </label>
+                            <label htmlFor="destiantion">
+                                <select className="form-select form-select-sm" style={{ marginTop: "10px" }} value={datas.destinationValue} name="destinationValue" onChange={handleChange}>
+                                    {searchValues.map((flight) => (
+                                        <option value={flight}>{flight}</option>
+                                    ))}
+                                </select>
+                            </label>
+                            <input style={{ marginTop: "10px" }} className="btn btn-primary" type="submit" value="Wyszukaj!" />
+                        </form>
+                    </div>
+                    {isSearched ? <div className="searchSubmit">
+                        <button className="exitBtn" onClick={() => setIsSearched(false)}>X</button>
+                        <h4>Wyniki:</h4>
+                        <ul className="list-group">
+                            {searchedFlight.length > 0 ? searchedFlight.map(list => (
+                                <li key={list.id} className="quickSearchList list-group-item">{list.flightName}</li>
+                            )) : <h5 className="text-uppercase text-center">Brak lotów!</h5>}
+                        </ul>
+                    </div> : ""}
+                </div>
             </div>
+            <section className="bestFlights text-center">
+                <h3 style={{ marginTop: "5px" }}>Nasz Bestseller</h3>
+                <div className="bestFlightsFlex">
+                    
+                </div>
+            </section>
+            <section className="moreInformations">
+                <h4>Wiadomoœci</h4>
+                <div className="quickNewsFlex">
+                    <ul className="flexNewsList">
+                        {quickNews.map((news) => (
+                            <li key={news.id} className="newsCard">
+                                {<img src={news.img} className="imgNewsStyle" alt="image" />}
+                                <h5>{news.title}</h5>
+                                <p>{news.content}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </section>
         </div>
     );
 };
 
-export default Login;
+export default Home;

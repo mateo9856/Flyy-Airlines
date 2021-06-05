@@ -24,7 +24,6 @@ namespace FlyyAirlines.Controllers
             _mainAirplanes = mainAirplanes;
         }
 
-        [Authorize(Roles = "Admin, SuperAdmin")]
         [Route("GetFlights")]
         [HttpGet]
         public IActionResult GetFlights()
@@ -33,7 +32,6 @@ namespace FlyyAirlines.Controllers
             return Ok(GetFlights);
         }
 
-        [Authorize(Roles = "Admin, SuperAdmin")]
         [Route("GetAirplanes")]
         [HttpGet]
         public IActionResult GetAirplanes()

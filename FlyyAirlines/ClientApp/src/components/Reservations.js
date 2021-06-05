@@ -1,9 +1,7 @@
-﻿import React, { useContext, useState } from "react";
+﻿import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../AppContext";
 import "../css/Reservations.css";
-import Flights from "../models/Flights";
-import Reservations from "../models/Reservations";
-import Users from "../models/Users";
+import FetchDatas from "../FetchDatas";
 const ReservationComponent = () => {
     const [buttonValue, setButtonValue] = useState(0);
 
@@ -43,16 +41,23 @@ const ReservationComponent = () => {
         return arr;
     };
 
+    useEffect(() => {
+        FetchDatas.Get('api/Flights/GetFlights', setFlights)
+        FetchDatas.Get('api/Reservation', setReservations);
+    })
+
     const [activeReservation, setActiveReservation] = useState(false);
+    const [Flights, setFlights] = useState([]);
+    const [Reservations, setReservations] = useState([]);
     const [reservationVal, setReservationVal] = useState({
         name: "",
         surname: "",
         personIdentity: 0,
         seatNumber: 0,
-        flight: [Flights[0]],
+        flight: 0
     });
     const [context, setContext] = useContext(AppContext);
-    const activeUser = Users.filter((user) => user.id === context.userData.id);
+    const activeUser = context.userData;
     const GetReserve = Reservations.filter((res) => {
         return res.userReservation === activeUser[0];
     });
@@ -82,16 +87,14 @@ const ReservationComponent = () => {
         if (checkFreeFlight.includes(buttonValue)) {
             alert("Miejsce zajęte");
         } else {
-            Reservations.push({
-                id: Reservations.length,
-                userReservation: activeUser[0],
-                name: reservationVal.name,
-                surname: reservationVal.surname,
-                personIdentity: reservationVal.personIdentity,
-                seatNumber: buttonValue,
-                flight: reservationVal.flight[0],
-            });
-            reservationVal.flight[0].reservedPlaces.push(buttonValue);
+            FetchDatas.Post('api/Reservation', {
+                name: "",
+                surname: "",
+                personIdentity: "",
+                seat: "",
+                flight: 0,
+                user: 0
+            })
             alert("Zarezerwowano");
             setButtonValue(0);
             setReservationVal({
@@ -99,7 +102,7 @@ const ReservationComponent = () => {
                 surname: "",
                 personIdentity: 0,
                 seatNumber: 0,
-                flight: [Flights[0]],
+                
             })
         }
     };

@@ -1,4 +1,5 @@
-﻿import React from 'react';
+﻿import React, { useEffect } from 'react';
+import FetchDatas from '../FetchDatas';
 import Flights from "../models/Flights";
 
 const convertToName = (string) => {
@@ -51,6 +52,12 @@ const convertToName = (string) => {
 }
 
 const FlightsComponent = () => {
+    const [Flights, setFlights] = useState([]);
+
+    useEffect(() => {
+        FetchDatas.Get('api/Flights/GetFlights', setFlights);
+    }, [])
+
     return (
         <>
             <h4 className="text-center">Aktualne wyloty</h4>

@@ -14,7 +14,6 @@ import "./css/Home.css";
 
 const NavMenu = () => {
     const [context, setContext] = useContext(AppContext);
-
     const [collapsed, setCollapsed] = useState(true);
     const toggleNavbar = () => setCollapsed(!collapsed);
     return (

@@ -22,9 +22,8 @@ namespace FlyyAirlines.Controllers
             _mainReserves = mainRepository;
         }
 
-        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpGet]
-        public IActionResult GetUsers()
+        public IActionResult GetReservations()
         {
             try
             {

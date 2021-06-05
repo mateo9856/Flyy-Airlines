@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import "../css/Register.css";
+import FetchDatas from "../FetchDatas";
 import Users from "../models/Users";
 const Register = () => {
     const [data, setData] = useState({
-        login: "",
+        email: "",
         password: "",
+        userName: "",
         name: "",
         surname: "",
     });
@@ -29,15 +31,14 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        Users.push({
-            id: Users.length,
-            name: data.name,
-            surname: data.surname,
-            login: data.login,
+        FetchDatas.Post("api/account/register", {
+            email: data.email,
+            userName: data.userName,
             password: data.password,
-            role: "User",
-            reservations: [],
-        });
+            name: data.name,
+            surname: data.surname
+        })
+
         if (checkObjValueIsNotEmpty(data)) {
             alert("Zarejestrowany! Mo¿esz siê zalogowaæ")
             history.push('/')
@@ -58,6 +59,18 @@ const Register = () => {
                             type="text"
                             name="login"
                             value={data.email}
+                            onChange={handleChange}
+                            required
+                        />
+                    </label>
+
+                    <label>
+                        <input
+                            className="input-field"
+                            placeholder="User name"
+                            type="text"
+                            name="userName"
+                            value={data.userName}
                             onChange={handleChange}
                             required
                         />

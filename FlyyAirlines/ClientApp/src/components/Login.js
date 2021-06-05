@@ -3,6 +3,7 @@ import { AppContext } from "../AppContext";
 import Users from "../models/Users";
 import "../css/Login.css";
 import { useHistory } from "react-router";
+import FetchDatas from "../FetchDatas";
 
 const Login = () => {
     const [context, setContext] = useContext(AppContext);
@@ -14,20 +15,21 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const findUser = Users.filter((user) => user.login === datas.email);
-        const newDatas = {
-            isLogged: true,
-            userData: findUser[0],
-            userRole: findUser[0].role,
-        };
+        const datas = FetchDatas.Post('api/account/login')
+        console.log(datas);
+        //const newDatas = {
+        //    isLogged: true,
+        //    userData: findUser[0],
+        //    userRole: findUser[0].role,
+        //};
 
-        if (findUser.length > 0) {
-            setContext(newDatas);
-            localStorage.setItem("loginData", JSON.stringify(newDatas));
-            history.push("/");
-        } else {
-            return "niezalogowany";
-        }
+        //if (findUser.length > 0) {
+        //    setContext(newDatas);
+        //    localStorage.setItem("loginData", JSON.stringify(newDatas));
+        //    history.push("/");
+        //} else {
+        //    return "niezalogowany";
+        //}
     };
 
     const handleChange = (e) => {
