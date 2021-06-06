@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import "../css/Register.css";
-import FetchDatas from "../FetchDatas";
+import axios from "axios";
 
 const Register = () => {
     const [data, setData] = useState({
@@ -11,19 +11,8 @@ const Register = () => {
         name: "",
         surname: "",
     });
-    //sprawdzic!
+    
     const history = useHistory();
-
-    const checkObjValueIsNotEmpty = (obj) => {
-        for (var key in obj) {
-            if (obj.hasOwnProperty(key))
-                return true;
-            else {
-                return false;
-                break;
-            }
-        }
-    }
 
     const handleChange = (e) => {
         setData({
@@ -35,21 +24,21 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-
-        if (checkObjValueIsNotEmpty(data)) {
-            alert("Zarejestrowany! Mo¿esz siê zalogowaæ")
-            FetchDatas.Post("api/account/register", {
+        axios.post("api/account/register",
+            {
                 email: data.email,
                 userName: data.userName,
                 password: data.password,
                 name: data.name,
                 surname: data.surname
+            }).then(res => {
+                alert("Zarejestrowany");
+                history.push("/")
+            }).catch(err => {
+                console.log(err);
+                alert("B³¹d z zaptaniem!")
             })
-            history.push('/')
-        } else {
-            alert("U¿ytkownik niezarejestrowany!")
-        }
-    };
+    }
 
     return (
         <div>

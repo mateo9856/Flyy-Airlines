@@ -63,6 +63,8 @@ namespace FlyyAirlines.Controllers
                 Email = userRegisterDto.Email,
                 UserName = userRegisterDto.UserName,
                 Password = userRegisterDto.Password,
+                Name = userRegisterDto.Name,
+                Surname = userRegisterDto.Surname,
                 Role = Roles.User
             };
 

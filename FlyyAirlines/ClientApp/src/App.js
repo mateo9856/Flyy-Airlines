@@ -12,6 +12,7 @@ import Register from "./components/Register";
 import FlightComponent from "./components/Flights";
 import './custom.css'
 import { AppContext } from "./AppContext";
+import RegisterSubmit from './components/RegisterSubmit';
 
 const CheckIsLocalStorage = () => {
     try {
@@ -55,6 +56,7 @@ function App() {
                         <Route path='/flights' component={FlightComponent} />
                         <Route path='/login' component={Login} />
                         <Route path='/register' component={Register} />
+                        <Route path='/registerSubmit' component={RegisterSubmit} />
                         <ProtectedRoute path='/Admin' component={Admin} />
                     </Switch>
                 </Container>
