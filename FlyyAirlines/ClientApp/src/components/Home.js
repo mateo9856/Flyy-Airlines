@@ -54,7 +54,6 @@ const Home = () => {
             [e.target.name]: e.target.value
         })
     };
-
     return (
         <div className="homePage">
             <div className="searchDiv">
