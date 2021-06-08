@@ -7,7 +7,6 @@ const EmployeeManage = (props) => {
         name: "",
         surname: "",
         workPosition: "",
-        Role: "Employee",
         login: "",
         password: "",
 
@@ -29,7 +28,8 @@ const EmployeeManage = (props) => {
     const AddEmployee = (e) => {
         e.preventDefault();
         if (employeeUser) {
-            FetchDatas.Post("api/Employees", {})
+            //FetchDatas.Post("api/Employees", {})
+            alert("Dodano! Employee User")
         } else {
             FetchDatas.Post('api/Employees', {
                 name: employeeDatas.name,

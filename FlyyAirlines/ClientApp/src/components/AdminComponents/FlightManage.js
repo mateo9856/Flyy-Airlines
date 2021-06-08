@@ -5,15 +5,7 @@ const convertToDateTimeString = (val) => {
     const convertDate = val.split("-");
     const convertDayAndTime = convertDate[2].split("T");
     convertDate.pop();
-    const buildStringDate =
-        convertDayAndTime[0] +
-        "." +
-        convertDate[1] +
-        "." +
-        convertDate[0] +
-        " " +
-        convertDayAndTime[1] +
-        ":00";
+    const buildStringDate = convertDate.concat(convertDayAndTime);//zadbac o konwersje do api
     return buildStringDate;
 };
 
@@ -25,7 +17,7 @@ const FlightManage = (props) => {
         toCountry: "",
         toCity: "",
         departureDate: new Date(),
-        airplane: airplanesList[0],
+        airplane: ""
     });
     const [flightsList, setFlightsList] = useState([]);
     const [airplanesList, setAirplanesList] = useState([]);
@@ -35,7 +27,7 @@ const FlightManage = (props) => {
     });
 
     const GetAirplanes = () => {
-        FetchDatas.Get('api/Flight/GetAirplanes', setAirplanesList)
+        FetchDatas.Get('api/Flights/GetAirplanes', setAirplanesList)
     }
 
     useEffect(() => {
@@ -52,13 +44,15 @@ const FlightManage = (props) => {
 
     const AddFlight = (e) => {
         e.preventDefault();
+        console.log(flightDatas);//dobry skrypt z samolotem i data
         FetchDatas.Post('api/Flights', {
             flightName: flightDatas.flightName,
             fromCountry: flightDatas.country,
             fromCity: flightDatas.city,
             toCountry: flightDatas.toCountry,
             toCity: flightDatas.toCity,
-            departureDate: flightDatas.departureDate
+            departureDate: flightDatas.departureDate,
+            airplane: flightDatas.airplane
         })
         alert("Dodano!");
     };
@@ -87,13 +81,7 @@ const FlightManage = (props) => {
                 ...flightDatas,
                 [e.target.name]: buildStringDate,
             });
-        } else if (e.target.name === "airplane") {
-            const findArray = FetchDatas.Get('api/Flights/Airplane' + e.target.value)
-            setFlightDatas({
-                ...flightDatas,
-                [e.target.name]: findArray,
-            });
-        } else {
+        }  else {
             setFlightDatas({
                 ...flightDatas,
                 [e.target.name]: e.target.value,
@@ -107,7 +95,7 @@ const FlightManage = (props) => {
             [e.target.name]: e.target.value
         })
     };
-
+    console.log(airplanesList);
     return (
         <>
             {props.selectedManage === "add" ? (
@@ -176,7 +164,7 @@ const FlightManage = (props) => {
                                 class="form-control"
                             >
                                 {airplanesList.map((air) => (
-                                    <option value={air.id}>{air.planeName}</option>
+                                    <option value={air.airplaneId}>{air.planeName}</option>
                                 ))}
                             </select>
                         </div>

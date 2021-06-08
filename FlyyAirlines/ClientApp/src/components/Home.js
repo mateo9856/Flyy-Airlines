@@ -4,6 +4,7 @@ import JoinTheClub from "../images/joinTheClub.jpg";
 import Ecology from "../images/ecology.jpg";
 import Progress from "../images/progress.jpg";
 import FetchDatas from "../FetchDatas";
+import axios from "axios";
 
 const quickNews = [
     {
@@ -29,14 +30,12 @@ const quickNews = [
     },
 ];
 const Home = () => {
-
+    const [Flights, setFlights] = useState([]);
     useEffect(() => {
-        const datas = FetchDatas.Get('api/Flights/GetFlights', setFlights);
-        console.log(datas);
+        FetchDatas.Get('api/Flights/GetFlights', setFlights);
     }, [])
 
     const [isSearched, setIsSearched] = useState(false);
-    const [Flights, setFlights] = useState([]);
     const [searchedFlight, setSearchedFlight] = useState([]);
     const [datas, setDatas] = useState({
         leavingValue: "",
@@ -64,15 +63,15 @@ const Home = () => {
                             <form onSubmit={handleSubmit}>
                                 <label htmlFor="leavings">
                                     <select value={datas.leavingValue} className="form-select form-select-sm" name="leavingValue" onChange={handleChange}>
-                                        {Flights.map((flight) => (
-                                            <option value={flight}>{flight}</option>
+                                    {Flights.map((flight) => (
+                                        <option value={flight.flightId}>{flight.flightName}</option>
                                         ))}
                                     </select>
                                 </label>
                                 <label htmlFor="destiantion">
                                     <select className="form-select form-select-sm" style={{ marginTop: "10px" }} value={datas.destinationValue} name="destinationValue" onChange={handleChange}>
-                                        {Flights.map((flight) => (
-                                            <option value={flight}>{flight}</option>
+                                    {Flights.map((flight) => (
+                                        <option value={flight.flightId}>{flight.flightName}</option>
                                         ))}
                                     </select>
                                 </label>

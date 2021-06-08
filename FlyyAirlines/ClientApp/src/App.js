@@ -16,7 +16,7 @@ import RegisterSubmit from './components/RegisterSubmit';
 
 const CheckIsLocalStorage = () => {
     try {
-        const GetData = JSON.parse(localStorage.getItem('loginData'));
+        const GetData = JSON.parse(localStorage.getItem('loginUser'));
         if (Object.keys(GetData).length > 0) {
             return true;
         } else {
@@ -36,7 +36,7 @@ function App() {
 
     useEffect(() => {
         if (CheckIsLocalStorage()) {
-            const GetData = JSON.parse(localStorage.getItem('loginData'));
+            const GetData = JSON.parse(localStorage.getItem('loginUser'));
             setContext({
                 isLogged: true,
                 userData: GetData.userData,

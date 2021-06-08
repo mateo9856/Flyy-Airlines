@@ -1,4 +1,5 @@
-﻿using FlyyAirlines.Models;
+﻿using FlyyAirlines.DTO;
+using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.Employees;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
@@ -38,14 +39,22 @@ namespace FlyyAirlines.Controllers
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Employee employee)
+        public async Task<ActionResult> Post([FromBody] EmployeeAddDTO employee)
         {
             if (employee == null)
             {
                 return BadRequest();
             }
-            await _mainEmployee.Add(employee);
-            return CreatedAtAction("Get", new { id = employee.EmployeeId }, employee);
+
+            var newEmployee = new Employee()
+            {
+                EmployeeId = Guid.NewGuid(),
+                Name = employee.Name,
+                Surname = employee.Surname,
+                WorkPosition = employee.WorkPosition,
+            };
+            await _mainEmployee.Add(newEmployee);
+            return CreatedAtAction("Get", new { id = newEmployee.EmployeeId }, employee);
         }
 
         //[Authorize(Roles = "Admin, SuperAdmin")]

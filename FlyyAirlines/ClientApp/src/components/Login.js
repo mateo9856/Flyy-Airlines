@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../AppContext";
-
+import axios from "axios";
 import "../css/Login.css";
 import { useHistory } from "react-router";
 import FetchDatas from "../FetchDatas";
@@ -15,18 +15,18 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const data = FetchDatas.Post('api/account/login', datas);
-        if (data) {//przerobic by w calym axiosie bo jest asynchroniczne i najpierw jest undefined
-            console.log(data.data)
-            const loginData = {
-                isLogged: true,
-                userData: data.data,
-                userRole: data.data.userRole
-            }
-            setContext(loginData)
-            localStorage.setItem("loginUser", JSON.stringify(loginData))
-            history.push("/")
-        }
+        axios.post('api/account/login', datas)
+            .then(res => {
+                console.log(res);
+                const loginData = {
+                    isLogged: true,
+                    userData: res.data,
+                    userRole: res.data.userRole
+                }
+                setContext(loginData)
+                localStorage.setItem("loginUser", JSON.stringify(loginData))
+                history.push("/")
+            }).catch(err => alert("Niezalogowany"))
     };
 
     const handleChange = (e) => {
