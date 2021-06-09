@@ -3,9 +3,12 @@ import FetchDatas from "../../FetchDatas";
 
 const convertToDateTimeString = (val) => {
     const convertDate = val.split("-");
-    const convertDayAndTime = convertDate[2].split("T");
+    let convertDayAndTime = convertDate[2].split("T");
+    const convertMinutes = convertDayAndTime[1].split(":");
+    convertDayAndTime.pop();
+    convertDayAndTime = convertDayAndTime.concat(convertMinutes);
     convertDate.pop();
-    const buildStringDate = convertDate.concat(convertDayAndTime);//zadbac o konwersje do api
+    const buildStringDate = convertDate.concat(convertDayAndTime);
     return buildStringDate;
 };
 
@@ -17,7 +20,7 @@ const FlightManage = (props) => {
         toCountry: "",
         toCity: "",
         departureDate: new Date(),
-        airplane: ""
+        airplane: "8B0BA3EC-D6EC-4103-08E0-08D92B5B9994"
     });
     const [flightsList, setFlightsList] = useState([]);
     const [airplanesList, setAirplanesList] = useState([]);
@@ -31,8 +34,10 @@ const FlightManage = (props) => {
     }
 
     useEffect(() => {
-        GetAirplanes();
-        if (props.selectedManage === "remove") {
+        if (props.selectedManage === "add") {
+            GetAirplanes();
+        }
+        else if (props.selectedManage === "remove") {
             GetFlights();
         }
     }, []);
@@ -159,6 +164,7 @@ const FlightManage = (props) => {
                         <div className="form-group">
                             <label className="text-left text-capitalize">Samolot</label>
                             <select
+                                value={flightDatas.airplane}
                                 name="airplane"
                                 onChange={handleChange}
                                 class="form-control"
@@ -198,12 +204,12 @@ const FlightManage = (props) => {
                             </thead>
                             <tbody>
                                 {flightsList.length > 0
-                                    ? flightsList.map((list) => (
+                                    ? flightsList.map((list, index) => (
                                         <tr key={list.id}>
-                                            <th scope="row">{list.id}</th>
+                                            <th scope="row">{index}</th>
                                             <td>{list.flightName}</td>
                                             <td>
-                                                <button className="btn btn-outline-primary" name={list.id} onClick={RemoveFlight}>
+                                                <button className="btn btn-outline-primary" name={list.flightsId} onClick={RemoveFlight}>
                                                     Usuń
                           </button>
                                             </td>

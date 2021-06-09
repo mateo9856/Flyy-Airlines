@@ -45,7 +45,10 @@ namespace FlyyAirlines.Controllers
             {
                 return BadRequest();
             }
-
+            else if (employee.Email != null && employee.Password != null)
+            {//sprobojemy redirect przez new Uri
+                return RedirectToAction("RegisterEmployee", "Account", new { Id = Guid.NewGuid(), Email= employee.Email, UserName = employee.UserName, Password = employee.Password });
+            }
             var newEmployee = new Employee()
             {
                 EmployeeId = Guid.NewGuid(),

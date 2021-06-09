@@ -8,6 +8,7 @@ const EmployeeManage = (props) => {
         surname: "",
         workPosition: "",
         login: "",
+        email: "",
         password: "",
 
     });
@@ -27,9 +28,16 @@ const EmployeeManage = (props) => {
 
     const AddEmployee = (e) => {
         e.preventDefault();
+        console.log(employeeDatas)
         if (employeeUser) {
-            //FetchDatas.Post("api/Employees", {})
-            alert("Dodano! Employee User")
+            FetchDatas.Post("api/Employees", {
+                name: employeeDatas.name,
+                surname: employeeDatas.surname,
+                workPosition: employeeDatas.workPosition,
+                userName: employeeDatas.login,
+                email: employeeDatas.email,
+                password: employeeDatas.password
+            })
         } else {
             FetchDatas.Post('api/Employees', {
                 name: employeeDatas.name,
@@ -37,7 +45,6 @@ const EmployeeManage = (props) => {
                 workPosition: employeeDatas.workPosition
             })
         }
-        alert("Dodano")
     }
     const RemoveEmployee = (id) => {
         FetchDatas.Delete("api/Employees" + id);
@@ -72,6 +79,10 @@ const EmployeeManage = (props) => {
                         <input className="form-control" type="text" onChange={handleChange} value={employeeDatas.workPosition} name="workPosition" />
                         </div><br />
                         {employeeUser ? <div>
+                            <div className="form-group">
+                                Email:
+                            <input className="form-control" type="text" name="email" value={employeeDatas.email} onChange={handleChange} />
+                            </div><br />
                             <div className="form-group">
                                 Login:
                             <input className="form-control" type="text" name="login" value={employeeDatas.login} onChange={handleChange} />

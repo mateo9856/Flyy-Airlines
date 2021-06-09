@@ -1,11 +1,12 @@
-﻿using FlyyAirlines.Models;
+﻿using FlyyAirlines.DTO;
+using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.FlightsAirplanes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-
+//Relations Flights-Airlanes problem solved this later!
 
 namespace FlyyAirlines.Controllers
 {
@@ -77,14 +78,33 @@ namespace FlyyAirlines.Controllers
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost]
-        public IActionResult AddFlight([FromBody] Flight flight)
+        public async Task<IActionResult> AddFlight([FromBody] FlightDTO flight)
         {
             if(flight == null)
             {
                 return BadRequest();
             }
-            _mainPlanes.Add(flight);
-            return CreatedAtAction("Get", new { id = flight.FlightsId }, flight);
+            int[] Times = new int[5];
+            for(int i = 0; i < Times.Length; i++)
+            {
+                Times[i] = Int32.Parse(flight.DepartureDate[i]);
+            }
+
+            var GetAirplane = await _mainAirplanes.Get(Guid.Parse(flight.Airplane));
+            var Flight = new Flight()
+            {
+                FlightsId = Guid.NewGuid(),
+                FlightName = flight.FlightName,
+                FromCountry = flight.FromCountry,
+                FromCity = flight.FromCity,
+                ToCountry = flight.ToCountry,
+                ToCity = flight.ToCity,
+                Airplane = GetAirplane,
+                DepartureDate = new DateTime(Times[0], Times[1], Times[2], Times[3], Times[4], 0)
+            };
+
+            await _mainPlanes.Add(Flight);
+            return CreatedAtAction("Get", new { id = Flight.FlightsId }, Flight);
         }
 
         //[Authorize(Roles = "Admin, SuperAdmin")]

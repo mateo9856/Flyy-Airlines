@@ -25,8 +25,7 @@ namespace FlyyAirlines.Repository
 
         public async Task Delete(T entity)
         {
-            T GetData = await table.FindAsync(entity);
-            table.Remove(GetData);
+            table.Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
 
