@@ -88,9 +88,9 @@ namespace FlyyAirlines.Controllers
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [Route("addEmployee")]
         [HttpPost]
-        public async Task<IActionResult> RegisterEmployee([FromBody] EmployeeAddDTO userRegisterDto)
+        public async Task<IActionResult> RegisterEmployee([FromBody] EmployeeAddDTO employee)
         {
-            var userExists = await _userManager.FindByEmailAsync(userRegisterDto.Email);
+            var userExists = await _userManager.FindByEmailAsync(employee.Email);
             if (userExists != null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { StatusCode = "Error", Message = "User already exists!" });
@@ -99,22 +99,22 @@ namespace FlyyAirlines.Controllers
             var newUser = new User()
             {
                 Id = newId,
-                Email = userRegisterDto.Email,
-                UserName = userRegisterDto.UserName,
-                Password = userRegisterDto.Password,
+                Email = employee.Email,
+                UserName = employee.UserName,
+                Password = employee.Password,
                 Role = Roles.Employee
             };
             var newEmployee = new Employee()
             {
                 User = newUser,
-                Name = userRegisterDto.Name,
-                Surname = userRegisterDto.Surname,
-                WorkPosition = userRegisterDto.WorkPosition,
+                Name = employee.Name,
+                Surname = employee.Surname,
+                WorkPosition = employee.WorkPosition,
                 EmployeeId = Guid.NewGuid()
                 
             };
 
-            var result = await _userManager.CreateAsync(newUser, userRegisterDto.Password);
+            var result = await _userManager.CreateAsync(newUser, employee.Password);
             if (result.Succeeded)
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
