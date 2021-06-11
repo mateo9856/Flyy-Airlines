@@ -30,7 +30,7 @@ const EmployeeManage = (props) => {
         e.preventDefault();
         console.log(employeeDatas)
         if (employeeUser) {
-            FetchDatas.Post("api/Employees", {
+            FetchDatas.Post("api/account/addEmployee", {
                 name: employeeDatas.name,
                 surname: employeeDatas.surname,
                 workPosition: employeeDatas.workPosition,

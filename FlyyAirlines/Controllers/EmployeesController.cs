@@ -45,11 +45,6 @@ namespace FlyyAirlines.Controllers
             {
                 return BadRequest();
             }
-            else if (employee.Email != null && employee.Password != null)
-            {//sprobujemy redirect przez new Uri badz we froncie fetch na addemployee albo http client i new uri
-                //looking http requests
-                return RedirectToAction("RegisterEmployee", "Account", new { employee = employee });
-            }
             var newEmployee = new Employee()
             {
                 EmployeeId = Guid.NewGuid(),
