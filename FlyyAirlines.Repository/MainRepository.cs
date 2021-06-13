@@ -11,7 +11,7 @@ namespace FlyyAirlines.Repository
     public class MainRepository<T> : IMainRepository<T> where T : class
     {
         private readonly AppDBContext _dbContext;
-        private DbSet<T> table = null;
+        private DbSet<T> table;
         public MainRepository(AppDBContext dbContext)
         {
             _dbContext = dbContext;
@@ -29,13 +29,8 @@ namespace FlyyAirlines.Repository
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<T> Get(Guid id)
-        {
-            return await table.FindAsync(id);
-        }
-
-        public async Task<T> Get(string id)
-        {
+        public async Task<T> Get(object id)
+        {//zmienic by modele mialy wspolna nazwe id bo nie moge sie odwolac ! Baza do przemodelowania
             return await table.FindAsync(id);
         }
 

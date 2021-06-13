@@ -9,8 +9,7 @@ namespace FlyyAirlines.Repository
     public interface IMainRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
-        Task<T> Get(Guid id);
-        Task<T> Get(string id);
+        Task<T> Get(object id);
         Task Add(T entity);
         void Update(T entity);
         Task Delete(T entity);

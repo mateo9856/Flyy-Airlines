@@ -101,17 +101,10 @@ namespace FlyyAirlines.Controllers
                 Id = newId,
                 Email = employee.Email,
                 UserName = employee.UserName,
-                Password = employee.Password,
-                Role = Roles.Employee
-            };
-            var newEmployee = new Employee()
-            {
-                User = newUser,
                 Name = employee.Name,
                 Surname = employee.Surname,
-                WorkPosition = employee.WorkPosition,
-                EmployeeId = Guid.NewGuid()
-                
+                Password = employee.Password,
+                Role = Roles.Employee
             };
 
             var result = await _userManager.CreateAsync(newUser, employee.Password);
@@ -122,6 +115,15 @@ namespace FlyyAirlines.Controllers
                 await _userManager.ConfirmEmailAsync(newUser, token);
 
                 await _userManager.AddToRoleAsync(newUser, Roles.Employee);
+                
+                var newEmployee = new Employee()
+                {
+                    EmployeeId = Guid.NewGuid(),
+                    Name = employee.Name,
+                    Surname = employee.Surname,
+                    WorkPosition = employee.WorkPosition,
+                    User = newUser,
+                };
 
                 await _dbContext.AddAsync(newEmployee);
 

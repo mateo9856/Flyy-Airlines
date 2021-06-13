@@ -47,7 +47,8 @@ const EmployeeManage = (props) => {
         }
     }
     const RemoveEmployee = (id) => {
-        FetchDatas.Delete("api/Employees" + id);
+        console.log(id);
+        FetchDatas.Delete("api/Employees/" + id);
     }
 
     const handleChange = (e) => {
@@ -110,13 +111,13 @@ const EmployeeManage = (props) => {
                             </thead>
                             <tbody>
                                 {employeesList.length > 0 ?
-                                    employeesList.map(list => (
+                                    employeesList.map((list, index) => (
                                         <tr>
-                                            <th scope="row">{list.id}</th>
+                                            <th scope="row">{index}</th>
                                             <td>{list.name}</td>
                                             <td>{list.surname}</td>
                                             <td>{list.workPosition}</td>
-                                            <td><button className="btn btn-outline-primary" name={list.employeeId} onClick={() => RemoveEmployee(list.id)}>Delete</button></td>
+                                            <td><button className="btn btn-outline-primary" name={list.employeeId} onClick={() => RemoveEmployee(list.employeeId)}>Delete</button></td>
                                         </tr>
                                     ))
                                     : ""}

@@ -70,14 +70,16 @@ const FlightsComponent = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Flights.map(flight => (
-                        <tr>
-                            <th scope="row">{`${flight.from.city} : `}<b>{`${flight.from.country}`}</b></th>
-                            <td>{flight.to.city + " : "}<b>{flight.to.country}</b></td>
-                            <td>{convertToName(flight.departureDate)}</td>
-                            <td>{flight.airplane.numberOfSeats}</td>
-                        </tr>
-                    ))}
+                    {Flights.length > 0 ?
+                        Flights.map(flight => (
+                            <tr>
+                                <th scope="row">{`${flight.from.city} : `}<b>{`${flight.from.country}`}</b></th>
+                                <td>{flight.to.city + " : "}<b>{flight.to.country}</b></td>
+                                <td>{convertToName(flight.departureDate)}</td>
+                                <td>{flight.airplane.numberOfSeats}</td>
+                            </tr>
+                        )) : ""
+                    }
                 </tbody>
             </table>
         </>

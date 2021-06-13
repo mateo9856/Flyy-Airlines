@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FlyyAirlines.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,7 +12,6 @@ namespace FlyyAirlines.Models
         {
             Reservations = new HashSet<Reservation>();
         }
-        [Key]
         public override string Id { get; set; }
         public override string UserName { get; set; }
         public string Name { get; set; }
