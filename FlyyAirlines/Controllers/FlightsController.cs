@@ -73,7 +73,7 @@ namespace FlyyAirlines.Controllers
                 return BadRequest();
             }
             _mainAirplanes.Add(airplane);
-            return CreatedAtAction("Get", new { id = airplane.AirplaneId }, airplane);
+            return CreatedAtAction("Get", new { id = airplane.Id }, airplane);
         }
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
@@ -93,7 +93,7 @@ namespace FlyyAirlines.Controllers
             var GetAirplane = await _mainAirplanes.Get(Guid.Parse(flight.Airplane));
             var Flight = new Flight()
             {
-                FlightsId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 FlightName = flight.FlightName,
                 FromCountry = flight.FromCountry,
                 FromCity = flight.FromCity,
@@ -104,14 +104,14 @@ namespace FlyyAirlines.Controllers
             };
 
             await _mainPlanes.Add(Flight);
-            return CreatedAtAction("Get", new { id = Flight.FlightsId }, Flight);
+            return CreatedAtAction("Get", new { id = Flight.Id }, Flight);
         }
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
         public IActionResult Put(Guid id, Flight flight)
         {
-            if (id != flight.FlightsId)
+            if (id != flight.Id)
             {
                 return BadRequest();
             }

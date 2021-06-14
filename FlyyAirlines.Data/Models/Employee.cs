@@ -1,12 +1,11 @@
-﻿using System;
+﻿using FlyyAirlines.Data.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlyyAirlines.Models
 {
-    public class Employee
+    public class Employee : BaseEntity
     {
-        [Key]
-        public Guid EmployeeId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string WorkPosition { get; set; }

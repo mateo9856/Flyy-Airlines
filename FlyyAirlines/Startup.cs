@@ -65,7 +65,6 @@ namespace FlyyAirlines
             services.AddDbContext<AppDBContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("FlyyAirlines"), b => b.MigrationsAssembly("FlyyAirlines")));
             
-            services.AddScoped<IMainRepository<User>, MainRepository<User>>();
             services.AddScoped<IMainRepository<Reservation>, MainRepository<Reservation>>();
             services.AddScoped<IMainRepository<Flight>, MainRepository<Flight>>();
             services.AddScoped<IMainRepository<Airplane>, MainRepository<Airplane>>();
@@ -73,6 +72,7 @@ namespace FlyyAirlines
             services.AddScoped<IReserveData, ReserveData>();
             services.AddScoped<IAirplanesFlightsData, AirplanesFlightsData>();
             services.AddScoped<IEmployeeData, EmployeeData>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton(mapper);
             services.AddWebEncoders(o =>
             {

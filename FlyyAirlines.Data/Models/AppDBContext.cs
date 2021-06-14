@@ -20,6 +20,14 @@ namespace FlyyAirlines.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Airplane>().Property(b => b.Id)
+                .HasColumnName("AirplaneId");
+            modelBuilder.Entity<Employee>().Property(b => b.Id)
+            .HasColumnName("EmployeeId");
+            modelBuilder.Entity<Flight>().Property(b => b.Id)
+            .HasColumnName("FlightsId");
+            modelBuilder.Entity<Reservation>().Property(b => b.Id)
+            .HasColumnName("ReservationId");
         }
     }
 }

@@ -48,14 +48,14 @@ namespace FlyyAirlines.Controllers
         public async Task<ActionResult> Post([FromBody] Reservation reservation)
         {
             await _mainReserves.Add(reservation);
-            return CreatedAtAction("Get", new { id = reservation.ReservationId }, reservation);
+            return CreatedAtAction("Get", new { id = reservation.Id }, reservation);
         }
         
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
         public IActionResult Put(Guid id, Reservation reservation)
         {
-            if (id != reservation.ReservationId)
+            if (id != reservation.Id)
             {
                 return BadRequest();
             }

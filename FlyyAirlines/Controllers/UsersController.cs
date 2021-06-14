@@ -12,8 +12,8 @@ namespace FlyyAirlines.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IMainRepository<User> _userData;
-        public UsersController(IMainRepository<User> userData)
+        private readonly IUserRepository _userData;
+        public UsersController(IUserRepository userData)
         {
             _userData = userData;
         }
@@ -58,14 +58,9 @@ namespace FlyyAirlines.Controllers
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id)
+        public ActionResult Delete(string id)
         {
-            var getUser = await _userData.Get(id);
-            if(getUser == null)
-            {
-                return NotFound();
-            }
-            await _userData.Delete(getUser);
+             _userData.Delete(id);
             return NoContent();
         }
     }

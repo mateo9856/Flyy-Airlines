@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlyyAirlines.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,14 +7,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlyyAirlines.Models
 {
-    public class Flight
+    public class Flight : BaseEntity
     {
         public Flight()
         {
             Reservations = new HashSet<Reservation>();
         }
-        [Key]
-        public Guid FlightsId { get; set; }
         public string FlightName { get; set; }
         public string FromCountry { get; set; }
         public string FromCity { get; set; }

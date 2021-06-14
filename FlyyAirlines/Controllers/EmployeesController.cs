@@ -47,20 +47,20 @@ namespace FlyyAirlines.Controllers
             }
             var newEmployee = new Employee()
             {
-                EmployeeId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Name = employee.Name,
                 Surname = employee.Surname,
                 WorkPosition = employee.WorkPosition,
             };
             await _mainEmployee.Add(newEmployee);
-            return CreatedAtAction("Get", new { id = newEmployee.EmployeeId }, employee);
+            return CreatedAtAction("Get", new { id = newEmployee.Id }, employee);
         }
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
         public IActionResult Put(Guid id, [FromBody] Employee employee)
         {
-            if (id != employee.EmployeeId)
+            if (id != employee.Id)
             {
                 return BadRequest();
             }

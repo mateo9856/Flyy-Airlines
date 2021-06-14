@@ -1,4 +1,5 @@
-﻿using FlyyAirlines.Models;
+﻿using FlyyAirlines.Data.Models;
+using FlyyAirlines.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FlyyAirlines.Repository
 {
-    public class MainRepository<T> : IMainRepository<T> where T : class
+    public class MainRepository<T> : IMainRepository<T> where T : BaseEntity
     {
         private readonly AppDBContext _dbContext;
         private DbSet<T> table;
@@ -29,14 +30,14 @@ namespace FlyyAirlines.Repository
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<T> Get(object id)
-        {//zmienic by modele mialy wspolna nazwe id bo nie moge sie odwolac ! Baza do przemodelowania
-            return await table.FindAsync(id);
+        public async Task<T> Get(Guid id)
+        {
+            return await table.SingleOrDefaultAsync(s => s.Id == id);
         }
 
         public IEnumerable<T> GetAll()
         {
-            return table.ToList();
+            return table.AsEnumerable();
         }
 
         public void Update(T entity)

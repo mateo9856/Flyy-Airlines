@@ -14,7 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-
+//przetestowac w razie co przemodelowac!
 namespace FlyyAirlines.Controllers
 {
     [Route("api/[controller]")]
@@ -118,7 +118,7 @@ namespace FlyyAirlines.Controllers
                 
                 var newEmployee = new Employee()
                 {
-                    EmployeeId = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = employee.Name,
                     Surname = employee.Surname,
                     WorkPosition = employee.WorkPosition,
