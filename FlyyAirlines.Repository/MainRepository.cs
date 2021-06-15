@@ -30,14 +30,14 @@ namespace FlyyAirlines.Repository
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<T> Get(Guid id)
+        public async Task<T> Get(string id)
         {
-            return await table.SingleOrDefaultAsync(s => s.Id == id);
+            return await table.FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return table.AsEnumerable();
+            return table;
         }
 
         public void Update(T entity)

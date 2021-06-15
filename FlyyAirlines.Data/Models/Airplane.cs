@@ -11,6 +11,6 @@ namespace FlyyAirlines.Models
     {
         public string PlaneName { get; set; }
         public int? NumberOfSeats { get; set; }
-        public List<Flight> Flights { get; set; }
+        public virtual ICollection<Flight> Flights { get; set; }
     }
 }

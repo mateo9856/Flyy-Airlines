@@ -9,8 +9,8 @@ namespace FlyyAirlines.Repository
 {
     public interface IMainRepository<T> where T : BaseEntity
     {
-        IEnumerable<T> GetAll();
-        Task<T> Get(Guid id);
+        IQueryable<T> GetAll();
+        Task<T> Get(string id);
         Task Add(T entity);
         void Update(T entity);
         Task Delete(T entity);

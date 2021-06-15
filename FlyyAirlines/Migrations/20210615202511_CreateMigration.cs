@@ -3,15 +3,15 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FlyyAirlines.Migrations
 {
-    public partial class InitialCreate : Migration
-    {//obczaic blad migracji
+    public partial class CreateMigration : Migration
+    {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Airplanes",
                 columns: table => new
                 {
-                    AirplaneId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AirplaneId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PlaneName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NumberOfSeats = table.Column<int>(type: "int", nullable: true)
                 },
@@ -38,7 +38,7 @@ namespace FlyyAirlines.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -61,21 +61,21 @@ namespace FlyyAirlines.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Flights",
                 columns: table => new
                 {
-                    FlightsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FlightsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FlightName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FromCountry = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FromCity = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ToCountry = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ToCity = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AirplaneId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AirplaneId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -126,7 +126,7 @@ namespace FlyyAirlines.Migrations
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -146,7 +146,7 @@ namespace FlyyAirlines.Migrations
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -170,7 +170,7 @@ namespace FlyyAirlines.Migrations
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -190,7 +190,7 @@ namespace FlyyAirlines.Migrations
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -198,7 +198,7 @@ namespace FlyyAirlines.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WorkPosition = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -211,7 +211,7 @@ namespace FlyyAirlines.Migrations
                         name: "FK_Employees_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -219,12 +219,12 @@ namespace FlyyAirlines.Migrations
                 name: "Reservations",
                 columns: table => new
                 {
-                    ReservationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReservationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PersonIdentify = table.Column<int>(type: "int", nullable: false),
                     Seat = table.Column<int>(type: "int", nullable: false),
-                    FlightsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    FlightsId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -234,7 +234,7 @@ namespace FlyyAirlines.Migrations
                         name: "FK_Reservations_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Reservations_Flights_FlightsId",

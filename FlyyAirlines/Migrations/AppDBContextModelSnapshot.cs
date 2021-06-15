@@ -21,9 +21,8 @@ namespace FlyyAirlines.Migrations
 
             modelBuilder.Entity("FlyyAirlines.Models.Airplane", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("AirplaneId");
 
                     b.Property<int?>("NumberOfSeats")
@@ -39,9 +38,8 @@ namespace FlyyAirlines.Migrations
 
             modelBuilder.Entity("FlyyAirlines.Models.Employee", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("EmployeeId");
 
                     b.Property<string>("Name")
@@ -65,13 +63,13 @@ namespace FlyyAirlines.Migrations
 
             modelBuilder.Entity("FlyyAirlines.Models.Flight", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("FlightsId");
 
-                    b.Property<Guid>("AirplaneId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("AirplaneId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DepartureDate")
                         .HasColumnType("datetime2");
@@ -100,13 +98,12 @@ namespace FlyyAirlines.Migrations
 
             modelBuilder.Entity("FlyyAirlines.Models.Reservation", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("ReservationId");
 
-                    b.Property<Guid?>("FlightsId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("FlightsId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -135,7 +132,8 @@ namespace FlyyAirlines.Migrations
             modelBuilder.Entity("FlyyAirlines.Models.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("UserId");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");

@@ -37,7 +37,7 @@ namespace FlyyAirlines.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(Guid id)
+        public async Task<ActionResult> Get(string id)
         {
             var GetReservation = await _mainReserves.Get(id);
             return Ok(GetReservation);
@@ -53,7 +53,7 @@ namespace FlyyAirlines.Controllers
         
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, Reservation reservation)
+        public IActionResult Put(string id, Reservation reservation)
         {
             if (id != reservation.Id)
             {
@@ -67,7 +67,7 @@ namespace FlyyAirlines.Controllers
         
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var Reserve = await _mainReserves.Get(id);
             await _mainReserves.Delete(Reserve);

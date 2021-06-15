@@ -31,7 +31,7 @@ namespace FlyyAirlines.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetEmployee(Guid id)
+        public async Task<ActionResult> GetEmployee(string id)
         {
             var GetEmployee = await _mainEmployee.Get(id);
             return Ok(GetEmployee);
@@ -47,7 +47,7 @@ namespace FlyyAirlines.Controllers
             }
             var newEmployee = new Employee()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 Name = employee.Name,
                 Surname = employee.Surname,
                 WorkPosition = employee.WorkPosition,
@@ -58,7 +58,7 @@ namespace FlyyAirlines.Controllers
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] Employee employee)
+        public IActionResult Put(string id, [FromBody] Employee employee)
         {
             if (id != employee.Id)
             {
@@ -71,7 +71,7 @@ namespace FlyyAirlines.Controllers
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var Emp = await _mainEmployee.Get(id);//sprawdzic to pozniej(usuwanie pracownikow)
             await _mainEmployee.Delete(Emp);

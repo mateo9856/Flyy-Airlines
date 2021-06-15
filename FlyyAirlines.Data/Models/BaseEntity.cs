@@ -10,6 +10,6 @@ namespace FlyyAirlines.Data.Models
     public abstract class BaseEntity
     {
         [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
     }
 }

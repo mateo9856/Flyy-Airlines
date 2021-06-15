@@ -42,7 +42,7 @@ namespace FlyyAirlines.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetFlight(Guid id)
+        public async Task<ActionResult> GetFlight(string id)
         {
             var GetFlight = await _mainPlanes.Get(id);
             if(GetFlight == null)
@@ -53,7 +53,7 @@ namespace FlyyAirlines.Controllers
         }
         [Route("Airplane")]
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetAirplane(Guid id)
+        public async Task<ActionResult> GetAirplane(string id)
         {
             var GetAirplane = await _mainAirplanes.Get(id);
             if (GetAirplane == null)
@@ -90,10 +90,10 @@ namespace FlyyAirlines.Controllers
                 Times[i] = Int32.Parse(flight.DepartureDate[i]);
             }
 
-            var GetAirplane = await _mainAirplanes.Get(Guid.Parse(flight.Airplane));
+            var GetAirplane = await _mainAirplanes.Get(flight.Airplane);
             var Flight = new Flight()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 FlightName = flight.FlightName,
                 FromCountry = flight.FromCountry,
                 FromCity = flight.FromCity,
@@ -109,7 +109,7 @@ namespace FlyyAirlines.Controllers
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, Flight flight)
+        public IActionResult Put(string id, Flight flight)
         {
             if (id != flight.Id)
             {
@@ -122,7 +122,7 @@ namespace FlyyAirlines.Controllers
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteFlight(Guid id)
+        public async Task<ActionResult> DeleteFlight(string id)
         {
             var Flight = await _mainPlanes.Get(id);
             await _mainPlanes.Delete(Flight);

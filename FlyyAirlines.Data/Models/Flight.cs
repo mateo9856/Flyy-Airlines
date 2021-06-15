@@ -19,7 +19,6 @@ namespace FlyyAirlines.Models
         public string ToCountry { get; set; }
         public string ToCity { get; set; }
         public DateTime DepartureDate { get; set; }
-        public Guid AirplaneId { get; set; }
         public virtual Airplane Airplane { get; set; }
         public virtual ICollection<Reservation> Reservations { get; set; }
     }

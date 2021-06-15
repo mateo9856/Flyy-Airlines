@@ -120,7 +120,7 @@ namespace FlyyAirlines
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-            serviceProvider.GetRequiredService<AppDBContext>().Database.EnsureCreated();
+            //serviceProvider.GetRequiredService<AppDBContext>().Database.EnsureCreated();
         }
     }
 }

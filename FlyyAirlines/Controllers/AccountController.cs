@@ -118,14 +118,14 @@ namespace FlyyAirlines.Controllers
                 
                 var newEmployee = new Employee()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     Name = employee.Name,
                     Surname = employee.Surname,
                     WorkPosition = employee.WorkPosition,
                     User = newUser,
                 };
 
-                await _dbContext.AddAsync(newEmployee);
+                await _dbContext.Employees.AddAsync(newEmployee);
 
                 await _dbContext.SaveChangesAsync();
 
