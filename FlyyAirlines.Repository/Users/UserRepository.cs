@@ -35,7 +35,7 @@ namespace FlyyAirlines.Repository
 
         public IEnumerable<User> GetAll()
         {
-            return _dbContext.Users;
+            return _dbContext.Users.Include(d => d.Reservations).ToList();
         }
 
         public void Update(User entity)

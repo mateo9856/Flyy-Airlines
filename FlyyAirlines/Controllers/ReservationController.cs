@@ -27,8 +27,10 @@ namespace FlyyAirlines.Controllers
         {
             try
             {
-                var GetReserves = _mainReserves.GetAll();
-                return Ok(GetReserves);
+                var child = new string[] { "Flights", "User" };
+                var GetDetails = _mainReserves.GetAll(child);
+                return Ok(GetDetails);
+                
             }
             catch (Exception)
             {
@@ -39,8 +41,9 @@ namespace FlyyAirlines.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(string id)
         {
-            var GetReservation = await _mainReserves.Get(id);
-            return Ok(GetReservation);
+            var child = new string[] { "Flight", "User" };
+            var GetDetails = await _mainReserves.EntityWithEagerLoad(d => d.Id == id, child);
+            return Ok(GetDetails);
         }
         
         //[Authorize(Roles = "Admin, SuperAdmin")]

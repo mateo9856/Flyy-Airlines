@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-//Relations Flights-Airlanes problem solved this later!
+
 
 namespace FlyyAirlines.Controllers
 {
@@ -29,38 +29,34 @@ namespace FlyyAirlines.Controllers
         [HttpGet]
         public IActionResult GetFlights()
         {
-            var GetFlights = _mainPlanes.GetAll();
-            return Ok(GetFlights);
+            var child = new string[] { "Airplane" };
+            var GetDetails = _mainPlanes.GetAll(child);
+            return Ok(GetDetails);
         }
 
         [Route("GetAirplanes")]
         [HttpGet]
         public IActionResult GetAirplanes()
         {
-            var GetAirplanes = _mainAirplanes.GetAll();
-            return Ok(GetAirplanes);
+            var child = new string[] { "Flight" };
+            var GetDetails = _mainAirplanes.GetAll(child);
+            return Ok(GetDetails);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetFlight(string id)
         {
-            var GetFlight = await _mainPlanes.Get(id);
-            if(GetFlight == null)
-            {
-                return NotFound();
-            }
-            return Ok(GetFlight);
+            var child = new string[] { "Airplane" };
+            var FlightDetails = await _mainPlanes.EntityWithEagerLoad(d => d.Id == id, child);
+            return Ok(FlightDetails);
         }
         [Route("Airplane")]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetAirplane(string id)
         {
-            var GetAirplane = await _mainAirplanes.Get(id);
-            if (GetAirplane == null)
-            {
-                return NotFound();
-            }
-            return Ok(GetAirplane);
+            var child = new string[] { "Flight" };
+            var AirplaneDetails = await _mainAirplanes.EntityWithEagerLoad(d => d.Id == id, child);
+            return Ok(AirplaneDetails);
         }
 
         //[Authorize(Roles = "Admin, SuperAdmin")]

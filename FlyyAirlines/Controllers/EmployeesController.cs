@@ -8,7 +8,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
-{//nadal zwraca null z relacjami
+{
     //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -25,7 +25,7 @@ namespace FlyyAirlines.Controllers
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpGet]
         public IActionResult GetEmployees()
-        {//skrypt ten działa teraz poprawić czytelność oraz dostęp do innych klas
+        {
             var child = new string[] { "User" };
             var GetAll = _mainEmployee.GetAll(child);
             return Ok(GetAll);
@@ -36,7 +36,6 @@ namespace FlyyAirlines.Controllers
         {
             var child = new string[] {"User"};
             var employeeDetails = await _mainEmployee.EntityWithEagerLoad(d => d.Id == id, child);
-            //var GetEmployee = await _mainEmployee.Get(id);
             return Ok(employeeDetails);
         }
 
