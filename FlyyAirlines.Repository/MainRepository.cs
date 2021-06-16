@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +19,7 @@ namespace FlyyAirlines.Repository
             _dbContext = dbContext;
             table = dbContext.Set<T>();
         }
+
         public async Task Add(T entity)
         {
             await table.AddAsync(entity);
@@ -30,20 +32,43 @@ namespace FlyyAirlines.Repository
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<T> Get(string id)
+        public async Task<IEnumerable<T>> EntityWithEagerLoad(Expression<Func<T, bool>> filter, string[] children)
         {
-            return await table.FirstOrDefaultAsync(s => s.Id == id);
+            IQueryable<T> query = table;
+            foreach(string entity in children)
+            {
+                query = query.Include(entity);
+            }
+            return await query.Where(filter).ToListAsync();
         }
 
-        public IQueryable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll(string[] children)
         {
-            return table;
+            IQueryable<T> query = table;
+            foreach(string entity in children)
+            {
+                query = query.Include(entity);
+            }
+            Console.WriteLine(query);
+            return query.AsEnumerable();
+        }
+
+        public async Task<T> Get(string id)
+        {
+            var data = await table.SingleOrDefaultAsync(s => s.Id == id);
+            return data;
+        }
+
+        public IEnumerable<T> GetAll()
+        {
+            return table.AsEnumerable();
         }
 
         public void Update(T entity)
         {
             table.Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
+            _dbContext.SaveChanges();
         }
     }
 }
