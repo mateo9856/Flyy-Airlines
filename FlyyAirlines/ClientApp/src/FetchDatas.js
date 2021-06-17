@@ -8,6 +8,13 @@ class FetchDatas {
             })
     }
 
+    async GetAll(url, state) {
+        await axios.get(url)
+            .then(res => {
+                state(res.data.result)
+            });
+    }
+
     async Get(url, state) {
         await axios.get(url)
             .then(res => {

@@ -29,7 +29,7 @@ namespace FlyyAirlines.Controllers
         [HttpGet]
         public IActionResult GetFlights()
         {
-            var child = new string[] { "Airplane" };
+            var child = new string[] {"Airplane", "Reservation" };
             var GetDetails = _mainPlanes.GetAll(child);
             return Ok(GetDetails);
         }
@@ -38,20 +38,21 @@ namespace FlyyAirlines.Controllers
         [HttpGet]
         public IActionResult GetAirplanes()
         {
-            var child = new string[] { "Flight" };
-            var GetDetails = _mainAirplanes.GetAll(child);
+            var GetDetails = _mainAirplanes.GetAll();
             return Ok(GetDetails);
         }
 
-        [HttpGet("{id}")]
+        [Route("GetFlight/{id}")]
+        [HttpGet]
         public async Task<ActionResult> GetFlight(string id)
         {
-            var child = new string[] { "Airplane" };
+            var child = new string[] { "Airplane", "Reservation" };//przyczya== wartosci null zrbic skrypt by dzialal z nullem
             var FlightDetails = await _mainPlanes.EntityWithEagerLoad(d => d.Id == id, child);
             return Ok(FlightDetails);
         }
-        [Route("Airplane")]
-        [HttpGet("{id}")]
+
+        [Route("GetAirplane/{id}")]
+        [HttpGet]
         public async Task<ActionResult> GetAirplane(string id)
         {
             var child = new string[] { "Flight" };
@@ -68,7 +69,16 @@ namespace FlyyAirlines.Controllers
             {
                 return BadRequest();
             }
-            _mainAirplanes.Add(airplane);
+
+            var newAirplane = new Airplane
+            {
+                Id = Guid.NewGuid().ToString(),
+                PlaneName = airplane.PlaneName,
+                NumberOfSeats = airplane.NumberOfSeats,
+                Flights = airplane.Flights
+            };
+
+            _mainAirplanes.Add(newAirplane);
             return CreatedAtAction("Get", new { id = airplane.Id }, airplane);
         }
 

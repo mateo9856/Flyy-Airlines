@@ -32,7 +32,7 @@ const quickNews = [
 const Home = () => {
     const [Flights, setFlights] = useState([]);
     useEffect(() => {
-        FetchDatas.Get('api/Flights/GetFlights', setFlights);
+        FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
     }, [])
 
     const [isSearched, setIsSearched] = useState(false);

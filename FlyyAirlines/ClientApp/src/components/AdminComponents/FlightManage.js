@@ -20,7 +20,7 @@ const FlightManage = (props) => {
         toCountry: "",
         toCity: "",
         departureDate: new Date(),
-        airplane: "8B0BA3EC-D6EC-4103-08E0-08D92B5B9994"
+        airplane: "c2aecb63-e606-4d2b-a371-9c49cc34675b"
     });
     const [flightsList, setFlightsList] = useState([]);
     const [airplanesList, setAirplanesList] = useState([]);
@@ -43,13 +43,13 @@ const FlightManage = (props) => {
     }, []);
 
     const GetFlights = () => {
-        FetchDatas.Get('api/Flights/GetFlights', setFlightsList);
+        FetchDatas.GetAll('api/Flights/GetFlights', setFlightsList);
         FetchDatas.Get('api/Flights/GetAirplanes', setAirplanesList)
     };
 
     const AddFlight = (e) => {
         e.preventDefault();
-        console.log(flightDatas);//dobry skrypt z samolotem i data
+
         FetchDatas.Post('api/Flights', {
             flightName: flightDatas.flightName,
             fromCountry: flightDatas.country,
@@ -80,6 +80,7 @@ const FlightManage = (props) => {
     };
 
     const handleChange = (e) => {
+        console.log(e.target.value);
         if (e.target.name === "departureDate") {
             const buildStringDate = convertToDateTimeString(e.target.value);
             setFlightDatas({
@@ -170,7 +171,7 @@ const FlightManage = (props) => {
                                 class="form-control"
                             >
                                 {airplanesList.map((air) => (
-                                    <option value={air.airplaneId}>{air.planeName}</option>
+                                    <option value={air.id}>{air.planeName}</option>
                                 ))}
                             </select>
                         </div>
