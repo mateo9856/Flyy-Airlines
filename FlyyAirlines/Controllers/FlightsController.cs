@@ -46,7 +46,7 @@ namespace FlyyAirlines.Controllers
         [HttpGet]
         public async Task<ActionResult> GetFlight(string id)
         {
-            var child = new string[] { "Airplane", "Reservation" };//przyczya== wartosci null zrbic skrypt by dzialal z nullem
+            var child = new string[] { "Airplane", "Reservation" };//przyczyna to nulle sproboac poprawic to by przyjmowalo nulle
             var FlightDetails = await _mainPlanes.EntityWithEagerLoad(d => d.Id == id, child);
             return Ok(FlightDetails);
         }
