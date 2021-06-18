@@ -50,7 +50,7 @@ namespace FlyyAirlines.Repository
                 query = query.Include(entity);
             }
             Console.WriteLine(query);
-            return query.AsEnumerable();
+            return query.ToList();
         }
 
         public async Task<T> Get(string id)

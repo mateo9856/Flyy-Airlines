@@ -30,7 +30,7 @@ const FlightManage = (props) => {
     });
 
     const GetAirplanes = () => {
-        FetchDatas.Get('api/Flights/GetAirplanes', setAirplanesList)
+        FetchDatas.GetAll('api/Flights/GetAirplanes', setAirplanesList)
     }
 
     useEffect(() => {

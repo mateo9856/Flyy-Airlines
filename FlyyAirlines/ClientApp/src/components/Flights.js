@@ -2,7 +2,7 @@
 import FetchDatas from '../FetchDatas';
 
 const convertToName = (string) => {
-    let stringName = "";
+    let stringName = "";//metoda do poprawy
     const convert = string.split('.');
     let deleteSecondsArr = convert[2].split(' ');
     const deleteSeconds = deleteSecondsArr[1].substring(0, 5);
@@ -54,9 +54,9 @@ const FlightsComponent = () => {
     const [Flights, setFlights] = useState([]);
 
     useEffect(() => {
-        FetchDatas.Get('api/Flights/GetFlights', setFlights);
+        FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
     }, [])
-
+    console.log(Flights);
     return (
         <>
             <h4 className="text-center">Aktualne wyloty</h4>
@@ -73,9 +73,9 @@ const FlightsComponent = () => {
                     {Flights.length > 0 ?
                         Flights.map(flight => (
                             <tr>
-                                <th scope="row">{`${flight.from.city} : `}<b>{`${flight.from.country}`}</b></th>
-                                <td>{flight.to.city + " : "}<b>{flight.to.country}</b></td>
-                                <td>{convertToName(flight.departureDate)}</td>
+                                <th scope="row">{`${flight.fromCity} : `}<b>{`${flight.fromCountry}`}</b></th>
+                                <td>{flight.toCity + " : "}<b>{flight.toCountry}</b></td>
+                                <td>{flight.departureDate}</td>
                                 <td>{flight.airplane.numberOfSeats}</td>
                             </tr>
                         )) : ""

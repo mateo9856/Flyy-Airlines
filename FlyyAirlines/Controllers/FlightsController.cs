@@ -29,7 +29,7 @@ namespace FlyyAirlines.Controllers
         [HttpGet]
         public IActionResult GetFlights()
         {
-            var child = new string[] {"Airplane", "Reservation" };
+            var child = new string[] {"Airplane", "Reservations" };
             var GetDetails = _mainPlanes.GetAll(child);
             return Ok(GetDetails);
         }
@@ -38,7 +38,8 @@ namespace FlyyAirlines.Controllers
         [HttpGet]
         public IActionResult GetAirplanes()
         {
-            var GetDetails = _mainAirplanes.GetAll();
+            var child = new string[] { "Flights" };
+            var GetDetails = _mainAirplanes.GetAll(child);
             return Ok(GetDetails);
         }
 

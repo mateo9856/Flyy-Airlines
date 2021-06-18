@@ -30,9 +30,6 @@ namespace FlyyAirlines.Models
             .HasColumnName("ReservationId");
             modelBuilder.Entity<User>().Property(b => b.Id)
                 .HasColumnName("UserId");
-
-            modelBuilder.Entity<Flight>().HasOne(c => c.Airplane)
-                .WithMany(e => e.Flights).IsRequired();
         }
     }
 }

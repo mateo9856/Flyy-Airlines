@@ -35,6 +35,10 @@ namespace FlyyAirlines
             var mapConfig = new MapperConfiguration(config => config.AddProfile(new Mappers()));
             IMapper mapper = mapConfig.CreateMapper();
 
+            services.AddControllers().AddNewtonsoftJson(options => 
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
             services.AddIdentity<User, IdentityRole>(config =>
             {
                 config.SignIn.RequireConfirmedEmail = true;

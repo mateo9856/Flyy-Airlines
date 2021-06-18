@@ -23,7 +23,7 @@ const EmployeeManage = (props) => {
     }, [])
 
     const GetEmployees = () => {
-        FetchDatas.Get('api/Employees', setEmployeesList);
+        FetchDatas.GetAll('api/Employees', setEmployeesList);
     }
 
     const AddEmployee = (e) => {
@@ -46,9 +46,10 @@ const EmployeeManage = (props) => {
             })
         }
     }
-    const RemoveEmployee = (id) => {
-        console.log(id);
-        FetchDatas.Delete("api/Employees/" + id);
+    const RemoveEmployee = (e) => {
+        e.preventDefault();
+        FetchDatas.Delete("api/Employees/" + e.target.value);
+        props.exit();
     }
 
     const handleChange = (e) => {
@@ -57,7 +58,7 @@ const EmployeeManage = (props) => {
             [e.target.name]: e.target.value
         });
     }
-
+    console.log(employeesList);
     return (
         <>
             {props.selectedManage === "addEmployee" ?
@@ -117,7 +118,7 @@ const EmployeeManage = (props) => {
                                             <td>{list.name}</td>
                                             <td>{list.surname}</td>
                                             <td>{list.workPosition}</td>
-                                            <td><button className="btn btn-outline-primary" name={list.employeeId} onClick={() => RemoveEmployee(list.employeeId)}>Delete</button></td>
+                                            <td><button className="btn btn-outline-primary" value={list.id} name={list.Id} onClick={RemoveEmployee}>Delete</button></td>
                                         </tr>
                                     ))
                                     : ""}
