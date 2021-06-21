@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationController : ControllerBase

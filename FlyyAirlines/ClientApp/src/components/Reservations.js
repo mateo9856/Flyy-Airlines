@@ -5,7 +5,7 @@ import FetchDatas from "../FetchDatas";
 const ReservationComponent = () => {
     const [buttonValue, setButtonValue] = useState(0);
 
-    const buttonRows = (val) => {
+    const buttonRows = (val) => {//tu przerobic
 
         const arr = [];
         const colors = {
@@ -42,9 +42,10 @@ const ReservationComponent = () => {
     };
 
     useEffect(() => {
-        FetchDatas.Get('api/Flights/GetFlights', setFlights)
-        FetchDatas.Get('api/Reservation', setReservations);
-    })
+        console.log(context);
+        FetchDatas.GetAll('api/Flights/GetFlights', setFlights)
+        FetchDatas.Get('api/Reservation/' + context.userData.id, setReservations);
+    }, [])
 
     const [activeReservation, setActiveReservation] = useState(false);
     const [Flights, setFlights] = useState([]);
@@ -106,7 +107,8 @@ const ReservationComponent = () => {
             })
         }
     };
-
+    console.log(Reservations);
+    console.log(Flights);
     return (
         <>
             {context.isLogged ? <h1>Moje rezerwacje</h1> : <h1>Zaloguj się!</h1>}
