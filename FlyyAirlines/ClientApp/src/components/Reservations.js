@@ -24,6 +24,7 @@ const ReservationComponent = () => {
         };
 
         const currentAirplane = val[0].airplane.numberOfSeats;
+        console.log(currentAirplane);
         for (let i = 0; i < currentAirplane; i++) {
             arr.push(
                 <button
@@ -31,7 +32,7 @@ const ReservationComponent = () => {
                     className={i + 1 === buttonValue ? "clickedButton" : ""}
                     onClick={handleClick}
                     style={
-                        val[0].reservedPlaces.includes(i + 1) ? colors.free : colors.busy
+                        val[0].reservations.some(res => res.seat === currentAirplane && res.flights === val[0]) ? colors.free : colors.busy
                     }
                 >
                     {i + 1}
@@ -53,8 +54,8 @@ const ReservationComponent = () => {
     const [reservationVal, setReservationVal] = useState({
         name: "",
         surname: "",
-        personIdentity: 0,
-        seatNumber: 0,
+        personIdentify: 0,
+        seat: 0,
         flight: 0
     });
     const [context, setContext] = useContext(AppContext);
@@ -67,8 +68,8 @@ const ReservationComponent = () => {
     };
 
     const handleFlightChange = (e) => {
-        const val = parseInt(e.target.value, 10);
-        const filterFlight = Flights.filter((value) => value.id === val);
+        console.log(e.target.value)
+        const filterFlight = Flights.filter((value) => value.id === e.target.value);
         setReservationVal({
             ...reservationVal,
             flight: filterFlight,
@@ -84,15 +85,18 @@ const ReservationComponent = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const checkFreeFlight = reservationVal.flight[0].reservedPlaces;
+        const checkFreeFlight = reservationVal.flight[0].reservations;
+        console.log(checkFreeFlight)
+        console.log(buttonValue);
+        console.log(reservationVal);
         if (checkFreeFlight.includes(buttonValue)) {
             alert("Miejsce zajęte");
         } else {
             FetchDatas.Post('api/Reservation', {
-                name: "",
-                surname: "",
-                personIdentity: "",
-                seat: "",
+                name: reservationVal.name,
+                surname: reservationVal.surname,
+                personIdentify: reservationVal.personIdentify,
+                seat: buttonValue,
                 flight: 0,
                 user: 0
             })
@@ -101,14 +105,12 @@ const ReservationComponent = () => {
             setReservationVal({
                 name: "",
                 surname: "",
-                personIdentity: 0,
-                seatNumber: 0,
+                personIdentify: 0,
+                seat: 0,
                 
             })
         }
     };
-    console.log(Reservations);
-    console.log(Flights);
     return (
         <>
             {context.isLogged ? <h1>Moje rezerwacje</h1> : <h1>Zaloguj się!</h1>}
@@ -137,9 +139,9 @@ const ReservationComponent = () => {
                                         <tr>
                                             <th scope="row">{res.surname}</th>
                                             <td>{res.name}</td>
-                                            <td>{res.personIdentity}</td>
+                                            <td>{res.personIdentify}</td>
                                             <td>{res.flight.flightName}</td>
-                                            <td>{res.seatNumber}</td>
+                                            <td>{res.seat}</td>
                                         </tr>
                                     ))
                                     : ""}
@@ -193,8 +195,8 @@ const ReservationComponent = () => {
                     <input
                                             onChange={handleChange}
                                             type="number"
-                                            name="personIdentity"
-                                            value={reservationVal.personIdentity}
+                                            name="personIdentify"
+                                            value={reservationVal.personIdentify}
                                             className="form-control"
                                         />
                                     </div>
