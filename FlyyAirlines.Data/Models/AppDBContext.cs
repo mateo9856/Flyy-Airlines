@@ -4,8 +4,14 @@ using System;
 
 namespace FlyyAirlines.Models
 {
-    public partial class AppDBContext : IdentityDbContext<User>
+    public class AppDBContext : IdentityDbContext<User>
     {
+
+        public AppDBContext()
+        {
+
+        }
+
         public AppDBContext(DbContextOptions<AppDBContext> options)
             : base(options)
         {

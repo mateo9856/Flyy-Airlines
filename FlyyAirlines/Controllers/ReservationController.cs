@@ -1,9 +1,11 @@
-﻿using FlyyAirlines.Models;
+﻿using FlyyAirlines.DTO;
+using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.Reservations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -14,11 +16,13 @@ namespace FlyyAirlines.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly IReserveData _reserveData;
+        private readonly IUserRepository _userRepository;
         private readonly IMainRepository<Reservation> _mainReserves;
-        public ReservationController(IReserveData reserveData, IMainRepository<Reservation> mainRepository)
+        public ReservationController(IReserveData reserveData, IMainRepository<Reservation> mainRepository, IUserRepository userRepository)
         {
             _reserveData = reserveData;
             _mainReserves = mainRepository;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
@@ -47,10 +51,22 @@ namespace FlyyAirlines.Controllers
         
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Reservation reservation)
+        public async Task<ActionResult> Post([FromBody] ReservationDTO reservation)
         {
-            await _mainReserves.Add(reservation);
-            return CreatedAtAction("Get", new { id = reservation.Id }, reservation);
+            var GetUser = _userRepository.Get(reservation.User);
+                var NewReserve = new Reservation()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = reservation.Name,
+                    Surname = reservation.Surname,
+                    PersonIdentify = reservation.PersonIdentify,
+                    Seat = reservation.Seat,
+                    Flights = reservation.Flight,
+                    User = GetUser
+                };
+
+            await _mainReserves.Add(NewReserve);
+            return CreatedAtAction("Get", new { id = NewReserve.Id }, NewReserve);
         }
         
         //[Authorize(Roles = "Admin, SuperAdmin")]

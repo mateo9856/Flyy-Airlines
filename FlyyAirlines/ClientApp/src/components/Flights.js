@@ -1,53 +1,9 @@
 ﻿import React, { useEffect, useState } from 'react';
 import FetchDatas from '../FetchDatas';
 
-const convertToName = (string) => {
-    let stringName = "";//metoda do poprawy
-    const convert = string.split('.');
-    let deleteSecondsArr = convert[2].split(' ');
-    const deleteSeconds = deleteSecondsArr[1].substring(0, 5);
-    deleteSecondsArr[1] = deleteSeconds;
-    deleteSecondsArr = deleteSecondsArr.join(' ');
-    convert[2] = deleteSecondsArr;
-    switch (convert[1]) {
-        case '01':
-            stringName = "styczeń"
-            break;
-        case '02':
-            stringName = "luty"
-            break;
-        case '03':
-            stringName = "marzec"
-            break;
-        case '04':
-            stringName = "kwiecień"
-            break;
-        case '05':
-            stringName = "maj"
-            break;
-        case '06':
-            stringName = "czerwiec"
-            break;
-        case '07':
-            stringName = "lipiec"
-            break;
-        case '08':
-            stringName = "czerwiec"
-            break;
-        case '09':
-            stringName = "wrzesień"
-            break;
-        case '10':
-            stringName = "październik"
-            break;
-        case '11':
-            stringName = "listopad"
-            break;
-        case '12':
-            stringName = "grudzień"
-            break;
-    }
-    return convert.join(' ').replace(convert[1], stringName)
+const convertString = (string) => {
+    const regex = /[-|T]/gi;
+    return string.replace(regex, " ").substring(0, 16);
 }
 
 const FlightsComponent = () => {
@@ -75,7 +31,7 @@ const FlightsComponent = () => {
                             <tr>
                                 <th scope="row">{`${flight.fromCity} : `}<b>{`${flight.fromCountry}`}</b></th>
                                 <td>{flight.toCity + " : "}<b>{flight.toCountry}</b></td>
-                                <td>{flight.departureDate}</td>
+                                <td>{convertString(flight.departureDate)}</td>
                                 <td>{flight.airplane.numberOfSeats}</td>
                             </tr>
                         )) : ""
