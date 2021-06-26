@@ -4,6 +4,7 @@ using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.Reservations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,13 +17,13 @@ namespace FlyyAirlines.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly IReserveData _reserveData;
-        private readonly IUserRepository _userRepository;
+        private readonly AppDBContext _dbContext;
         private readonly IMainRepository<Reservation> _mainReserves;
-        public ReservationController(IReserveData reserveData, IMainRepository<Reservation> mainRepository, IUserRepository userRepository)
+        public ReservationController(IReserveData reserveData, IMainRepository<Reservation> mainRepository, AppDBContext dBContext)
         {
             _reserveData = reserveData;
             _mainReserves = mainRepository;
-            _userRepository = userRepository;
+            _dbContext = dBContext;
         }
 
         [HttpGet]
@@ -44,7 +45,7 @@ namespace FlyyAirlines.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(string id)
         {
-            var child = new string[] { "Flight", "User" };
+            var child = new string[] { "Flights", "User" };
             var GetDetails = await _mainReserves.EntityWithEagerLoad(d => d.Id == id, child);
             return Ok(GetDetails);
         }
@@ -53,7 +54,8 @@ namespace FlyyAirlines.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] ReservationDTO reservation)
         {
-            var GetUser = _userRepository.Get(reservation.User);
+            var GetUser = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == reservation.User);
+            var GetFlight = _dbContext.Flights.SingleOrDefault(u => u.Id == reservation.Flight);
                 var NewReserve = new Reservation()
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -61,7 +63,7 @@ namespace FlyyAirlines.Controllers
                     Surname = reservation.Surname,
                     PersonIdentify = reservation.PersonIdentify,
                     Seat = reservation.Seat,
-                    Flights = reservation.Flight,
+                    Flights = GetFlight,
                     User = GetUser
                 };
 

@@ -12,7 +12,7 @@ namespace FlyyAirlines.DTO
         public string Name { get; set; }
         public string Surname { get; set; }
         public int PersonIdentify { get; set; }
-        public Flight Flight { get; set; }
+        public string Flight { get; set; }
         public string User { get; set; }
         public int Seat { get; set; }
     }

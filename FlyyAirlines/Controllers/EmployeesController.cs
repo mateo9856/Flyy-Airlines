@@ -75,7 +75,7 @@ namespace FlyyAirlines.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id)
         {
-            var Emp = await _mainEmployee.Get(id);//sprawdzic to pozniej(usuwanie pracownikow)
+            var Emp = await _mainEmployee.Get(id);
             await _mainEmployee.Delete(Emp);
             return NoContent();
         }

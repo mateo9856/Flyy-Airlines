@@ -86,20 +86,17 @@ const ReservationComponent = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const checkFreeFlight = reservationVal.flight[0];
-
+        console.log(checkFreeFlight.id);
         const sendDatas = {
             name: reservationVal.name,
             surname: reservationVal.surname,
             personIdentify: reservationVal.personIdentify,
             seat: buttonValue,
-            flight: checkFreeFlight,
+            flight: checkFreeFlight.id,
             user: context.userData.id
         };
-
-        console.log(checkFreeFlight)
-        console.log(buttonValue);
-        console.log(sendDatas);
-        if (checkFreeFlight.reservations.includes(buttonValue)) {//test this!
+        console.log();
+        if (checkFreeFlight.reservations.some(el => el.seat === buttonValue)) {
             alert("Miejsce zajęte");
         } else {
         FetchDatas.Post('api/Reservation', sendDatas)
@@ -110,13 +107,12 @@ const ReservationComponent = () => {
                 surname: "",
                 personIdentify: 0,
                 seat: 0,
-                flight:
+                flight:0
                 
             })
         }
     };
-    console.log(reservationVal);
-    console.log(context.userData.id);
+
     return (
         <>
             {context.isLogged ? <h1>Moje rezerwacje</h1> : <h1>Zaloguj się!</h1>}

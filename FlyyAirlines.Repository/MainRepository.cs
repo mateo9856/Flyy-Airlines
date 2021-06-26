@@ -23,7 +23,7 @@ namespace FlyyAirlines.Repository
         public async Task Add(T entity)
         {
             await table.AddAsync(entity);
-            await _dbContext.SaveChangesAsync();//nie robi zapisu naprawić
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task Delete(T entity)
