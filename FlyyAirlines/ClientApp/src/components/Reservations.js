@@ -5,7 +5,7 @@ import FetchDatas from "../FetchDatas";
 const ReservationComponent = () => {
     const [buttonValue, setButtonValue] = useState(0);
 
-    const buttonRows = (val) => {//tu przerobic
+    const buttonRows = (val) => {
 
         const arr = [];
         const colors = {
@@ -24,7 +24,7 @@ const ReservationComponent = () => {
         };
 
         const currentAirplane = val[0].airplane.numberOfSeats;
-        console.log(currentAirplane);
+        console.log(val[0]);
         for (let i = 0; i < currentAirplane; i++) {
             arr.push(
                 <button
@@ -32,7 +32,7 @@ const ReservationComponent = () => {
                     className={i + 1 === buttonValue ? "clickedButton" : ""}
                     onClick={handleClick}
                     style={
-                        val[0].reservations.some(res => res.seat === currentAirplane && res.flights === val[0]) ? colors.free : colors.busy
+                        val[0].reservations.some(res => res.seat === (i+1)) ? colors.free : colors.busy
                     }
                 >
                     {i + 1}
