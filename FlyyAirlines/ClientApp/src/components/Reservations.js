@@ -112,7 +112,7 @@ const ReservationComponent = () => {
             })
         }
     };
-
+    
     return (
         <>
             {context.isLogged ? <h1>Moje rezerwacje</h1> : <h1>Zaloguj się!</h1>}

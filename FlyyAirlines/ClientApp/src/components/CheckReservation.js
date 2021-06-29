@@ -3,7 +3,6 @@ import FetchDatas from "../FetchDatas";
 
 const CheckReservation = () => {
 
-    const CheckReserve = () => {
 
         const handleClick = (e) => {
             setButtonValue(parseInt(e.target.value, 10));
@@ -46,27 +45,83 @@ const CheckReservation = () => {
             }
             return arr;
         };
-    }
+    
 
     const [selectedOption, setSelectedOption] = useState("check");
     const [checkedClicked, setCheckedClicked] = useState(false);
     const [checkForm, setCheckForm] = useState("");
     const [Reservations, setReservations] = useState([]);
+    const [Flights, setFlights] = useState([]);
     const [checkDatas, setCheckDatas] = useState({
         name: "",
         surname: "",
         personIdentity: 0,
+        seatNumber: 0,
         flight: 0
     });
 
     useEffect(() => {
-        if (selectedOption === "check") {
-            FetchDatas.GetAll('api/Reservation', setReservations)
+        FetchDatas.GetAll('api/Reservation', setReservations)
+        FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
+    }, [])
+
+    useEffect(() => {
+        if (selectedOption === "add") {
+            setCheckDatas({
+                name: "",
+                surname: "",
+                personIdentity: 0,
+                seatNumber: 0,
+                flight: 0
+            });
+        } else if (selectedOption === "check") {
+            setCheckDatas({
+                name: "",
+                surname: "",
+                personIdentity: 0,
+                flight: 0
+            });
         }
-    })
+    }, [selectedOption]);
+
+    const handleCheckSubmit = (e) => {
+        e.preventDefault();
+        if (checkForm === null) {
+            alert("Click check user datas!");
+            return;
+        }
+        const { name, surname, personIdentify } = checkForm[0];
+        if (checkDatas.name === name && checkDatas.surname === surname && parseInt(checkDatas.personIdentity, 10) === personIdentify) {
+            alert("Success!")
+        } else {
+            alert("Invalid!")
+        }
+    }
 
     const handleCheckClick = (e) => {
+        const GetValue = Reservations.filter((res) => res.id === e.target.name);
+        setCheckForm(GetValue);
+        setCheckedClicked(true);
+    }
 
+    const handleChange = (e) => {
+        setCheckDatas({
+            ...checkDatas,
+            [e.target.name]: e.target.value,
+        })
+    }
+
+    const handleFlightChange = (e) => {
+        console.log(e.target.value)
+        const filterFlight = Flights.filter((value) => value.id === e.target.value);
+        setCheckDatas({
+            ...checkDatas,
+            flight: filterFlight,
+        });
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
     }
 
     return (
@@ -112,10 +167,123 @@ const CheckReservation = () => {
                                 ))}
                             </tbody>
                         </table>
+                        {checkedClicked && (
+                            <div>
+                                <button className="buttonExit" onClick={() => setCheckedClicked(false)}>
+                                    X
+                                </button>
+                                <form onSubmit={handleCheckSubmit}>
+                                    <div className="form-group">
+                                        Name:
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            name="name"
+                                            value={checkDatas.name}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        Surname:
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            name="surname"
+                                            value={checkDatas.surname}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        Person Identity:
+                                        <input
+                                            className="form-control"
+                                            type="number"
+                                            name="personIdentity"
+                                            value={checkDatas.personIdentity}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <br />
+                                    <input
+                                        className="btn btn-primary"
+                                        type="submit"
+                                        value="Sprawdź"
+                                    />
+                                </form>
+                            </div>
+                        )}
                     </div>   
-                 )}
+                )}
+                {selectedOption === "add" && (
+                    <div>
+                        <form onSubmit={handleSubmit}>
+                            <button
+                                className="buttonExit"
+                                onClick={() => setCheckedClicked(false)}
+                            >
+                                X
+                            </button>
+                            <div className="from-gorup">
+                                <select
+                                    value={checkDatas.flight.id}
+                                    onChange={handleFlightChange}
+                                    multiple
+                                    className="form-control"
+                                >
+                                    {Flights.map((fly) => (
+                                        <option value={fly.id}>{fly.flightName}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                Imię:
+                                <input
+                                    onChange={handleChange}
+                                    type="text"
+                                    name="name"
+                                    value={Reservations.name}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="form-group">
+                                Nazwisko:
+                                <input
+                                    onChange={handleChange}
+                                    type="text"
+                                    name="surname"
+                                    value={Reservations.surname}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="form-group">
+                                Identyfikator:
+                                <input
+                                    onChange={handleChange}
+                                    type="number"
+                                    name="personIdentify"
+                                    value={Reservations.personIdentify}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <input
+                                    type="submit"
+                                    style={{ marginTop: "5px" }}
+                                    className="btn btn-primary"
+                                    value="Zarezerwuj!"
+                                />
+                            </div>
+                        </form>
+                        {checkDatas.flight ? (//dokonczyc rezerwacje od strony employsa
+                            <div className="reservationTable">
+                                {buttonRows(checkDatas.flight)}
+                            </div>
+                        ) : ""}
+                    </div>
+                )}
             </div>
-        </div>    
+        </div>
+        
     )
 }
 
