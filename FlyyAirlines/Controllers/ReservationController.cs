@@ -71,6 +71,31 @@ namespace FlyyAirlines.Controllers
             return CreatedAtAction("Get", new { id = NewReserve.Id }, NewReserve);
         }
         
+        [Route("CheckReserve")]
+        [HttpPost]
+        public async Task<bool> CheckReserve([FromBody] ReservationDTO reservation)
+        {
+            var GetData = await _dbContext.Reservations.SingleOrDefaultAsync(r => r.Name == reservation.Name &&
+            r.Surname == reservation.Surname &&
+            r.PersonIdentify == reservation.PersonIdentify);
+            if (GetData != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        [Route("GeneratePDF")]
+        [HttpPost]
+        public async Task<IActionResult> GeneratePDF() {
+            
+            
+            return Ok();
+        }
+
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
         public IActionResult Put(string id, Reservation reservation)

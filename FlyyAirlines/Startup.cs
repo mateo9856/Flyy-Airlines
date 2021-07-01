@@ -1,4 +1,6 @@
 using AutoMapper;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using FlyyAirlines.DTO.AutoMapper;
 using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
@@ -64,6 +66,8 @@ namespace FlyyAirlines
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
             });
+
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
             services.AddControllers();
             services.AddDbContext<AppDBContext>(opt =>

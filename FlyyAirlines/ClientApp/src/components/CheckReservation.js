@@ -1,12 +1,8 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import axios from "axios";
+import React, { useEffect, useState } from "react";
 import FetchDatas from "../FetchDatas";
 
 const CheckReservation = () => {
-
-
-        const handleClick = (e) => {
-            setButtonValue(parseInt(e.target.value, 10));
-        };
 
         const [buttonValue, setButtonValue] = useState(0);
         const buttonRows = (val) => {
@@ -28,7 +24,6 @@ const CheckReservation = () => {
             };
 
             const currentAirplane = val[0].airplane.numberOfSeats;
-            console.log(val[0]);
             for (let i = 0; i < currentAirplane; i++) {
                 arr.push(
                     <button
@@ -55,10 +50,12 @@ const CheckReservation = () => {
     const [checkDatas, setCheckDatas] = useState({
         name: "",
         surname: "",
-        personIdentity: 0,
+        personIdentify: 0,
         seatNumber: 0,
         flight: 0
     });
+
+    const [checkedData, setCheckedData] = useState(false);
 
     useEffect(() => {
         FetchDatas.GetAll('api/Reservation', setReservations)
@@ -70,7 +67,7 @@ const CheckReservation = () => {
             setCheckDatas({
                 name: "",
                 surname: "",
-                personIdentity: 0,
+                personIdentify: 0,
                 seatNumber: 0,
                 flight: 0
             });
@@ -78,7 +75,7 @@ const CheckReservation = () => {
             setCheckDatas({
                 name: "",
                 surname: "",
-                personIdentity: 0,
+                personIdentify: 0,
                 flight: 0
             });
         }
@@ -91,11 +88,21 @@ const CheckReservation = () => {
             return;
         }
         const { name, surname, personIdentify } = checkForm[0];
-        if (checkDatas.name === name && checkDatas.surname === surname && parseInt(checkDatas.personIdentity, 10) === personIdentify) {
+        if (checkDatas.name === name && checkDatas.surname === surname && parseInt(checkDatas.personIdentify, 10) === personIdentify) {
             alert("Success!")
         } else {
             alert("Invalid!")
         }
+        axios.post('api/Reservation/CheckReserve', {
+            name: name,
+            surname: surname,
+            personIdentify: parseInt(personIdentify, 10)
+        }).then(res => {
+            setCheckedData(true);
+        }).catch(err => {
+            console.error(err);
+            setCheckedData(false);
+        });
     }
 
     const handleCheckClick = (e) => {
@@ -112,7 +119,6 @@ const CheckReservation = () => {
     }
 
     const handleFlightChange = (e) => {
-        console.log(e.target.value)
         const filterFlight = Flights.filter((value) => value.id === e.target.value);
         setCheckDatas({
             ...checkDatas,
@@ -120,8 +126,35 @@ const CheckReservation = () => {
         });
     }
 
+    const handleGenerate = () => {
+        //PDF Generator with API test
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        const checkFreeFlight = checkDatas.flight[0];
+        const sendDatas = {
+            name: checkDatas.name,
+            surname: checkDatas.surname,
+            personIdentify: parseInt(checkDatas.personIdentify, 10),
+            seat: buttonValue,
+            flight: checkFreeFlight.id,
+        };
+        if (checkFreeFlight.reservations.some(el => el.seat === buttonValue)) {
+            alert("Miejsce zajęte");
+        } else {
+            FetchDatas.Post('api/Reservation', sendDatas)
+            alert("Zarezerwowano");
+            setButtonValue(0);
+            setCheckDatas({
+                name: "",
+                surname: "",
+                personIdentify: 0,
+                seat: 0,
+                flight: 0
+
+            })
+        }
     }
 
     return (
@@ -194,12 +227,12 @@ const CheckReservation = () => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        Person Identity:
+                                        Person Identify:
                                         <input
                                             className="form-control"
                                             type="number"
-                                            name="personIdentity"
-                                            value={checkDatas.personIdentity}
+                                            name="personIdentify"
+                                            value={checkDatas.personIdentify}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -210,6 +243,9 @@ const CheckReservation = () => {
                                         value="Sprawdź"
                                     />
                                 </form>
+
+                                <button className="btn btn-outline-primary" onClick={handleGenerate}>Generuj PDF</button>
+
                             </div>
                         )}
                     </div>   
