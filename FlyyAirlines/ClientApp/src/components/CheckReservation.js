@@ -1,5 +1,6 @@
 ﻿import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../AppContext";
 import FetchDatas from "../FetchDatas";
 
 const CheckReservation = () => {
@@ -40,8 +41,8 @@ const CheckReservation = () => {
             }
             return arr;
         };
-    
 
+    const [context, setContext] = useContext(AppContext);
     const [selectedOption, setSelectedOption] = useState("check");
     const [checkedClicked, setCheckedClicked] = useState(false);
     const [checkForm, setCheckForm] = useState("");
@@ -127,7 +128,7 @@ const CheckReservation = () => {
     }
 
     const handleGenerate = () => {
-        //PDF Generator with API test
+        axios.get('api/Pdf/');//look how change parameter
     }
 
     const handleSubmit = (e) => {
@@ -243,9 +244,7 @@ const CheckReservation = () => {
                                         value="Sprawdź"
                                     />
                                 </form>
-
-                                <button className="btn btn-outline-primary" onClick={handleGenerate}>Generuj PDF</button>
-
+                                {checkedData && <button className="btn btn-outline-primary" onClick={handleGenerate}>Generuj PDF</button>}
                             </div>
                         )}
                     </div>   

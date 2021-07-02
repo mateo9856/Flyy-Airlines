@@ -88,14 +88,6 @@ namespace FlyyAirlines.Controllers
             }
         }
 
-        [Route("GeneratePDF")]
-        [HttpPost]
-        public async Task<IActionResult> GeneratePDF() {
-            
-            
-            return Ok();
-        }
-
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
         public IActionResult Put(string id, Reservation reservation)
