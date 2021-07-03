@@ -40,7 +40,7 @@ namespace FlyyAirlines.Controllers
                 Margins = new MarginSettings { Top = 10 },
                 DocumentTitle = "Reservation Check",
             };
-            var GetPath = Path.Combine(Directory.GetCurrentDirectory());//"C:\\Users\\Mateusz\\Source\\Repos\\Flyy-Airlines\\FlyyAirlines"(usunąć ostatnie FlyyAirlines i zmienic na FlyyAirlines.Repository\PDFGenerator)
+            var GetPath = Path.Combine(Directory.GetCurrentDirectory());
             string ChangedPath = Regex.Replace(GetPath, @"\\FlyyAirlines$", "\\FlyyAirlines.Repository\\PDFGenerator");
             var Generator = new TemplateGenerator();
             var objectSettings = new ObjectSettings
