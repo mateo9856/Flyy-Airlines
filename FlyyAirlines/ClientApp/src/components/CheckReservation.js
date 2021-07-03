@@ -55,7 +55,7 @@ const CheckReservation = () => {
         seatNumber: 0,
         flight: 0
     });
-
+    const [sendedPdf, setSendedPdf] = useState([]);
     const [checkedData, setCheckedData] = useState(false);
 
     useEffect(() => {
@@ -99,7 +99,7 @@ const CheckReservation = () => {
             surname: surname,
             personIdentify: parseInt(personIdentify, 10)
         }).then(res => {
-            setCheckedData(true);
+            setCheckedData(res.data);
         }).catch(err => {
             console.error(err);
             setCheckedData(false);
@@ -128,7 +128,7 @@ const CheckReservation = () => {
     }
 
     const handleGenerate = () => {
-        FetchDatas.Post('api/Pdf', [checkDatas.flight.id, "ffgggg"])
+        FetchDatas.Post('api/Pdf', [checkedData.flight, checkedData.reservation, context.userData.id])
     }
 
     const handleSubmit = (e) => {

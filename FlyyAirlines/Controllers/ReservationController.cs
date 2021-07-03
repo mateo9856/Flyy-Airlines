@@ -75,9 +75,8 @@ namespace FlyyAirlines.Controllers
         [HttpPost]
         public async Task<IActionResult> CheckReserve([FromBody] ReservationDTO reservation)
         {
-            var GetData = await _dbContext.Reservations.SingleOrDefaultAsync(r => r.Name == reservation.Name &&
-            r.Surname == reservation.Surname &&
-            r.PersonIdentify == reservation.PersonIdentify);
+            var GetData = await _dbContext.Reservations.Include(r => r.Flights).FirstOrDefaultAsync(r => r.Name == reservation.Name &&
+            r.Surname == reservation.Surname && r.PersonIdentify == reservation.PersonIdentify);
             if (GetData != null)
             {
                 return CreatedAtAction("Checked", new {flight = GetData.Flights.Id, reservation = GetData.Id});
