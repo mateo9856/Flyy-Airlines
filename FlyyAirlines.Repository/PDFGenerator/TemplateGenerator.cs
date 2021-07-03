@@ -15,10 +15,10 @@ namespace FlyyAirlines.Repository.PDFGenerator
             _dbContext = new AppDBContext();
         }
 
-        public string GetHTMLString(string data, string employeeId) {
+        public string GetHTMLString(string reservation, string employee) {
 
-            var GetDatas = _dbContext.Reservations.Include(bl => bl.Flights).FirstOrDefault(d => d.Id == data);
-            var GetEmployee = _dbContext.Employees.FirstOrDefault(e => e.Id == employeeId);
+            var GetDatas = _dbContext.Reservations.Include(bl => bl.Flights).FirstOrDefault(d => d.Id == reservation);
+            var GetEmployee = _dbContext.Employees.FirstOrDefault(e => e.Id == employee);
             var sb = new StringBuilder();
 
             sb.Append(@"<html>

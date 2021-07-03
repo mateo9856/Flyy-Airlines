@@ -128,7 +128,7 @@ const CheckReservation = () => {
     }
 
     const handleGenerate = () => {
-        axios.get('api/Pdf/');//look how change parameter
+        FetchDatas.Post('api/Pdf', [checkDatas.flight.id, "ffgggg"])
     }
 
     const handleSubmit = (e) => {

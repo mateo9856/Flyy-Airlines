@@ -22,8 +22,8 @@ namespace FlyyAirlines.Controllers
             _converter = converter;
         }
         
-        [HttpGet]
-        public IActionResult CreatePDF(string datas)
+        [HttpPost]
+        public IActionResult CreatePDF(string[] datas)
         {
             var GlobalSet = new GlobalSettings
             {
@@ -35,14 +35,14 @@ namespace FlyyAirlines.Controllers
             };
 
             var Generator = new TemplateGenerator();
-
+            Console.WriteLine(Path.Combine(Directory.GetCurrentDirectory()));
             var objectSettings = new ObjectSettings
             {
                 PagesCount = true,
                 HtmlContent = Generator.GetHTMLString("3333", "123123"),//change parameters
                 WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "style.css") },//zmienic path
                 HeaderSettings = { FontName = "Arial", FontSize = 12, Line = true},
-                FooterSettings = { FontName = "Arial", FontSize = 12, Line = true }//jeszcze footer i header dopracowac
+                FooterSettings = { FontName = "Arial", FontSize = 12, Line = true }
             };
 
             var pdf = new HtmlToPdfDocument()
