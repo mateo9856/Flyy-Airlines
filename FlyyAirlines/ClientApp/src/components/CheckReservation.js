@@ -126,9 +126,9 @@ const CheckReservation = () => {
             flight: filterFlight,
         });
     }
-
     const handleGenerate = () => {
-        FetchDatas.Post('api/Pdf', [checkedData.flight, checkedData.reservation, context.userData.id])
+        axios.get("api/Pdf/reservationId=" + checkedData.reservation + "&employeeId=" + context.userData.id)
+            .then(res => console.log(res));
     }
 
     const handleSubmit = (e) => {

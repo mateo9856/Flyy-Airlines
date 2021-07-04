@@ -27,11 +27,17 @@ namespace FlyyAirlines.Controllers
             _dbContext = context;
         }
         
-        [HttpPost]
-        public IActionResult CreatePDF(string[] datas)
+        [HttpGet("reservationId={reservationId}&employeeId={employeeId}")]
+        public IActionResult CreatePDF(string reservationId, string employeeId)
         {
-            var GetDatas = _dbContext.Reservations.Include(bl => bl.Flights).FirstOrDefault(d => d.Id == datas[1]);
-            var GetEmployee = _dbContext.Employees.Include(u => u.User).FirstOrDefault(d => d.User.Id == datas[2]);
+            var GetDatas = _dbContext.Reservations.Include(bl => bl.Flights).FirstOrDefault(d => d.Id == reservationId);
+            var GetEmployee = _dbContext.Employees.Include(u => u.User).FirstOrDefault(d => d.User.Id == employeeId);
+
+            if(GetDatas == null || GetEmployee == null)
+            {
+                return NotFound();
+            }
+
             var GlobalSet = new GlobalSettings
             {
                 ColorMode = ColorMode.Color,
@@ -40,14 +46,14 @@ namespace FlyyAirlines.Controllers
                 Margins = new MarginSettings { Top = 10 },
                 DocumentTitle = "Reservation Check",
             };
-            var GetPath = Path.Combine(Directory.GetCurrentDirectory());
+            var GetPath = Directory.GetCurrentDirectory();
             string ChangedPath = Regex.Replace(GetPath, @"\\FlyyAirlines$", "\\FlyyAirlines.Repository\\PDFGenerator");
             var Generator = new TemplateGenerator();
             var objectSettings = new ObjectSettings
             {
                 PagesCount = true,
                 HtmlContent = Generator.GetHTMLString(GetDatas, GetEmployee),
-                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "style.css") },
+                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(ChangedPath, "assets", "style.css") },
                 HeaderSettings = { FontName = "Arial", FontSize = 12, Line = true},
                 FooterSettings = { FontName = "Arial", FontSize = 12, Line = true }
             };
@@ -57,10 +63,10 @@ namespace FlyyAirlines.Controllers
                 GlobalSettings = GlobalSet,
                 Objects = { objectSettings }
             };
-            //'libwkhtmltox odnaleźć to!
+            
             var file = _converter.Convert(pdf);
 
-            return File(file, "application/pdf");
+            return File(file, "application/pdf", "ReserveCheck.pdf");
         }
 
     }
