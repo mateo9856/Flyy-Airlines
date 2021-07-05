@@ -66,7 +66,7 @@ namespace FlyyAirlines.Controllers
             
             var file = _converter.Convert(pdf);
 
-            return File(file, "application/pdf", "ReserveCheck.pdf");
+            return File(file, "application/pdf");
         }
 
     }

@@ -126,10 +126,6 @@ const CheckReservation = () => {
             flight: filterFlight,
         });
     }
-    const handleGenerate = () => {
-        axios.get("api/Pdf/reservationId=" + checkedData.reservation + "&employeeId=" + context.userData.id)
-            .then(res => console.log(res));
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -244,7 +240,9 @@ const CheckReservation = () => {
                                         value="Sprawdź"
                                     />
                                 </form>
-                                {checkedData && <button className="btn btn-outline-primary" onClick={handleGenerate}>Generuj PDF</button>}
+                                {checkedData && <a target='_blank'
+                                    href={"api/Pdf/reservationId=" + checkedData.reservation + "&employeeId=" + context.userData.id}
+                                    className="btn btn-outline-primary">Generuj PDF</a>}
                             </div>
                         )}
                     </div>   
@@ -309,7 +307,7 @@ const CheckReservation = () => {
                                 />
                             </div>
                         </form>
-                        {checkDatas.flight ? (//dokonczyc rezerwacje od strony employsa
+                        {checkDatas.flight ? (
                             <div className="reservationTable">
                                 {buttonRows(checkDatas.flight)}
                             </div>
