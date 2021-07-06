@@ -140,7 +140,12 @@ const CheckReservation = () => {
         if (checkFreeFlight.reservations.some(el => el.seat === buttonValue)) {
             alert("Miejsce zajęte");
         } else {
-            FetchDatas.Post('api/Reservation', sendDatas)
+            axios.post('api/Reservation', sendDatas)
+                .then(res => {
+                    setCheckedData({
+                        reservation: res.data.id
+                    });
+                }).catch(err => setCheckedData(false));
             alert("Zarezerwowano");
             setButtonValue(0);
             setCheckDatas({
@@ -153,7 +158,7 @@ const CheckReservation = () => {
             })
         }
     }
-
+    console.log(checkedData);
     return (
         <div className="row">
             <div className="col-sm">
@@ -181,7 +186,7 @@ const CheckReservation = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {Reservations.map((res) => (//UWAGA! W reservations dodac by nie dodawalo jezeli flights jest nullem
+                                {Reservations.map((res) => (
                                     <tr>
                                         <th scope="row">{res.surname}</th>
                                         <td>{res.name}</td>
@@ -199,7 +204,7 @@ const CheckReservation = () => {
                         </table>
                         {checkedClicked && (
                             <div>
-                                <button className="buttonExit" onClick={() => setCheckedClicked(false)}>
+                                <button className="buttonExit" onClick={() => setSelectedOption("")}>
                                     X
                                 </button>
                                 <form onSubmit={handleCheckSubmit}>
@@ -240,7 +245,7 @@ const CheckReservation = () => {
                                         value="Sprawdź"
                                     />
                                 </form>
-                                {checkedData && <a target='_blank'
+                                {checkedData && <a onClick={() => setCheckedData(false)} target='_blank'
                                     href={"api/Pdf/reservationId=" + checkedData.reservation + "&employeeId=" + context.userData.id}
                                     className="btn btn-outline-primary">Generuj PDF</a>}
                             </div>
@@ -249,13 +254,12 @@ const CheckReservation = () => {
                 )}
                 {selectedOption === "add" && (
                     <div>
-                        <form onSubmit={handleSubmit}>
-                            <button
-                                className="buttonExit"
-                                onClick={() => setCheckedClicked(false)}
-                            >
-                                X
+                        <button
+                            className="buttonExit"
+                            onClick={() => setSelectedOption("")}>
+                            X
                             </button>
+                        <form onSubmit={handleSubmit}>
                             <div className="from-gorup">
                                 <select
                                     value={checkDatas.flight.id}
@@ -307,6 +311,12 @@ const CheckReservation = () => {
                                 />
                             </div>
                         </form>
+                        {checkedData && <a onClick={() => {
+                            setCheckedData(false);
+                            setSelectedOption("");
+                        }} target='_blank'
+                            href={"api/Pdf/reservationId=" + checkedData.reservation + "&employeeId=" + context.userData.id}
+                            className="btn btn-outline-primary">Generuj PDF</a>}
                         {checkDatas.flight ? (
                             <div className="reservationTable">
                                 {buttonRows(checkDatas.flight)}

@@ -89,7 +89,7 @@ namespace FlyyAirlines.Controllers
         
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
-        public IActionResult Put(string id, Reservation reservation)
+        public IActionResult Put(string id, Reservation reservation)//do zmian danych w pucie wystarczy wypelnic pola oprocz nierelacyjnych
         {
             if (id != reservation.Id)
             {

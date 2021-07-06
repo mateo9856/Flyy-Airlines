@@ -1,6 +1,7 @@
 ﻿import React, { useState } from 'react'
 import EmployeeManage from './AdminComponents/EmployeeManage';
 import FlightManage from './AdminComponents/FlightManage';
+import PutManage from './AdminComponents/PutManage';
 
 const Admin = (props) => {
     const [activeManage, setActiveManage] = useState("");
@@ -19,6 +20,7 @@ const Admin = (props) => {
                     <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("addPlane")}>Dodaj samolot</button></li>
                     <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("addEmployee")}>Dodaj pracownika</button></li>
                     <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("removeEmployee")}>Usuń pracownika</button></li>
+                    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("editData")}>Edytuj Dane</button></li>
                 </ul>
                 <div className="text-center">
                     {activeManage === "add" ?
@@ -31,6 +33,7 @@ const Admin = (props) => {
                         <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}
                     {activeManage === "removeEmployee" ?
                         <EmployeeManage selectedManage={activeManage} exit={resetValues} /> : ""}
+                    {activeManage === "editData" ? <PutManage exit={resetValues} /> : ""}
                 </div>
             </div>
         </>
