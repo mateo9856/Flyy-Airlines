@@ -1,25 +1,42 @@
-﻿import React, { useContext, useState } from "react";
+﻿import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../AppContext";
 import FetchDatas from "../../FetchDatas";
 
 const PutManage = (props) => {
-    const [editData, setEditData] = useState("");
-    const returnForms = (data) => {
-        if (data === "flight") {
-            FetchDatas.GetAll();//adresy api
-        }
 
-        else if (data === "airplane") {
-            FetchDatas.GetAll();
-        }
-        else {
-            FetchDatas.GetAll();
-        }
+    useEffect(() => {
+        FetchDatas.GetAll('api/Reservation', setEditData);
+    }, [])
+
+    const GetPersonName = (e) => {
+        const GetPerson = editData.filter(data => data.personIdentify === parseInt(e.target.value, 10));//robic metode returnForms!
+        setPersonData({
+            name: GetPerson[0].name,
+            surname: GetPerson[0].surname
+        })
+    }
+    const [PersonData, setPersonData] = useState({});
+    const [editData, setEditData] = useState([]);
+    const returnForms = (data) => {
         switch (data) {
             case "reservation":
-                return <>
-                    
-                </>
+                return (<>
+                    <div className="form-group">
+                        <select onChange={GetPersonName} className="form-control">
+                            Identyfikator:
+                            {editData.map(data => <option value={data.personIdentify}>{data.personIdentify}</option>)}
+                        </select>
+                        <p className="text-center">Toższamość: {PersonData.name} {PersonData.surname}</p>
+                    </div>
+                    <div className="form-group">
+                        Wylot
+                        <input type="text" className="form-control" name="flight" />
+                    </div>
+                    <div className="form-group">
+                        Miejsce
+                        <input type="text" className="form-control" name="flight" />
+                    </div>
+                </>)
             case "flight":
                 return <></>
             case "airplane":
@@ -28,7 +45,7 @@ const PutManage = (props) => {
                 return <h4>Wybierz dane!</h4>
         }
     }
-
+    console.log(editData);
     const [changedData, setChangedData] = useState("reservation");
     const [context, setContext] = useContext(AppContext);
 
@@ -38,6 +55,19 @@ const PutManage = (props) => {
 
     const handleChange = (e) => {
         setChangedData(e.target.value);
+        switch (e.target.value) {
+            case "reservation":
+                FetchDatas.GetAll('api/Reservation', setEditData);
+                break;
+            case "flight":
+                FetchDatas.GetAll('api/Flights/GetFlights', setEditData);
+                break;
+            case "airplane":
+                FetchDatas.GetAll('api/Flights/GetAirplanes', setEditData);
+                break;
+            default:
+                break;
+        }
     }
 
     return (
