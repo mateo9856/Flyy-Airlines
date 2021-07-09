@@ -8,21 +8,41 @@ const PutManage = (props) => {
         FetchDatas.GetAll('api/Reservation', setEditData);
     }, [])
 
-    const GetPersonName = (e) => {
-        const GetPerson = editData.filter(data => data.personIdentify === parseInt(e.target.value, 10));//robic metode returnForms!
-        setPersonData({
-            name: GetPerson[0].name,
-            surname: GetPerson[0].surname
-        })
+    const EditInForms = (e) => {
+        switch (e.target.name) {
+            case "flight":
+                break;
+            case "seat":
+                break;
+            case "reservation":
+                const GetPerson = editData.filter(data => data.personIdentify === parseInt(e.target.value, 10));
+                setPersonData({
+                    name: GetPerson[0].name,
+                    surname: GetPerson[0].surname
+                })
+                break;
+            case "airplane":
+                break;
+        }
     }
+    const [sendedData, setSendedData] = useState({});
+    const [Reservations, setReservations] = useState([]);
+    const [Flights, setFlights] = useState([]);
+    const [Airplanes, setAirplanes] = useState([]) 
     const [PersonData, setPersonData] = useState({});
     const [editData, setEditData] = useState([]);
     const returnForms = (data) => {
         switch (data) {
             case "reservation":
+                FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
+                setSendedData({
+                    reservation: "",
+                    flight: "",
+                    seat: ""
+                })
                 return (<>
                     <div className="form-group">
-                        <select onChange={GetPersonName} className="form-control">
+                        <select name="reservation" onChange={EditInForms} className="form-control">
                             Identyfikator:
                             {editData.map(data => <option value={data.personIdentify}>{data.personIdentify}</option>)}
                         </select>
@@ -30,17 +50,35 @@ const PutManage = (props) => {
                     </div>
                     <div className="form-group">
                         Wylot
-                        <input type="text" className="form-control" name="flight" />
+                        <select onChange={EditInForms} name="flight" className="form-control">
+                            {Flights.map(data => <option value={data.id}>{data.flightName}</option>)}
+                        </select>
                     </div>
                     <div className="form-group">
                         Miejsce
-                        <input type="text" className="form-control" name="flight" />
+                        <input className = "form-control" type="number" name="seat" value="0" onChange={EditInForms} />
                     </div>
                 </>)
             case "flight":
-                return <></>
+                FetchDatas.GetAll('api/Flights/GetAirplanes', setAirplanes)
+                return (<>
+                </>)
             case "airplane":
-                return <></>
+                FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
+                return (<>
+                    <div className="form-group">
+                        <select name="airplane" onChange={EditInForms} className="form-control">
+                            Samolot:
+                            {editData.map(data => <option value={data.planeName}>{data.planeName}</option>)}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <input type="text" name="planeName" onChange={EditInForms} className="form-control" />
+                    </div>
+                    <div className="form-group">
+                        <input type="number" name="numberOfSeats" onChange={EditInForms} className="form-control" />
+                    </div>
+                </>)
             default:
                 return <h4>Wybierz dane!</h4>
         }
