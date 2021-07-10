@@ -1,6 +1,7 @@
 ﻿import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../AppContext";
 import FetchDatas from "../../FetchDatas";
+import { convertToDateTimeString } from "./FlightManage";
 
 const PutManage = (props) => {
     const [context, setContext] = useContext(AppContext);
@@ -20,6 +21,7 @@ const PutManage = (props) => {
                 FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
                 break;
             case "flight":
+                FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
                 FetchDatas.GetAll('api/Flights/GetAirplanes', setAirplanes)
                 break;
             case "airplane":
@@ -32,14 +34,13 @@ const PutManage = (props) => {
 
     const EditInForms = (e) => {
         switch (e.target.name) {
-
             case "seat": case "numberOfSeats":
                 setSendedData({
                     ...sendedData,
                     [e.target.name]: parseInt(e.target.value, 10)
                 })
                 break;
-            case "flight": case "fromCity": case "fromCountry": case "toCity":
+            case "flight": case "fromCity": case "fromCountry": case "toCity": case "flightId": 
             case "toCountry": case "airplane": case "airplaneName": case "planeNane": 
                 setSendedData({
                     ...sendedData,
@@ -54,6 +55,10 @@ const PutManage = (props) => {
                 })
                 break;
             case "departureDate":
+                setSendedData({
+                    ...sendedData,
+                    [e.target.name]: convertToDateTimeString(e.target.value)
+                })
                 break;
         }
     }
@@ -82,6 +87,12 @@ const PutManage = (props) => {
             case "flight":
                 return (<>
                     <div className="form-group">
+                        Wybierz wylot:
+                        <select value={sendedData.flightId} onChange={EditInForms} name="flightId" className="form-control">
+                            {Flights.map(data => <option value={data.id}>{data.flightName}</option>)}
+                        </select>
+                    </div>
+                    <div className="form-group">
                         Wylot z:<br />
                         Miasto
                         <input value={sendedData.fromCity} className="form-control" type="text" name="fromCity" onChange={EditInForms} />
@@ -97,13 +108,13 @@ const PutManage = (props) => {
                     </div>
                     <div className="form-group">
                         Samolot
-                        <select value={sendedData.flight} onChange={EditInForms} name="airplane" className="form-control">
+                        <select value={sendedData.airplane} onChange={EditInForms} name="airplane" className="form-control">
                             {Airplanes.map(data => <option value={data.id}>{data.planeName}</option>)}
                         </select>
                     </div>
                     <div className="form-group">
                         Data wylotu:
-                        <input className="form-control" type="datetime-local"  name="departureDate" value="0" onChange={EditInForms} />
+                        <input className="form-control" type="datetime-local" name="departureDate" onChange={EditInForms} />
                     </div>
                 </>)
             case "airplane":
@@ -130,6 +141,7 @@ const PutManage = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(sendedData);
     }
 
     const handleChange = (e) => {
@@ -144,8 +156,9 @@ const PutManage = (props) => {
                 break;
             case "flight":         
                 setSendedData({
+                    flightId: "2001bccb-a80f-4152-aab5-3044647e89e8",
                     fromCity: "",
-                    formCountry: "",
+                    frrmCountry: "",
                     toCity: "",
                     toCountry: "",
                     departureDate: "",
