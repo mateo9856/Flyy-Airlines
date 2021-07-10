@@ -41,18 +41,22 @@ const PutManage = (props) => {
                 })
                 break;
             case "flight": case "fromCity": case "fromCountry": case "toCity": case "flightId": 
-            case "toCountry": case "airplane": case "airplaneName": case "planeNane": 
+            case "toCountry": case "airplane": case "airplaneName": case "planeName": case "airplaneId":
                 setSendedData({
                     ...sendedData,
                     [e.target.name]: e.target.value
                 })
                 break;
-            case "personId":
-                const GetPerson = Reservations.filter(data => data.personIdentify === parseInt(e.target.value, 10));
+            case "reservationId":
+                const GetPerson = Reservations.filter(data => data.id === e.target.value);
                 setPersonData({
                     name: GetPerson[0].name,
                     surname: GetPerson[0].surname
                 })
+                setSendedData({
+                    ...sendedData,
+                    [e.target.name]: e.target.value
+                })                
                 break;
             case "departureDate":
                 setSendedData({
@@ -61,15 +65,16 @@ const PutManage = (props) => {
                 })
                 break;
         }
+        console.log(sendedData);
     }
     const returnForms = (data) => {
         switch (data) {
             case "reservation":
                 return (<>
                     <div className="form-group">
-                        <select name="personId" onChange={EditInForms} className="form-control">
+                        <select name="reservationId" onChange={EditInForms} className="form-control">
                             Identyfikator:
-                            {Reservations.map(data => <option value={data.personIdentify}>{data.personIdentify}</option>)}
+                            {Reservations.map(data => <option value={data.id}>{data.personIdentify}</option>)}
                         </select>
                         <p className="text-center">Toższamość: {PersonData.name} {PersonData.surname}</p>
                     </div>
@@ -121,8 +126,8 @@ const PutManage = (props) => {
                 return (<>
                     <div className="form-group">
                         Samolot:
-                        <select value={sendedData.name} name="airplaneName" onChange={EditInForms} className="form-control">
-                            {Airplanes.map(data => <option value={data.planeName}>{data.planeName}</option>)}
+                        <select value={sendedData.airplaneId} name="airplaneId" onChange={EditInForms} className="form-control">
+                            {Airplanes.map(data => <option value={data.id}>{data.planeName}</option>)}
                         </select>
                     </div>
                     <div className="form-group">
@@ -142,6 +147,32 @@ const PutManage = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(sendedData);
+        switch (changedData) {
+            case "reservation":
+                FetchDatas.Put('api/Reservation/' + sendedData.reservationId, {//sprawdzic teraz przy wywolaniach i poprawic metody w api!
+                    flight: sendedData.flight,
+                    seat: sendedData.seat
+                });
+                break;
+            case "flight":
+                FetchDatas.Put('api/Flights/' + sendedData.flightId, {
+                    fromCountry: sendedData.fromCountry,
+                    fromCity: sendedData.fromCity,
+                    toCity: sendedData.toCity,
+                    toCountry: sendedData.toCountry,
+                    departureDate: sendedData.departureDate,
+                    airplane: sendedData.airplane
+                });
+                break;
+            case "airplane":
+                FetchDatas.Put('api/Flights/Airplane/' + sendedData.airplaneId, {
+                    planeName: sendedData.planeName,
+                    numberOfSeats: sendedData.numberOfSeats
+                });
+                break;
+            default:
+                break;
+        }
     }
 
     const handleChange = (e) => {
@@ -149,7 +180,7 @@ const PutManage = (props) => {
         switch (e.target.value) {
             case "reservation":    
                 setSendedData({
-                    personId: 0,
+                    reservationId: 0,
                     flight: "",
                     seat: 0
                 })
@@ -167,7 +198,7 @@ const PutManage = (props) => {
                 break;
             case "airplane":
                 setSendedData({
-                    name: "",
+                    airplaneId: "c2aecb63-e606-4d2b-a371-9c49cc34675b",
                     planeName: "",
                     numberOfSeats:0
                 })

@@ -127,6 +127,19 @@ namespace FlyyAirlines.Controllers
             return NoContent();
         }
 
+        [Route("Airplane")]
+        [HttpPut("{id}")]
+        public IActionResult PutAirplane(string id, Airplane airplane)
+        {
+            if (id != airplane.Id)
+            {
+                return BadRequest();
+            }
+
+            _mainAirplanes.Update(airplane);
+            return NoContent();
+        }
+
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFlight(string id)
