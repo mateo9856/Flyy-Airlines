@@ -3,48 +3,68 @@ import { AppContext } from "../../AppContext";
 import FetchDatas from "../../FetchDatas";
 
 const PutManage = (props) => {
+    const [context, setContext] = useContext(AppContext);
+    const [changedData, setChangedData] = useState("reservation");
+    const [sendedData, setSendedData] = useState({});
+    const [Reservations, setReservations] = useState([]);
+    const [Flights, setFlights] = useState([]);
+    const [Airplanes, setAirplanes] = useState([])
+    const [PersonData, setPersonData] = useState({});
 
     useEffect(() => {
-        FetchDatas.GetAll('api/Reservation', setEditData);
+        FetchDatas.GetAll('api/Reservation', setReservations);
     }, [])
+    useEffect(() => {
+        switch (changedData) {
+            case "reservation":
+                FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
+                break;
+            case "flight":
+                FetchDatas.GetAll('api/Flights/GetAirplanes', setAirplanes)
+                break;
+            case "airplane":
+                FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
+                break;
+            default:
+                break;
+        }
+    }, [changedData])
 
     const EditInForms = (e) => {
         switch (e.target.name) {
-            case "flight":
+
+            case "seat": case "numberOfSeats":
+                setSendedData({
+                    ...sendedData,
+                    [e.target.name]: parseInt(e.target.value, 10)
+                })
                 break;
-            case "seat":
+            case "flight": case "fromCity": case "fromCountry": case "toCity":
+            case "toCountry": case "airplane": case "airplaneName": case "planeNane": 
+                setSendedData({
+                    ...sendedData,
+                    [e.target.name]: e.target.value
+                })
                 break;
-            case "reservation":
-                const GetPerson = editData.filter(data => data.personIdentify === parseInt(e.target.value, 10));
+            case "personId":
+                const GetPerson = Reservations.filter(data => data.personIdentify === parseInt(e.target.value, 10));
                 setPersonData({
                     name: GetPerson[0].name,
                     surname: GetPerson[0].surname
                 })
                 break;
-            case "airplane":
+            case "departureDate":
                 break;
         }
     }
-    const [sendedData, setSendedData] = useState({});
-    const [Reservations, setReservations] = useState([]);
-    const [Flights, setFlights] = useState([]);
-    const [Airplanes, setAirplanes] = useState([]) 
-    const [PersonData, setPersonData] = useState({});
-    const [editData, setEditData] = useState([]);
     const returnForms = (data) => {
         switch (data) {
             case "reservation":
-                FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
-                setSendedData({
-                    reservation: "",
-                    flight: "",
-                    seat: ""
-                })
                 return (<>
                     <div className="form-group">
-                        <select name="reservation" onChange={EditInForms} className="form-control">
+                        <select name="personId" onChange={EditInForms} className="form-control">
                             Identyfikator:
-                            {editData.map(data => <option value={data.personIdentify}>{data.personIdentify}</option>)}
+                            {Reservations.map(data => <option value={data.personIdentify}>{data.personIdentify}</option>)}
                         </select>
                         <p className="text-center">Toższamość: {PersonData.name} {PersonData.surname}</p>
                     </div>
@@ -56,36 +76,57 @@ const PutManage = (props) => {
                     </div>
                     <div className="form-group">
                         Miejsce
-                        <input className = "form-control" type="number" name="seat" value="0" onChange={EditInForms} />
+                        <input className="form-control" type="number" name="seat" value={sendedData.seat} onChange={EditInForms} />
                     </div>
                 </>)
             case "flight":
-                FetchDatas.GetAll('api/Flights/GetAirplanes', setAirplanes)
-                return (<>
-                </>)
-            case "airplane":
-                FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
                 return (<>
                     <div className="form-group">
-                        <select name="airplane" onChange={EditInForms} className="form-control">
-                            Samolot:
-                            {editData.map(data => <option value={data.planeName}>{data.planeName}</option>)}
+                        Wylot z:<br />
+                        Miasto
+                        <input value={sendedData.fromCity} className="form-control" type="text" name="fromCity" onChange={EditInForms} />
+                        Państwo
+                        <input value={sendedData.fromCountry} className="form-control" type="text" name="fromCountry" onChange={EditInForms} />
+                    </div>
+                    <div className="form-group">
+                        Wylot do:<br />
+                        Miasto
+                        <input value={sendedData.toCity} className="form-control" type="text" name="toCity" onChange={EditInForms} />
+                        Państwo
+                        <input value={sendedData.toCountry} className="form-control" type="text" name="toCountry" onChange={EditInForms} />
+                    </div>
+                    <div className="form-group">
+                        Samolot
+                        <select value={sendedData.flight} onChange={EditInForms} name="airplane" className="form-control">
+                            {Airplanes.map(data => <option value={data.id}>{data.planeName}</option>)}
                         </select>
                     </div>
                     <div className="form-group">
-                        <input type="text" name="planeName" onChange={EditInForms} className="form-control" />
+                        Data wylotu:
+                        <input className="form-control" type="datetime-local"  name="departureDate" value="0" onChange={EditInForms} />
+                    </div>
+                </>)
+            case "airplane":
+                return (<>
+                    <div className="form-group">
+                        Samolot:
+                        <select value={sendedData.name} name="airplaneName" onChange={EditInForms} className="form-control">
+                            {Airplanes.map(data => <option value={data.planeName}>{data.planeName}</option>)}
+                        </select>
                     </div>
                     <div className="form-group">
-                        <input type="number" name="numberOfSeats" onChange={EditInForms} className="form-control" />
+                        Nowa nazwa:
+                        <input value={sendedData.planeName} type="text" name="planeName" onChange={EditInForms} className="form-control" />
+                    </div>
+                    <div className="form-group">
+                        Ilość siedzeń:
+                        <input value={sendedData.numberOfSeats} type="number" name="numberOfSeats" onChange={EditInForms} className="form-control" />
                     </div>
                 </>)
             default:
                 return <h4>Wybierz dane!</h4>
         }
     }
-    console.log(editData);
-    const [changedData, setChangedData] = useState("reservation");
-    const [context, setContext] = useContext(AppContext);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -94,20 +135,34 @@ const PutManage = (props) => {
     const handleChange = (e) => {
         setChangedData(e.target.value);
         switch (e.target.value) {
-            case "reservation":
-                FetchDatas.GetAll('api/Reservation', setEditData);
+            case "reservation":    
+                setSendedData({
+                    personId: 0,
+                    flight: "",
+                    seat: 0
+                })
                 break;
-            case "flight":
-                FetchDatas.GetAll('api/Flights/GetFlights', setEditData);
+            case "flight":         
+                setSendedData({
+                    fromCity: "",
+                    formCountry: "",
+                    toCity: "",
+                    toCountry: "",
+                    departureDate: "",
+                    airplane:""
+                })
                 break;
             case "airplane":
-                FetchDatas.GetAll('api/Flights/GetAirplanes', setEditData);
+                setSendedData({
+                    name: "",
+                    planeName: "",
+                    numberOfSeats:0
+                })
                 break;
             default:
                 break;
         }
     }
-
     return (
         <div>
             <form onSubmit={handleSubmit}>

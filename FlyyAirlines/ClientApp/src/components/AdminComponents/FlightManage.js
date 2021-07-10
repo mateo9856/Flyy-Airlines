@@ -1,7 +1,8 @@
 ﻿import React, { useEffect, useState } from "react";
 import FetchDatas from "../../FetchDatas";
 
-const convertToDateTimeString = (val) => {
+const convertToDateTimeString = (val) => {//próba zmiany na regexa!
+    console.log(val)
     const convertDate = val.split("-");
     let convertDayAndTime = convertDate[2].split("T");
     const convertMinutes = convertDayAndTime[1].split(":");
