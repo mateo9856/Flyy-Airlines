@@ -5,6 +5,7 @@ using FlyyAirlines.Repository.FlightsAirplanes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -23,6 +24,16 @@ namespace FlyyAirlines.Controllers
             _planesData = planesData;
             _mainPlanes = mainPlanes;
             _mainAirplanes = mainAirplanes;
+        }
+
+        public DateTime ConvertToDateTime(string[] date)
+        {
+            int[] Times = new int[5];
+            for (int i = 0; i < Times.Length; i++)
+            {
+                Times[i] = Int32.Parse(date[i]);
+            }
+            return new DateTime(Times[0], Times[1], Times[2], Times[3], Times[4], 0);
         }
 
         [Route("GetFlights")]
@@ -91,11 +102,7 @@ namespace FlyyAirlines.Controllers
             {
                 return BadRequest();
             }
-            int[] Times = new int[5];
-            for(int i = 0; i < Times.Length; i++)
-            {
-                Times[i] = Int32.Parse(flight.DepartureDate[i]);
-            }
+
 
             var GetAirplane = await _mainAirplanes.Get(flight.Airplane);
             var Flight = new Flight()
@@ -107,7 +114,7 @@ namespace FlyyAirlines.Controllers
                 ToCountry = flight.ToCountry,
                 ToCity = flight.ToCity,
                 Airplane = GetAirplane,
-                DepartureDate = new DateTime(Times[0], Times[1], Times[2], Times[3], Times[4], 0)
+                DepartureDate = ConvertToDateTime(flight.DepartureDate)
             };
 
             await _mainPlanes.Add(Flight);
@@ -115,27 +122,42 @@ namespace FlyyAirlines.Controllers
         }
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
-        [HttpPut("{id}")]
-        public IActionResult Put(string id, Flight flight)
+        [Route("Flight/{id}")]
+        [HttpPut]
+        public IActionResult Put(string id, FlightDTO flight)
         {
-            if (id != flight.Id)
+            if (id == null)
             {
                 return BadRequest();
             }
-
-            _mainPlanes.Update(flight);
+            var child = new string[] { "Airplane", "Reservations" };
+            var FlightDetails = _mainPlanes.EntityWithEagerLoad(d => d.Id == id, child).Result.ToList()[0];
+            _mainPlanes.Update(new Flight()
+            {
+                Id = FlightDetails.Id,
+                FlightName = flight.FlightName,
+                FromCity = flight.FromCity,
+                FromCountry = flight.FromCountry,
+                ToCity = flight.ToCity,
+                ToCountry = flight.ToCountry,
+                Airplane = FlightDetails.Airplane,
+                Reservations = FlightDetails.Reservations,
+                DepartureDate = ConvertToDateTime(flight.DepartureDate)
+            });
             return NoContent();
         }
 
-        [Route("Airplane")]
-        [HttpPut("{id}")]
+        [Route("Airplane/{id}")]
+        [HttpPut]
         public IActionResult PutAirplane(string id, Airplane airplane)
         {
             if (id != airplane.Id)
             {
                 return BadRequest();
             }
-
+            var child = new string[] { "Flights" };
+            var AirplaneDetails = _mainAirplanes.EntityWithEagerLoad(d => d.Id == id, child).Result.ToList()[0];
+            airplane.Flights = AirplaneDetails.Flights;
             _mainAirplanes.Update(airplane);
             return NoContent();
         }

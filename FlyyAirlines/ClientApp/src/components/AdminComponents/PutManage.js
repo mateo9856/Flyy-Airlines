@@ -14,6 +14,11 @@ const PutManage = (props) => {
 
     useEffect(() => {
         FetchDatas.GetAll('api/Reservation', setReservations);
+        setSendedData({
+            reservationId: 0,
+            flight: "2001bccb-a80f-4152-aab5-3044647e89e8",
+            seat: 0
+        })
     }, [])
     useEffect(() => {
         switch (changedData) {
@@ -65,7 +70,6 @@ const PutManage = (props) => {
                 })
                 break;
         }
-        console.log(sendedData);
     }
     const returnForms = (data) => {
         switch (data) {
@@ -80,7 +84,7 @@ const PutManage = (props) => {
                     </div>
                     <div className="form-group">
                         Wylot
-                        <select onChange={EditInForms} name="flight" className="form-control">
+                        <select name="flight" onChange={EditInForms} className="form-control">
                             {Flights.map(data => <option value={data.id}>{data.flightName}</option>)}
                         </select>
                     </div>
@@ -146,16 +150,22 @@ const PutManage = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(changedData);
         console.log(sendedData);
         switch (changedData) {
             case "reservation":
-                FetchDatas.Put('api/Reservation/' + sendedData.reservationId, {//sprawdzic teraz przy wywolaniach i poprawic metody w api!
-                    flight: sendedData.flight,
-                    seat: sendedData.seat
-                });
+                if (Reservations.some(el => el.seat === sendedData.seat)) {
+                    alert("Miejsce zajęte")
+                } else {
+                    FetchDatas.Put('api/Reservation/' + sendedData.reservationId, {
+                        flight: sendedData.flight,
+                        seat: sendedData.seat
+                    });
+                }
                 break;
             case "flight":
-                FetchDatas.Put('api/Flights/' + sendedData.flightId, {
+                FetchDatas.Put('api/Flights/Flight/' + sendedData.flightId, {
+                    flightName: sendedData.fromCity + "-" + sendedData.toCity,
                     fromCountry: sendedData.fromCountry,
                     fromCity: sendedData.fromCity,
                     toCity: sendedData.toCity,
@@ -166,6 +176,7 @@ const PutManage = (props) => {
                 break;
             case "airplane":
                 FetchDatas.Put('api/Flights/Airplane/' + sendedData.airplaneId, {
+                    id: sendedData.airplaneId,
                     planeName: sendedData.planeName,
                     numberOfSeats: sendedData.numberOfSeats
                 });
@@ -181,7 +192,7 @@ const PutManage = (props) => {
             case "reservation":    
                 setSendedData({
                     reservationId: 0,
-                    flight: "",
+                    flight: "2001bccb-a80f-4152-aab5-3044647e89e8",
                     seat: 0
                 })
                 break;
@@ -189,7 +200,7 @@ const PutManage = (props) => {
                 setSendedData({
                     flightId: "2001bccb-a80f-4152-aab5-3044647e89e8",
                     fromCity: "",
-                    frrmCountry: "",
+                    fromCountry: "",
                     toCity: "",
                     toCountry: "",
                     departureDate: "",
@@ -207,6 +218,7 @@ const PutManage = (props) => {
                 break;
         }
     }
+    console.log(sendedData);
     return (
         <div>
             <form onSubmit={handleSubmit}>
