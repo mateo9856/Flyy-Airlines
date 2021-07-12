@@ -203,7 +203,7 @@ const FlightManage = (props) => {
                                             <th scope="row">{index}</th>
                                             <td>{list.flightName}</td>
                                             <td>
-                                                <button className="btn btn-outline-primary" name={list.flightsId} onClick={RemoveFlight}>
+                                                <button className="btn btn-outline-primary" name={list.id} onClick={RemoveFlight}>
                                                     Usuń
                           </button>
                                             </td>
