@@ -132,18 +132,15 @@ namespace FlyyAirlines.Controllers
             }
             var child = new string[] { "Airplane", "Reservations" };
             var FlightDetails = _mainPlanes.EntityWithEagerLoad(d => d.Id == id, child).Result.ToList()[0];
-            _mainPlanes.Update(new Flight()
-            {
-                Id = FlightDetails.Id,
-                FlightName = flight.FlightName,
-                FromCity = flight.FromCity,
-                FromCountry = flight.FromCountry,
-                ToCity = flight.ToCity,
-                ToCountry = flight.ToCountry,
-                Airplane = FlightDetails.Airplane,
-                Reservations = FlightDetails.Reservations,
-                DepartureDate = ConvertToDateTime(flight.DepartureDate)
-            });
+
+            FlightDetails.FlightName = flight.FlightName;
+            FlightDetails.FromCity = flight.FromCity;
+            FlightDetails.FromCountry = flight.FromCountry;
+            FlightDetails.ToCity = flight.ToCity;
+            FlightDetails.ToCountry = flight.ToCountry;
+            FlightDetails.DepartureDate = ConvertToDateTime(flight.DepartureDate);
+
+            _mainPlanes.Update(FlightDetails);
             return NoContent();
         }
 
@@ -157,7 +154,7 @@ namespace FlyyAirlines.Controllers
             }
             var child = new string[] { "Flights" };
             var AirplaneDetails = _mainAirplanes.EntityWithEagerLoad(d => d.Id == id, child).Result.ToList()[0];
-            airplane.Flights = AirplaneDetails.Flights;
+            AirplaneDetails.Flights = airplane.Flights;
             _mainAirplanes.Update(airplane);
             return NoContent();
         }

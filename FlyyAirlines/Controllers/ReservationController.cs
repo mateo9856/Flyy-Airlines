@@ -98,16 +98,11 @@ namespace FlyyAirlines.Controllers
             var GetFlight = _dbContext.Flights.Include(d => d.Airplane).FirstOrDefault(d => d.Id == reservation.Flight);
             var child = new string[] { "Flights", "User" };
             var GetDetails = _mainReserves.EntityWithEagerLoad(d => d.Id == id, child).Result.ToList()[0];
-             _mainReserves.Update(new Reservation()
-             {
-                 Id = GetDetails.Id,
-                 Name = GetDetails.Name,
-                 Surname = GetDetails.Surname,
-                 PersonIdentify = GetDetails.PersonIdentify,
-                 Seat = reservation.Seat,
-                 User = GetDetails.User,
-                 Flights = GetFlight
-             });
+
+            GetDetails.Seat = reservation.Seat;
+            GetDetails.Flights = GetFlight;
+
+             _mainReserves.Update(GetDetails);
             return NoContent();
             
         }

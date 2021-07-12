@@ -66,7 +66,7 @@ namespace FlyyAirlines.Repository
 
         public void Update(T entity)
         {
-            table.Attach(entity);
+            table.Update(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
