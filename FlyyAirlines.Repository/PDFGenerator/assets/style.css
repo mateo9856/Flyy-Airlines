@@ -1,6 +1,7 @@
-﻿.block {
-    border: 1px solid black;
+﻿.blockBottom {
+    border-bottom: 1px dotted black;
     width: 180px;
+    float:left;
     height: 100px;
     text-align: center;
 }
@@ -15,4 +16,18 @@ span {
     bottom: 13px;
     font-weight: bold;
     letter-spacing: 1px;
+}
+
+.tableStyle {
+    font-size:20px;
+
+}
+
+.tableStyle th {
+    padding: 5px;
+    text-align:center;
+}
+
+.tableStyle td {
+    text-align: center;
 }

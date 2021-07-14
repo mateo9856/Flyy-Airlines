@@ -14,9 +14,10 @@ namespace FlyyAirlines.Repository.PDFGenerator
                           </head>
                            <body>
                              <div class='header'>
-                             <h1 align='center'>Reservation nr " + reservation.Id + "</h1>" +
-                             "<table align='center'>" +
-                             "<thead><tr><th>Name></th><th>Surname</th><th>Seat</th>" +
+                             <h2 class = 'headerFont'>Flyy! Airlines</h2>
+                             <h4 style = 'margin-top: 5px; color:#44504a' align='center'>Reservation nr " + reservation.Id + "</h4>" +
+                             "<table class = 'tableStyle' align='center'>" +
+                             "<thead><tr><th>Name</th><th>Surname</th><th>Seat</th>" +
                              "<th>Identify</th><th>Flight</th></tr></thead>");
 
                 sb.AppendFormat(@"<tbody><tr><td>{0}</td>
@@ -28,10 +29,8 @@ namespace FlyyAirlines.Repository.PDFGenerator
                                 reservation.PersonIdentify, reservation.Flights.FlightName);
 
             sb.AppendFormat(@"</table
-                                 <div class='block'>
-                                   <p><h3 align='center'>Confirmed</h3></p>
-                                   <p class='confirmed'>{0} {1}</p>
-                                   <span>...................................</span>
+                                 <div class='blockBottom'>
+                                   <p class='confirmed'>Confirm :  <b>{0} {1}</b></p>
                                   </div>
                             </body>
                            </html>", employee.Surname, employee.Name);

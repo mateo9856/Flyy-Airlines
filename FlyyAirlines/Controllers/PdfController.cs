@@ -52,8 +52,8 @@ namespace FlyyAirlines.Controllers
             var objectSettings = new ObjectSettings
             {
                 PagesCount = true,
-                HtmlContent = Generator.GetHTMLString(GetDatas, GetEmployee),
                 WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(ChangedPath, "assets", "style.css") },
+                HtmlContent = Generator.GetHTMLString(GetDatas, GetEmployee),
                 HeaderSettings = { FontName = "Arial", FontSize = 12, Line = true},
                 FooterSettings = { FontName = "Arial", FontSize = 12, Line = true }
             };
