@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
@@ -11,9 +7,16 @@ namespace FlyyAirlines.Controllers
     [ApiController]
     public class HomePageController : ControllerBase
     {
-
+        [Route("Bestseller")]
         [HttpGet]
-        public async Task<IActionResult> GetTopThreeFlights()
+        public async Task<IActionResult> GetTopFlight()
+        {
+            return Ok("");
+        }
+
+        [Route("News")]
+        [HttpGet]
+        public async Task<IActionResult> GetNews()
         {
             return Ok("");
         }

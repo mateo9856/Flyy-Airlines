@@ -2,15 +2,11 @@
 using DinkToPdf.Contracts;
 using FlyyAirlines.Models;
 using FlyyAirlines.Repository.PDFGenerator;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
 {
@@ -48,12 +44,11 @@ namespace FlyyAirlines.Controllers
             };
             var GetPath = Directory.GetCurrentDirectory();
             string ChangedPath = Regex.Replace(GetPath, @"\\FlyyAirlines$", "\\FlyyAirlines.Repository\\PDFGenerator");
-            var Generator = new TemplateGenerator();
             var objectSettings = new ObjectSettings
             {
                 PagesCount = true,
                 WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(ChangedPath, "assets", "style.css") },
-                HtmlContent = Generator.GetHTMLString(GetDatas, GetEmployee),
+                HtmlContent = TemplateGenerator.GetHTMLString(GetDatas, GetEmployee),
                 HeaderSettings = { FontName = "Arial", FontSize = 12, Line = true},
                 FooterSettings = { FontName = "Arial", FontSize = 12, Line = true }
             };

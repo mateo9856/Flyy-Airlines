@@ -3,9 +3,9 @@ using System.Text;
 
 namespace FlyyAirlines.Repository.PDFGenerator
 {
-    public class TemplateGenerator
+    public static class TemplateGenerator
     {
-        public string GetHTMLString(Reservation reservation, Employee employee) {
+        public static string GetHTMLString(Reservation reservation, Employee employee) {
 
             var sb = new StringBuilder();
 
@@ -15,8 +15,8 @@ namespace FlyyAirlines.Repository.PDFGenerator
                            <body>
                              <div class='header'>
                              <h2 class = 'headerFont'>Flyy! Airlines</h2>
-                             <h4 style = 'margin-top: 5px; color:#44504a' align='center'>Reservation nr " + reservation.Id + "</h4>" +
-                             "<table class = 'tableStyle' align='center'>" +
+                             <h3 style = 'margin-top: 5px; color:#44504a' align='center'>Reservation nr " + reservation.Id + "</h3>" +
+                             "<table cellpadding='7'>" +
                              "<thead><tr><th>Name</th><th>Surname</th><th>Seat</th>" +
                              "<th>Identify</th><th>Flight</th></tr></thead>");
 
@@ -28,7 +28,7 @@ namespace FlyyAirlines.Repository.PDFGenerator
                                 </tr></tbody>", reservation.Name, reservation.Surname, reservation.Seat,
                                 reservation.PersonIdentify, reservation.Flights.FlightName);
 
-            sb.AppendFormat(@"</table
+            sb.AppendFormat(@"</table>
                                  <div class='blockBottom'>
                                    <p class='confirmed'>Confirm :  <b>{0} {1}</b></p>
                                   </div>

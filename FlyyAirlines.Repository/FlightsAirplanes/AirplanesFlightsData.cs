@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FlyyAirlines.Repository.FlightsAirplanes
-{//poprawić reposy
+{
     public class AirplanesFlightsData : IAirplanesFlightsData
     {
         private readonly AppDBContext _dbContext;

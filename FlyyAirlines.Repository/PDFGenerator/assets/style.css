@@ -1,14 +1,16 @@
-﻿.blockBottom {
+﻿
+.blockBottom {
+    margin-top:10px;
     border-bottom: 1px dotted black;
-    width: 180px;
+    max-width: 280px;
     float:left;
-    height: 100px;
+    padding-bottom: 1px;
     text-align: center;
 }
 
 .confirmed {
     line-height: 0;
-    font-size: 16px;
+    font-size: 22px;
 }
 
 span {
@@ -18,16 +20,11 @@ span {
     letter-spacing: 1px;
 }
 
-.tableStyle {
-    font-size:20px;
-
+table {
+    font-size: 22px;
+    text-align: center !important;
+    margin:auto;
 }
 
-.tableStyle th {
-    padding: 5px;
-    text-align:center;
-}
 
-.tableStyle td {
-    text-align: center;
-}
+
