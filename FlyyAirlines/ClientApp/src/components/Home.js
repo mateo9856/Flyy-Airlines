@@ -33,8 +33,10 @@ const Home = () => {
     const [Flights, setFlights] = useState([]);
     useEffect(() => {
         FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
+        FetchDatas.Get('api/HomePage/BestSeller', setBestSeller);
     }, [])
 
+    const [BestSeller, setBestSeller] = useState([]);
     const [isSearched, setIsSearched] = useState(false);
     const [searchedFlight, setSearchedFlight] = useState([]);
     const [datas, setDatas] = useState({
@@ -92,7 +94,10 @@ const Home = () => {
             <section className="bestFlights text-center">
                 <h3 style={{ marginTop: "5px" }}>Nasz Bestseller</h3>
                 <div className="bestFlightsFlex">
-                    
+                    {Object.keys(BestSeller).length > 0 && <>
+                        <h4>{BestSeller.flight}</h4>
+                        <h6>Popularnoœæ: {BestSeller.count}</h6>
+                    </>}
                 </div>
             </section>
             <section className="moreInformations">

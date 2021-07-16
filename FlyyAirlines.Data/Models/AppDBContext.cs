@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using FlyyAirlines.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -21,6 +22,7 @@ namespace FlyyAirlines.Models
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Flight> Flights { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<QuickNews> QuickNews { get; set; }
         public override DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +38,8 @@ namespace FlyyAirlines.Models
             .HasColumnName("ReservationId");
             modelBuilder.Entity<User>().Property(b => b.Id)
                 .HasColumnName("UserId");
+            modelBuilder.Entity<QuickNews>().Property(b => b.Id)
+                .HasColumnName("NewsId");
         }
     }
 }

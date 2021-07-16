@@ -1,6 +1,7 @@
 using AutoMapper;
 using DinkToPdf;
 using DinkToPdf.Contracts;
+using FlyyAirlines.Data.Models;
 using FlyyAirlines.DTO.AutoMapper;
 using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
@@ -81,6 +82,7 @@ namespace FlyyAirlines
             services.AddScoped<IMainRepository<Flight>, MainRepository<Flight>>();
             services.AddScoped<IMainRepository<Airplane>, MainRepository<Airplane>>();
             services.AddScoped<IMainRepository<Employee>, MainRepository<Employee>>();
+            services.AddScoped<IMainRepository<QuickNews>, MainRepository<QuickNews>>();
             services.AddScoped<IReserveData, ReserveData>();
             services.AddScoped<IAirplanesFlightsData, AirplanesFlightsData>();
             services.AddScoped<IEmployeeData, EmployeeData>();
@@ -132,7 +134,7 @@ namespace FlyyAirlines
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-            //serviceProvider.GetRequiredService<AppDBContext>().Database.EnsureCreated();
+            
         }
     }
 }
