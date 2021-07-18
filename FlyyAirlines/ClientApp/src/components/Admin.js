@@ -2,6 +2,10 @@
 import EmployeeManage from './AdminComponents/EmployeeManage';
 import FlightManage from './AdminComponents/FlightManage';
 import PutManage from './AdminComponents/PutManage';
+import "../css/Admin.css";
+import Sidebar from './AdminComponents/Sidebar';
+
+export const AdminContext = React.createContext();
 
 const Admin = (props) => {
     const [activeManage, setActiveManage] = useState("");
@@ -9,11 +13,22 @@ const Admin = (props) => {
     const resetValues = () => {
         setActiveManage("");
     }
-
+    //context działa teraz budowa dasha każdego elementu
+    const [active, setActive] = useState("home");
     return (
         <>
-            <h1 className="text-center">Admin panel</h1>
-            <div className="col-sm-12">
+            <AdminContext.Provider value={
+                {
+                    type: active,
+                    change: (val) => setActive(val)
+                }   
+            }>
+            <div className="adminBox">
+                <div className="sidebar">
+                    <Sidebar />
+                </div>
+                    <div className="col-sm-12 otherPanel">
+                    <h1 className="text-center">Admin panel</h1>
                 <ul style={{ listStyleType: "none" }} className="gridAdminBtn d-flex flex-wrap justify-content-around">
                     <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("add")}>Dodaj wylot</button></li>
                     <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("remove")}>Usuń wylot</button></li>
@@ -35,7 +50,9 @@ const Admin = (props) => {
                         <EmployeeManage selectedManage={activeManage} exit={resetValues} /> : ""}
                     {activeManage === "editData" ? <PutManage exit={resetValues} /> : ""}
                 </div>
-            </div>
+                </div>
+                </div>
+            </AdminContext.Provider>
         </>
     )
 }
