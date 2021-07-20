@@ -37,7 +37,7 @@ const FlightManage = (props) => {
 
     const GetFlights = () => {
         FetchDatas.GetAll('api/Flights/GetFlights', setFlightsList);
-        FetchDatas.Get('api/Flights/GetAirplanes', setAirplanesList)
+        FetchDatas.GetAll('api/Flights/GetAirplanes', setAirplanesList)
     };
 
     const AddFlight = (e) => {
