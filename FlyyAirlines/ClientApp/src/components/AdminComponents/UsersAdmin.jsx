@@ -9,6 +9,10 @@ export const UsersAdmin = function () {
         FetchDatas.Get('api/Users', setUsers);
     }, [])
 
+    const Delete = (val) => {
+        FetchDatas.Delete('api/account/DeleteUser/' + val);
+    }
+
     return (
         <table className="table">
             <thead>
@@ -30,7 +34,7 @@ export const UsersAdmin = function () {
                     <td>{res.email}</td>
                     <td>
                         <button>Edytuj</button>
-                        <button>Usuń</button>
+                        <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}
             </tbody>

@@ -9,6 +9,10 @@ export const EmployeesAdmin = function () {
         FetchDatas.GetAll('api/Employees', setEmployees);
     }, [])
 
+    const Delete = (val) => {
+        FetchDatas.Delete('api/Employees/' + val);
+    }
+
     return (
         <table className="table">
             <thead>
@@ -26,7 +30,7 @@ export const EmployeesAdmin = function () {
                     <td>{res.workPosition}</td>
                     <td>
                         <button>Edytuj</button>
-                        <button>Usuń</button>
+                        <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}
             </tbody>

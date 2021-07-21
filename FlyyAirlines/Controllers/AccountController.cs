@@ -14,7 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-//przetestowac w razie co przemodelowac!
+
 namespace FlyyAirlines.Controllers
 {
     [Route("api/[controller]")]
@@ -214,6 +214,27 @@ namespace FlyyAirlines.Controllers
                 });
             }
             return Unauthorized();
+        }
+
+        [Route("DeleteUser/{id}")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var GetUser = await _userManager.FindByIdAsync(id);
+
+            if(GetUser != null)
+            {
+                var result = await _userManager.DeleteAsync(GetUser);
+
+                if (result.Succeeded)
+                    return Ok("User Deleted");
+
+            } else
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
 
     }

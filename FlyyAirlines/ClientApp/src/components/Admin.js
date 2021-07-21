@@ -2,6 +2,7 @@
 import EmployeeManage from './AdminComponents/EmployeeManage';
 import FlightManage from './AdminComponents/FlightManage';
 import PutManage from './AdminComponents/PutManage';
+import { MdCreate, MdExitToApp } from 'react-icons/md';
 import "../css/Admin.css";
 import Sidebar from './AdminComponents/Sidebar';
 import AdminHome from './AdminComponents/AdminHome';
@@ -10,16 +11,21 @@ import { AirplanesAdmin } from './AdminComponents/AirplanesAdmin';
 import { ReservationsAdmin } from './AdminComponents/ReservationsAdmin';
 import { EmployeesAdmin } from './AdminComponents/EmployeesAdmin';
 import { UsersAdmin } from './AdminComponents/UsersAdmin';
+import { ReturnFrom } from './AdminComponents/ReturnForm';
 
 export const AdminContext = React.createContext();
 
 const Admin = (props) => {
     const [activeManage, setActiveManage] = useState("");
 
+    const [PostActive, setPostActive] = useState(false);
+
+    const [SelectedPost, setSelectedPost] = useState("");
+
     const resetValues = () => {
         setActiveManage("");
     }
-    //context działa teraz budowa dasha każdego elementu
+
     const [active, setActive] = useState("home");
 
     const returnComponent = (comp) => {
@@ -47,6 +53,14 @@ const Admin = (props) => {
         }
     }
 
+    const Post = () => {
+
+    }
+
+    const handleChange = (e) => {
+        setSelectedPost(e.target.value);
+    }
+
     return (
         <>
             <AdminContext.Provider value={
@@ -55,11 +69,29 @@ const Admin = (props) => {
                     change: (val) => setActive(val)
                 }   
             }>
-            <div className="adminBox">
+                {PostActive && <div className="postForm">
+                    <button className="buttExit" onClick={() => setPostActive(false)}><MdExitToApp /></button>
+                    <form onSubmit={Post}>
+                        <div className="form-group">
+                            <select className="form-control" name="categorySelect" value={SelectedPost} onChange={handleChange}>
+                                <option value="user">User</option>
+                                <option value="employee">Employee</option>
+                                <option value="reservation">Reservation</option>
+                                <option value="flight">Flight</option>
+                                <option value="airplane">Airplane</option>
+                            </select>
+                        </div>
+                            <ReturnFrom />
+                    </form>
+                </div>}
+                <div className={PostActive ? "adminBox blurStyle" : "adminBox"}>
                     <div className="sidebar">
                         <Sidebar />
                 </div>
                     <div className="col-sm-12 otherPanel">
+                        <div className="createButton">
+                            <button onClick={() => setPostActive(true)} className="btnCreate">CREATE <MdCreate style={{ fontSize: "30px" }} /></button>
+                        </div>
                         {returnComponent(active)}
                 {/*<ul style={{ listStyleType: "none" }} className="gridAdminBtn d-flex flex-wrap justify-content-around">*/}
                 {/*    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("add")}>Dodaj wylot</button></li>*/}

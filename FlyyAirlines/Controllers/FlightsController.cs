@@ -160,11 +160,22 @@ namespace FlyyAirlines.Controllers
         }
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
-        [HttpDelete("{id}")]
+        [Route("Flight/{id}")]
+        [HttpDelete]
         public async Task<ActionResult> DeleteFlight(string id)
         {
             var Flight = await _mainPlanes.Get(id);
             await _mainPlanes.Delete(Flight);
+            return NoContent();
+        }
+
+        //[Authorize(Roles = "Admin, SuperAdmin")]
+        [Route("Airplane/{id}")]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteAirplane(string id)
+        {
+            var GetAirplane = await _mainAirplanes.Get(id);
+            await _mainAirplanes.Delete(GetAirplane);
             return NoContent();
         }
     }

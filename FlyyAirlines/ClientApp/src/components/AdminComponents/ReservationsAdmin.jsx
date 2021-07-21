@@ -8,7 +8,11 @@ export const ReservationsAdmin = function () {
     useEffect(() => {
         FetchDatas.GetAll('api/Reservation/', setReservations);
     }, [])
-    console.log(Reservations);
+
+    const Delete = (val) => {
+        FetchDatas.Delete('api/Reservation/' + val);
+    }
+
     return (
         <table className="table">
             <thead>
@@ -30,7 +34,7 @@ export const ReservationsAdmin = function () {
                     <td>{res.flights.flightName}</td>
                     <td>
                         <button>Edytuj</button>
-                        <button>Usuń</button>
+                        <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}
             </tbody>

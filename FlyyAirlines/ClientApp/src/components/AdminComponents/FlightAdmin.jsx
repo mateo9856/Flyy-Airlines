@@ -8,6 +8,11 @@ export const FlightAdmin = function () {
     useEffect(() => {
         FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
     }, [])
+
+    const Delete = (val) => {
+        FetchDatas.Delete('api/Flights/Flight/' + val);
+    }
+
     return (
         <table className = "table">
             <thead>
@@ -27,7 +32,7 @@ export const FlightAdmin = function () {
                     <td>{res.airplane.planeName}</td>
                     <td>
                         <button>Edytuj</button>
-                        <button>Usuń</button>
+                        <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}
             </tbody>
