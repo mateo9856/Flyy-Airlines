@@ -81,7 +81,8 @@ const Admin = (props) => {
                                 <option value="airplane">Airplane</option>
                             </select>
                         </div>
-                            <ReturnFrom />
+                        <ReturnFrom />
+                        <input type="submit" value="Wykonaj!" />
                     </form>
                 </div>}
                 <div className={PostActive ? "adminBox blurStyle" : "adminBox"}>
