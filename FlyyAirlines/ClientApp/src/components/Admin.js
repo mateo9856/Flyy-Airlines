@@ -20,7 +20,7 @@ const Admin = (props) => {
 
     const [PostActive, setPostActive] = useState(false);
 
-    const [SelectedPost, setSelectedPost] = useState("");
+    const [SelectedPost, setSelectedPost] = useState("user");
 
     const resetValues = () => {
         setActiveManage("");
@@ -81,7 +81,7 @@ const Admin = (props) => {
                                 <option value="airplane">Airplane</option>
                             </select>
                         </div>
-                        <ReturnFrom />
+                        <ReturnFrom table={SelectedPost} />
                         <input type="submit" value="Wykonaj!" />
                     </form>
                 </div>}
