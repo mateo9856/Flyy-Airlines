@@ -8,20 +8,65 @@ export const convertToDateTimeString = (val) => {
 export const ReturnFrom = (props) => {
 
     const [tableType, setTableType] = useState("user");
-
+    const [isEmployeeUser, setIsEmployeeUser] = useState(false);
     const [datas, setDatas] = useState({})
     const [Airplanes, setAirplanes] = useState([]);
     const [Flights, setFlights] = useState([]);
     const [Reservations, setReservations] = useState([]);
     useEffect(() => {
-        if (props.table === "reservations") {
-            FetchDatas.GetAll('api/Reservation', setReservations);
-        } else if (props.table === "flights") {
-            FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
-        } else if (props.table === "airplanes") {
-            FetchDatas.GetAll('api/Flights/GetAirplanes', setAirplanes);
+        switch (props.table) {
+            case "user":
+                setDatas({
+                    email: "",
+                    userName: "",
+                    password: "",
+                    name: "",
+                    surname: ""
+                })
+                break;
+            case "reservation":
+                FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
+                setDatas({
+                    name: "",
+                    surname: "",
+                    personIdentify: 0,
+                    seat: 0,
+                    flightId: ""
+                })
+                break;
+            case "employee":
+                setDatas({
+                    name: "",
+                    surname: "",
+                    workPosition: "",
+                    isEmployeeUser: false,
+                    userName: "",
+                    email: "",
+                    password: ""
+                })
+                break;
+            case "flight":
+                FetchDatas.GetAll('api/Flights/GetAirplanes', setAirplanes);
+                setDatas({
+                    airplane: "",
+                    fromCountry: "",
+                    fromCity: "",
+                    toCountry: "",
+                    toCity: "",
+                    departureDate: ""
+                })
+                break;
+            case "airplane":
+                setDatas({
+                    planeName: "",
+                    numberOfseats: 0
+                })
+                break;
+            default:
+                break;
         }
-    }, [])
+
+    }, [props.table])
 
     const handleChange = (e) => {
 
@@ -38,16 +83,19 @@ export const ReturnFrom = (props) => {
         }
     }
 
+    const returnSeats = (val) => {
+        console.log(val);//dopracowac by flightid bylo ladowane
+        const GetAirplane = Flights.filter(res => res.id === val);
+        console.log(GetAirplane);
+        const arr = [];
+        for (let i = 1; i <= 30; i++) {
+            arr.push(<option value={i}>{i}</option>);
+        }
+    }
+
     const ReturnForms = () => {
         switch (props.table) {
             case "user":
-                setDatas({//move states to useEffect!
-                    email: "",
-                    userName: "",
-                    password: "",
-                    name: "",
-                    surname: ""
-                })
                 return (
                     <>
                         <div className="form-group">
@@ -72,14 +120,7 @@ export const ReturnFrom = (props) => {
                         </div>
                     </>
                 );
-            case "reservations":
-                setDatas({
-                    name: "",
-                    surname: "",
-                    personIdentify: 0,
-                    seat: 0,
-                    flightId: ""
-                })
+            case "reservation":
                 return (
                     <>
                     <div className="form-group">
@@ -97,28 +138,18 @@ export const ReturnFrom = (props) => {
                         <div className="form-group">
                             Flight:
                         <select className="form-control" type="number" name="flightId" value={datas.flightId} onChange={handleChange}>
-                                {/**/ }
+                               {Flights.map(res => <option value={res.id}>{res.flightName}</option>)}
                         </select>
                         </div>
                         <div className="form-group">
                             Seat:
                         <select className="form-control" name="seat" value={datas.seat} onChange={handleChange}>
-                           {/*Dokończyć tu!*/ }
+                                {returnSeats(datas.flightId)}
                         </select>
                         </div>
                     </>
                     );
-            case "employees":
-                setDatas({
-                    name: "",
-                    surname: "",
-                    workPosition: "",
-                    isEmployeeUser: false,
-                    userName: "",
-                    email: "",
-                    password: ""
-                })
-
+            case "employee":
                 return (
                     <>
                         <div className="form-group">
@@ -134,30 +165,24 @@ export const ReturnFrom = (props) => {
                             <input className="form-control" type="text" name="workPosition" value={datas.workPosition} onChange={handleChange} />
                         </div>
                         <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value={datas.isEmployeeUser} /> User Employee
+                            <input className="form-check-input" onChange={() => setIsEmployeeUser(!isEmployeeUser)} name="isEmployeeUser" type="checkbox" checked={datas.isEmployeeUser} /> User Employee
                         </div>
-                        <div className="form-group">
-                            Email:
+                        {isEmployeeUser && <>
+                            <div className="form-group">
+                                Email:
                             <input className="form-control" type="text" name="email" value={datas.email} onChange={handleChange} />
-                        </div>
-                        <div className="form-group">
-                            Username:
+                            </div>
+                            <div className="form-group">
+                                Username:
                             <input className="form-control" type="text" name="userName" value={datas.userName} onChange={handleChange} />
-                        </div>
-                        <div className="form-group">
-                            Password:
+                            </div>
+                            <div className="form-group">
+                                Password:
                             <input className="form-control" type="text" name="password" value={datas.password} onChange={handleChange} />
-                        </div>
+                            </div>
+                        </>}
                     </>)
-            case "flights":
-                setDatas({
-                    airplane: "",
-                    fromCountry: "",
-                    fromCity: "",
-                    toCountry: "",
-                    toCity: "",
-                    departureDate: ""
-                })
+            case "flight":
                 return (
                     <>
                         <div className="form-group">
@@ -177,19 +202,15 @@ export const ReturnFrom = (props) => {
                         <div className="form-group">
                             Samolot
                         <select value={datas.airplane} onChange={handleChange} name="airplane" className="form-control">
-                                {/**/}
+                                {Airplanes.map(res => <option value={res.id}>{res.planeName}</option>)}
                             </select>
                         </div>
                         <div className="form-group">
                             Data wylotu:
-                        <input value={datas.departureDate} className="form-control" type="datetime-local" name="departureDate" onChange={handleChange} />
+                        <input className="form-control" type="datetime-local" name="departureDate" onChange={handleChange} />
                         </div>
                     </>)
-            case "airplanes":
-                setDatas({
-                    planeName: "",
-                    numberOfseats: 0
-                })
+            case "airplane":
                 return (
                     <>
                         <div className="form-group">
