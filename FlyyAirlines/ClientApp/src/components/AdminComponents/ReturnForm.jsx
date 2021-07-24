@@ -1,4 +1,5 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import { data } from "jquery";
+import React, { useEffect, useState } from "react";
 import FetchDatas from "../../FetchDatas";
 
 export const convertToDateTimeString = (val) => {
@@ -6,10 +7,9 @@ export const convertToDateTimeString = (val) => {
 };
 
 export const ReturnFrom = (props) => {
-
     const [tableType, setTableType] = useState("user");
     const [isEmployeeUser, setIsEmployeeUser] = useState(false);
-    const [datas, setDatas] = useState({})
+    const [datas, setDatas] = useState({});
     const [Airplanes, setAirplanes] = useState([]);
     const [Flights, setFlights] = useState([]);
     const [Reservations, setReservations] = useState([]);
