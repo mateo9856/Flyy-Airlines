@@ -1,6 +1,7 @@
 ﻿import { data } from "jquery";
 import React, { useEffect, useState } from "react";
 import FetchDatas from "../../FetchDatas";
+import axios from "axios";
 
 export const convertToDateTimeString = (val) => {
     return val.replace(/[-T:]/gm, " ").split(" ");
@@ -25,13 +26,15 @@ export const ReturnFrom = (props) => {
                 })
                 break;
             case "reservation":
-                FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
-                setDatas({
-                    name: "",
-                    surname: "",
-                    personIdentify: 0,
-                    seat: 0,
-                    flightId: ""
+                axios.get('api/Flights/GetFlights').then(res => {
+                    setFlights(res.data.result);
+                    setDatas({
+                        name: "",
+                        surname: "",
+                        personIdentify: 0,
+                        seat: 0,
+                        flightId: res.data.result[0].id
+                    })
                 })
                 break;
             case "employee":
@@ -68,6 +71,74 @@ export const ReturnFrom = (props) => {
 
     }, [props.table])
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(datas);
+        switch (props.table) {
+            case "user":
+                axios.post("api/account/register",
+                    {
+                        email: datas.email,
+                        userName: datas.userName,
+                        password: datas.password,
+                        name: datas.name,
+                        surname: datas.surname
+                    }).then(res => {
+                        alert("Zarejestrowany");
+                    }).catch(err => {
+                        console.log(err);
+                        alert("Błąd z zaptaniem!")
+                    })
+                break;
+            case "reservation":
+                console.log(datas);
+                FetchDatas.Post('api/Reservation', {
+                    name: datas.name,
+                    surname: datas.surname,
+                    personIdentify: datas.personIdentify,
+                    seat: parseInt(datas.seat, 10),
+                    flight: datas.flightId,
+                    user: ""
+                });
+                break;
+            case "flight":
+                FetchDatas.Post('api/Flights', {
+                    fromCity: datas.fromCity,
+                    fromCountry: datas.fromCountry,
+                    toCity: datas.toCity,
+                    toCountry: datas.toCountry,
+                    airplane: datas.airplane,
+                    departureDate: datas.departureDate
+                });
+                break;
+            case "airplane":
+                FetchDatas.Post('api/Flights/Airplane', {
+                    planeName: datas.planeName,
+                    numberOfSeats: datas.numberOfseats
+                });
+                break;
+            case "employee":
+                if (isEmployeeUser) {
+                    FetchDatas.Post('api/account/addEmployee', {
+                        name: datas.name,
+                        surname: datas.surname,
+                        workPosition: datas.workPosition,
+                        email: datas.email,
+                        userName: datas.userName,
+                        password: datas.password
+                    })
+                } else {
+                    FetchDatas.Post('api/Employees', {
+                        name: datas.name,
+                        surname: datas.surname,
+                        workPosition: datas.workPosition
+                    })
+                }
+                break;
+        }
+        props.exit();
+    }
+
     const handleChange = (e) => {
 
         if (e.target.name === "departureDate") {
@@ -84,15 +155,19 @@ export const ReturnFrom = (props) => {
     }
 
     const returnSeats = (val) => {
-        console.log(val);//dopracowac by flightid bylo ladowane
         const GetAirplane = Flights.filter(res => res.id === val);
         console.log(GetAirplane);
         const arr = [];
-        for (let i = 1; i <= 30; i++) {
-            arr.push(<option value={i}>{i}</option>);
+        try {
+            for (let i = 1; i <= GetAirplane[0].airplane.numberOfSeats; i++) {
+                arr.push(<option value={i}>{i}</option>);
+            }
         }
-    }
+        catch (error) {
 
+        }
+        return arr;
+    }
     const ReturnForms = () => {
         switch (props.table) {
             case "user":
@@ -214,10 +289,12 @@ export const ReturnFrom = (props) => {
                 return (
                     <>
                         <div className="form-group">
+                            Plane name:
                             <input type="text" className="form-control" name="planeName" value={datas.planeName} onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            <input type="number" className="form-control" name="numberOfSeats" value={datas.numberOfseats} onChange={handleChange} />
+                            Number of seats:
+                            <input type="number" className="form-control" name="numberOfseats" value={datas.numberOfseats} onChange={handleChange} />
                         </div>
                     </>)
             default:
@@ -227,6 +304,9 @@ export const ReturnFrom = (props) => {
 
     return (
         <>
-            {ReturnForms()}
+            <form onSubmit={handleSubmit}>
+                {ReturnForms()}
+                <input className = "btn btn-outline-primary" type="submit" value="Wykonaj!" />
+            </form>
         </>)
 }

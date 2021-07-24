@@ -23,7 +23,7 @@ const Admin = (props) => {
     const [SelectedPost, setSelectedPost] = useState("user");
 
     const resetValues = () => {
-        setActiveManage("");
+        setPostActive(false);
     }
 
     const [active, setActive] = useState("home");
@@ -55,7 +55,6 @@ const Admin = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(ContextData);
     }
 
     const handleChange = (e) => {
@@ -71,27 +70,24 @@ const Admin = (props) => {
                     change: (val) => setActive(val)
                 }   
             }>
+                {PostActive &&
+                    <div className="postForm">
+                        <button className="buttExit" onClick={() => setPostActive(false)}><MdExitToApp /></button>
+                        <div className="form-group">
+                            <select className="form-control" name="categorySelect" value={SelectedPost} onChange={handleChange}>
+                                <option value="user">User</option>
+                                <option value="employee">Employee</option>
+                                <option value="reservation">Reservation</option>
+                                <option value="flight">Flight</option>
+                                <option value="airplane">Airplane</option>
+                            </select>
+                    </div>
+                    <ReturnFrom table={SelectedPost} exit={resetValues} />
+                    </div>}
                 <div className={PostActive ? "adminBox blurStyle" : "adminBox"}>
                     <div className="sidebar">
                         <Sidebar />
                     </div>
-                    {PostActive &&
-                        <div className="postForm">
-                            <button className="buttExit" onClick={() => setPostActive(false)}><MdExitToApp /></button>
-                            <form onSubmit={handleSubmit}>
-                                <div className="form-group">
-                                    <select className="form-control" name="categorySelect" value={SelectedPost} onChange={handleChange}>
-                                        <option value="user">User</option>
-                                        <option value="employee">Employee</option>
-                                        <option value="reservation">Reservation</option>
-                                        <option value="flight">Flight</option>
-                                        <option value="airplane">Airplane</option>
-                                    </select>
-                                </div>
-                                <ReturnFrom table={SelectedPost} />
-                                <input type="submit" value="Wykonaj!" />
-                            </form>
-                        </div>}
                     <div className="col-sm-12 otherPanel">
                         <div className="createButton">
                             <button onClick={() => setPostActive(true)} className="btnCreate">CREATE <MdCreate style={{ fontSize: "30px" }} /></button>
