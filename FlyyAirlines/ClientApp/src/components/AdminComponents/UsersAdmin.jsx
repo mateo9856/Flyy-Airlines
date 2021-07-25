@@ -1,6 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import FetchDatas from '../../FetchDatas';
 import { MdExitToApp } from 'react-icons/md';
+import { ReturnFrom } from './ReturnForm';
 import "../../css/Admin.css";
 export const UsersAdmin = function () {
 
@@ -13,13 +14,28 @@ export const UsersAdmin = function () {
     const Delete = (val) => {
         FetchDatas.Delete('api/account/DeleteUser/' + val);
     }
+    const [selectedId, setSelectedId] = useState("");
     const [PutEnabled, setPutEnabled] = useState(false);
     const Edit = () => {
         setPutEnabled(true);
     }
 
+    const handleChange = (e) => {
+        setSelectedId(e.target.value);
+    }
+
     return (
-        <div className = {PutEnabled && "blurStyle"}>
+        <>
+            {PutEnabled && <div className="postForm">
+                <button className="buttExit" onClick={() => setPutEnabled(false)}><MdExitToApp /></button>
+                <div className="form-group">
+                    Użytkownik
+                    <select className="form-control" name="selectedId" value={selectedId} onChange={handleChange}>
+                    </select>
+                </div>
+                <ReturnFrom table="user" />
+            </div>}
+        <div className={PutEnabled && "blurStyle"}>
         <table className="table">
             <thead>
                 <tr>
@@ -45,6 +61,7 @@ export const UsersAdmin = function () {
                 </tr>)}
             </tbody>
             </table>
-        </div>
+            </div>
+            </>
     )
 }

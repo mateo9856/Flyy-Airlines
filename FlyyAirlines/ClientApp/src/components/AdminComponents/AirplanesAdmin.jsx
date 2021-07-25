@@ -2,6 +2,7 @@
 import FetchDatas from '../../FetchDatas';
 import { MdExitToApp } from 'react-icons/md';
 import "../../css/Admin.css";
+import { ReturnFrom } from './ReturnForm';
 export const AirplanesAdmin = function () {
 
     const [Airplanes, setAirplanes] = useState([]);
@@ -9,6 +10,7 @@ export const AirplanesAdmin = function () {
         FetchDatas.GetAll('api/Flights/GetFlights', setAirplanes);
     }, [])
     const [PutEnabled, setPutEnabled] = useState(false);
+    const [selectedId, setSelectedId] = useState("");
     const Delete = (val) => {
         FetchDatas.Delete('api/Flights/Airplane/' + val);
     }
@@ -17,8 +19,22 @@ export const AirplanesAdmin = function () {
         setPutEnabled(true);//robic operacje put
     }
 
+    const handleChange = (e) => {
+        setSelectedId(e.target.value);
+    }
+
     return (
-        <div className = {PutEnabled && "blurStyle"}>
+                <>
+            {PutEnabled && <div className="postForm">
+                <button className="buttExit" onClick={() => setPutEnabled(false)}><MdExitToApp /></button>
+                <div className="form-group">
+                    Samolot:
+                    <select className="form-control" name="selectedId" value={selectedId} onChange={handleChange}>
+                    </select>
+                </div>
+                <ReturnFrom table="airplane" />
+            </div>}
+        <div className={PutEnabled && "blurStyle"}>
         <table className="table">
             <thead>
                 <tr>
@@ -39,6 +55,7 @@ export const AirplanesAdmin = function () {
                 </tr>)}
             </tbody>
             </table>
-        </div>
+            </div>
+            </>
     )
 }

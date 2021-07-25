@@ -1,11 +1,13 @@
 ﻿import React, { useEffect, useState } from 'react';
 import FetchDatas from '../../FetchDatas';
 import "../../css/Admin.css";
+import { ReturnFrom } from './ReturnForm';
 import { MdExitToApp } from 'react-icons/md';
 export const FlightAdmin = function () {
 
     const [Flights, setFlights] = useState([]);
     const [PutEnabled, setPutEnabled] = useState(false);
+    const [selectedId, setSelectedId] = useState("");
 
     useEffect(() => {
         FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
@@ -19,8 +21,22 @@ export const FlightAdmin = function () {
         setPutEnabled(true)
     }
 
+    const handleChange = (e) => {
+        setSelectedId(e.target.value);
+    }
+
     return (
-        <div className = {PutEnabled && "blurStyle"}>
+                <>
+            {PutEnabled && <div className="postForm">
+                <button className="buttExit" onClick={() => setPutEnabled(false)}><MdExitToApp /></button>
+                <div className="form-group">
+                        Wylot:
+                        <select className="form-control" name="selectedId" value={selectedId} onChange={handleChange}>
+                        </select>
+                    </div>
+                <ReturnFrom table="flight" />
+            </div>}
+        <div className={PutEnabled && "blurStyle"}>
         <table className = "table">
             <thead>
                 <tr>
@@ -45,5 +61,6 @@ export const FlightAdmin = function () {
             </tbody>
             </table>
             </div>
+            </>
         )
 }
