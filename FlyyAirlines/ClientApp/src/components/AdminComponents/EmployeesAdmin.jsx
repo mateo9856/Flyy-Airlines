@@ -1,6 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import FetchDatas from '../../FetchDatas';
-
+import "../../css/Admin.css";
+import { MdExitToApp } from 'react-icons/md';
 export const EmployeesAdmin = function () {
 
     const [Employees, setEmployees] = useState([]);
@@ -8,12 +9,17 @@ export const EmployeesAdmin = function () {
     useEffect(() => {
         FetchDatas.GetAll('api/Employees', setEmployees);
     }, [])
-
+    const [PutEnabled, setPutEnabled] = useState(false);
     const Delete = (val) => {
         FetchDatas.Delete('api/Employees/' + val);
     }
 
+    const Edit = () => {
+        setPutEnabled(true);
+    }
+
     return (
+        <div className = {PutEnabled && "blurStyle"}>
         <table className="table">
             <thead>
                 <tr>
@@ -29,11 +35,12 @@ export const EmployeesAdmin = function () {
                     <td>{res.name + " " + res.surname}</td>
                     <td>{res.workPosition}</td>
                     <td>
-                        <button>Edytuj</button>
+                        <button onClick={Edit}>Edytuj</button>
                         <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}
             </tbody>
-        </table>
+            </table>
+            </div>
     )
 }

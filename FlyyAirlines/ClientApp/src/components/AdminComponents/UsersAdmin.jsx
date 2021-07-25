@@ -1,6 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import FetchDatas from '../../FetchDatas';
-
+import { MdExitToApp } from 'react-icons/md';
+import "../../css/Admin.css";
 export const UsersAdmin = function () {
 
     const [Users, setUsers] = useState([]);
@@ -12,8 +13,13 @@ export const UsersAdmin = function () {
     const Delete = (val) => {
         FetchDatas.Delete('api/account/DeleteUser/' + val);
     }
+    const [PutEnabled, setPutEnabled] = useState(false);
+    const Edit = () => {
+        setPutEnabled(true);
+    }
 
     return (
+        <div className = {PutEnabled && "blurStyle"}>
         <table className="table">
             <thead>
                 <tr>
@@ -33,11 +39,12 @@ export const UsersAdmin = function () {
                     <td>{res.role}</td>
                     <td>{res.email}</td>
                     <td>
-                        <button>Edytuj</button>
+                        <button onClick={Edit}>Edytuj</button>
                         <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}
             </tbody>
-        </table>
+            </table>
+        </div>
     )
 }

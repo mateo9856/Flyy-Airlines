@@ -1,18 +1,24 @@
 ﻿import React, { useEffect, useState } from 'react';
 import FetchDatas from '../../FetchDatas';
-
+import { MdExitToApp } from 'react-icons/md';
+import "../../css/Admin.css";
 export const AirplanesAdmin = function () {
 
     const [Airplanes, setAirplanes] = useState([]);
     useEffect(() => {
         FetchDatas.GetAll('api/Flights/GetFlights', setAirplanes);
     }, [])
-
+    const [PutEnabled, setPutEnabled] = useState(false);
     const Delete = (val) => {
         FetchDatas.Delete('api/Flights/Airplane/' + val);
     }
 
+    const Edit = () => {
+        setPutEnabled(true);//robic operacje put
+    }
+
     return (
+        <div className = {PutEnabled && "blurStyle"}>
         <table className="table">
             <thead>
                 <tr>
@@ -27,11 +33,12 @@ export const AirplanesAdmin = function () {
                     <td>{res.planeName}</td>
                     <td>{res.numberOfSeats}</td>
                     <td>
-                        <button>Edytuj</button>
+                        <button onClick={Edit}>Edytuj</button>
                         <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}
             </tbody>
-        </table>
+            </table>
+        </div>
     )
 }
