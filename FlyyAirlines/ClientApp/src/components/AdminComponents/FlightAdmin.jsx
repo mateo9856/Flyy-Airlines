@@ -7,6 +7,7 @@ export const FlightAdmin = function () {
 
     const [Flights, setFlights] = useState([]);
     const [PutEnabled, setPutEnabled] = useState(false);
+    const [selectedFlight, setSelectedFlight] = useState("");
     const [selectedId, setSelectedId] = useState("");
 
     useEffect(() => {
@@ -17,12 +18,17 @@ export const FlightAdmin = function () {
         FetchDatas.Delete('api/Flights/Flight/' + val);
     }
 
-    const Edit = () => {
-        setPutEnabled(true)
+    const disableForm = () => {
+        setPutEnabled(false);
+    }
+
+    const Edit = (e) => {
+        setPutEnabled(true);
+        setSelectedId(e.target.value);
     }
 
     const handleChange = (e) => {
-        setSelectedId(e.target.value);
+        setSelectedFlight(e.target.value);
     }
 
     return (
@@ -30,11 +36,12 @@ export const FlightAdmin = function () {
             {PutEnabled && <div className="postForm">
                 <button className="buttExit" onClick={() => setPutEnabled(false)}><MdExitToApp /></button>
                 <div className="form-group">
-                        Wylot:
-                        <select className="form-control" name="selectedId" value={selectedId} onChange={handleChange}>
+                    Wylot:
+                        <select className="form-control" name="selectedId" value={selectedFlight} onChange={handleChange}>
+                        {Flights.map(res => <option value={res.id}>{res.flightName}</option>)}
                         </select>
-                    </div>
-                <ReturnFrom table="flight" />
+                </div>
+                <ReturnFrom table="flight" put={selectedId} exit={disableForm} />
             </div>}
         <div className={PutEnabled && "blurStyle"}>
         <table className = "table">
@@ -54,7 +61,7 @@ export const FlightAdmin = function () {
                     <td>{res.departureDate}</td>
                     <td>{res.airplane.planeName}</td>
                     <td>
-                        <button onClick={Edit}>Edytuj</button>
+                        <button value={res.id} onClick={Edit}>Edytuj</button>
                         <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}

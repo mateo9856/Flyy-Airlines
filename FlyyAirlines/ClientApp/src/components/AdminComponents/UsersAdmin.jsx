@@ -16,24 +16,20 @@ export const UsersAdmin = function () {
     }
     const [selectedId, setSelectedId] = useState("");
     const [PutEnabled, setPutEnabled] = useState(false);
-    const Edit = () => {
+    const Edit = (e) => {
         setPutEnabled(true);
+        setSelectedId(e.target.value);
     }
 
-    const handleChange = (e) => {
-        setSelectedId(e.target.value);
+    const disableForm = () => {
+        setPutEnabled(false);
     }
 
     return (
         <>
             {PutEnabled && <div className="postForm">
                 <button className="buttExit" onClick={() => setPutEnabled(false)}><MdExitToApp /></button>
-                <div className="form-group">
-                    Użytkownik
-                    <select className="form-control" name="selectedId" value={selectedId} onChange={handleChange}>
-                    </select>
-                </div>
-                <ReturnFrom table="user" />
+                <ReturnFrom table="user" put={selectedId} exit={disableForm} />
             </div>}
         <div className={PutEnabled && "blurStyle"}>
         <table className="table">

@@ -15,24 +15,20 @@ export const EmployeesAdmin = function () {
         FetchDatas.Delete('api/Employees/' + val);
     }
     const [selectedId, setSelectedId] = useState("");
-    const Edit = () => {
+    const Edit = (e) => {
         setPutEnabled(true);
+        setSelectedId(e.target.value);
     }
 
-    const handleChange = (e) => {
-        setSelectedId(e.target.value);
+    const disableForm = () => {
+        setPutEnabled(false);
     }
 
     return (
                 <>
             {PutEnabled && <div className="postForm">
                 <button className="buttExit" onClick={() => setPutEnabled(false)}><MdExitToApp /></button>
-                <div className="form-group">
-                    Pracownik:
-                    <select className="form-control" name="selectedId" value={selectedId} onChange={handleChange}>
-                    </select>
-                </div>
-                <ReturnFrom table="employee" />
+                <ReturnFrom table="employee" put={selectedId} exit={disableForm} />
             </div>}
         <div className={PutEnabled && "blurStyle"}>
         <table className="table">
@@ -50,7 +46,7 @@ export const EmployeesAdmin = function () {
                     <td>{res.name + " " + res.surname}</td>
                     <td>{res.workPosition}</td>
                     <td>
-                        <button onClick={Edit}>Edytuj</button>
+                        <button value={res.id} onClick={Edit}>Edytuj</button>
                         <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}

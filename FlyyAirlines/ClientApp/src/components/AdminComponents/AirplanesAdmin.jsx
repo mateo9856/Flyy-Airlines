@@ -15,24 +15,20 @@ export const AirplanesAdmin = function () {
         FetchDatas.Delete('api/Flights/Airplane/' + val);
     }
 
-    const Edit = () => {
-        setPutEnabled(true);//robic operacje put
+    const Edit = (e) => {
+        setPutEnabled(true);
+        setSelectedId(e.target.value);
     }
 
-    const handleChange = (e) => {
-        setSelectedId(e.target.value);
+    const disableForm = () => {
+        setPutEnabled(false);
     }
 
     return (
                 <>
             {PutEnabled && <div className="postForm">
                 <button className="buttExit" onClick={() => setPutEnabled(false)}><MdExitToApp /></button>
-                <div className="form-group">
-                    Samolot:
-                    <select className="form-control" name="selectedId" value={selectedId} onChange={handleChange}>
-                    </select>
-                </div>
-                <ReturnFrom table="airplane" />
+                <ReturnFrom table="airplane" put={selectedId} exit={disableForm} />
             </div>}
         <div className={PutEnabled && "blurStyle"}>
         <table className="table">
@@ -49,7 +45,7 @@ export const AirplanesAdmin = function () {
                     <td>{res.planeName}</td>
                     <td>{res.numberOfSeats}</td>
                     <td>
-                        <button onClick={Edit}>Edytuj</button>
+                        <button value={res.id} onClick={Edit}>Edytuj</button>
                         <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}

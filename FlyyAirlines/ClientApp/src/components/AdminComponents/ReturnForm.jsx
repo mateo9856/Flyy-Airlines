@@ -26,6 +26,7 @@ export const ReturnFrom = (props) => {
                 })
                 break;
             case "reservation":
+                FetchDatas.GetAll('api/Reservation', setReservations);
                 axios.get('api/Flights/GetFlights').then(res => {
                     setFlights(res.data.result);
                     setDatas({
@@ -70,69 +71,106 @@ export const ReturnFrom = (props) => {
         }
 
     }, [props.table])
-
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(datas);
         switch (props.table) {
             case "user":
-                axios.post("api/account/register",
-                    {
-                        email: datas.email,
-                        userName: datas.userName,
-                        password: datas.password,
-                        name: datas.name,
-                        surname: datas.surname
-                    }).then(res => {
-                        alert("Zarejestrowany");
-                    }).catch(err => {
-                        console.log(err);
-                        alert("Błąd z zaptaniem!")
-                    })
+                if (props.put) {
+                    console.log("aaaa")
+                } else {
+                    axios.post("api/account/register",
+                        {
+                            email: datas.email,
+                            userName: datas.userName,
+                            password: datas.password,
+                            name: datas.name,
+                            surname: datas.surname
+                        }).then(res => {
+                            alert("Zarejestrowany");
+                        }).catch(err => {
+                            console.log(err);
+                            alert("Błąd z zaptaniem!")
+                        })
+                }
                 break;
             case "reservation":
-                console.log(datas);
-                FetchDatas.Post('api/Reservation', {
-                    name: datas.name,
-                    surname: datas.surname,
-                    personIdentify: datas.personIdentify,
-                    seat: parseInt(datas.seat, 10),
-                    flight: datas.flightId,
-                    user: ""
-                });
+                if (props.put) {
+                    if (Reservations.some(el => el.seat === datas.seat)) {
+                        alert("Miejsce zajęte")
+                    } else {
+                        FetchDatas.Put('api/Reservation/' + props.put, {
+                            flight: datas.flight,
+                            seat: parseInt(datas.seat, 10)
+                        });
+                    }
+                } else {
+                    FetchDatas.Post('api/Reservation', {
+                        name: datas.name,
+                        surname: datas.surname,
+                        personIdentify: datas.personIdentify,
+                        seat: parseInt(datas.seat, 10),
+                        flight: datas.flightId,
+                        user: ""
+                    });
+                }
                 break;
             case "flight":
-                FetchDatas.Post('api/Flights', {
-                    fromCity: datas.fromCity,
-                    fromCountry: datas.fromCountry,
-                    toCity: datas.toCity,
-                    toCountry: datas.toCountry,
-                    airplane: datas.airplane,
-                    departureDate: datas.departureDate
-                });
+                if (props.put) {
+                    FetchDatas.Put('api/Flights/Flight/' + props.put, {
+                        flightName: datas.fromCity + "-" + datas.toCity,
+                        fromCountry: datas.fromCountry,
+                        fromCity: datas.fromCity,
+                        toCity: datas.toCity,
+                        toCountry: datas.toCountry,
+                        departureDate: datas.departureDate,
+                        airplane: datas.airplane
+                    });
+                } else {
+                    FetchDatas.Post('api/Flights', {
+                        fromCity: datas.fromCity,
+                        fromCountry: datas.fromCountry,
+                        toCity: datas.toCity,
+                        toCountry: datas.toCountry,
+                        airplane: datas.airplane,
+                        departureDate: datas.departureDate
+                    });
+                }
                 break;
             case "airplane":
-                FetchDatas.Post('api/Flights/Airplane', {
-                    planeName: datas.planeName,
-                    numberOfSeats: datas.numberOfseats
-                });
+                if (props.put) {
+                    FetchDatas.Put('api/Flights/Airplane/' + props.put, {
+                        id: props.put,
+                        planeName: datas.planeName,
+                        numberOfSeats: datas.numberOfseats
+                    });
+                } else {
+                    FetchDatas.Post('api/Flights/Airplane', {
+                        planeName: datas.planeName,
+                        numberOfSeats: datas.numberOfseats
+                    });
+                }
                 break;
             case "employee":
-                if (isEmployeeUser) {
-                    FetchDatas.Post('api/account/addEmployee', {
-                        name: datas.name,
-                        surname: datas.surname,
-                        workPosition: datas.workPosition,
-                        email: datas.email,
-                        userName: datas.userName,
-                        password: datas.password
-                    })
+                if (props.put) {
+
                 } else {
-                    FetchDatas.Post('api/Employees', {
-                        name: datas.name,
-                        surname: datas.surname,
-                        workPosition: datas.workPosition
-                    })
+                    if (isEmployeeUser) {
+                        FetchDatas.Post('api/account/addEmployee', {
+                            name: datas.name,
+                            surname: datas.surname,
+                            workPosition: datas.workPosition,
+                            email: datas.email,
+                            userName: datas.userName,
+                            password: datas.password
+                        })
+                    } else {
+                        FetchDatas.Post('api/Employees', {
+                            name: datas.name,
+                            surname: datas.surname,
+                            workPosition: datas.workPosition
+                        })
+                    }
                 }
                 break;
         }
