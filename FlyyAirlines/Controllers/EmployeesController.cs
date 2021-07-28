@@ -60,14 +60,17 @@ namespace FlyyAirlines.Controllers
 
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPut("{id}")]
-        public IActionResult Put(string id, [FromBody] Employee employee)
+        public async Task<IActionResult> Put(string id, [FromBody] Employee employee)
         {
             if (id != employee.Id)
             {
                 return BadRequest();
             }
-
-            _mainEmployee.Update(employee);
+            var GetEmployee = await _mainEmployee.Get(id);
+            GetEmployee.Surname = employee.Surname;
+            GetEmployee.Name = employee.Name;
+            GetEmployee.WorkPosition = employee.WorkPosition;
+            _mainEmployee.Update(GetEmployee);
             return NoContent();
         }
 

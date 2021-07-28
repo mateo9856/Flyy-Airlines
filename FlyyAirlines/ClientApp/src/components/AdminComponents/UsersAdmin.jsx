@@ -51,7 +51,7 @@ export const UsersAdmin = function () {
                     <td>{res.role}</td>
                     <td>{res.email}</td>
                     <td>
-                        <button onClick={Edit}>Edytuj</button>
+                        <button value={res.id} onClick={Edit}>Edytuj</button>
                         <button onClick={() => Delete(res.id)}>Usuń</button>
                     </td>
                 </tr>)}

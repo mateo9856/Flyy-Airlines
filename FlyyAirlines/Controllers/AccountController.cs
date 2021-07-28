@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -214,6 +215,65 @@ namespace FlyyAirlines.Controllers
                 });
             }
             return Unauthorized();
+        }
+
+        [Route("UpdateUser/{id}")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(string id, User user)
+        {
+            var GetUser = await _userManager.FindByIdAsync(id);
+            if(GetUser == null)
+            {
+                return NotFound();
+            } else
+            {
+                GetUser.UserName = user.UserName;
+                GetUser.Password = user.Password;
+                GetUser.Email = user.Email;
+                GetUser.Name = user.Name;
+                GetUser.Surname = user.Surname;
+                var result = await _userManager.UpdateAsync(GetUser);
+                if(result.Succeeded)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+        }
+
+        [Route("UpdateEmployee/{id}")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateEmployee(string id, EmployeeAddDTO employee)
+        {
+            var GetEmployee = await _dbContext.Employees.Include(r => r.User).FirstOrDefaultAsync(d => d.Id == id);
+            var GetEmployeeUser = await _userManager.FindByIdAsync(GetEmployee.User.Id);
+            if (GetEmployee == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                GetEmployeeUser.UserName = employee.UserName;
+                GetEmployeeUser.Password = employee.Password;
+                GetEmployeeUser.Email = employee.Email;
+                GetEmployee.Name = employee.Name;
+                GetEmployee.Surname = employee.Surname;
+                GetEmployee.WorkPosition = employee.WorkPosition;
+
+                _dbContext.Update(GetEmployee);
+                var result = await _userManager.UpdateAsync(GetEmployeeUser);
+                if (result.Succeeded)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
         }
 
         [Route("DeleteUser/{id}")]

@@ -73,11 +73,25 @@ export const ReturnFrom = (props) => {
     }, [props.table])
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(props.put);
         console.log(datas);
         switch (props.table) {
             case "user":
                 if (props.put) {
-                    console.log("aaaa")
+                    axios.put("api/account/UpdateUser/" + props.put,
+                        {
+                            id: props.put,
+                            email: datas.email,
+                            userName: datas.userName,
+                            password: datas.password,
+                            name: datas.name,
+                            surname: datas.surname
+                        }).then(res => {
+                            alert("Zmieniono");
+                        }).catch(err => {
+                            console.log(err);
+                            alert("Błąd z zaptaniem!")
+                        })
                 } else {
                     axios.post("api/account/register",
                         {
@@ -153,7 +167,25 @@ export const ReturnFrom = (props) => {
                 break;
             case "employee":
                 if (props.put) {
-
+                    if (isEmployeeUser) {
+                        axios.put('api/Account/UpdateEmployee/' + props.put, {
+                            id: props.put,
+                            name: datas.name,
+                            surname: datas.surname,
+                            workPosition: datas.workPosition,
+                            email: datas.email,
+                            userName: datas.userName,
+                            password: datas.password
+                        }).then(res => alert("Zmieniono"))
+                            .catch(err => alert("Nie zmieniono"))
+                    } else {
+                        FetchDatas.Put('api/Employees/' + props.put, {
+                            id: props.put,
+                            name: datas.name,
+                            surname: datas.surname,
+                            workPosition: datas.workPosition
+                        })
+                    }
                 } else {
                     if (isEmployeeUser) {
                         FetchDatas.Post('api/account/addEmployee', {
