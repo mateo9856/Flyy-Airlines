@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace FlyyAirlines.Data.Models
 {
-    public class Messages : BaseEntity
+    public class Message : BaseEntity
     {
         public string Author { get; set; }
         public string Title { get; set; }
-        public string Contents { get; set; }
+        public string Content { get; set; }
+        public string AuthorId { get; set; }
         public User User { get; set; }
     }
 }

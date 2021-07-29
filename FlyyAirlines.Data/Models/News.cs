@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace FlyyAirlines.Data.Models
 {
-    public class QuickNews : BaseEntity
+    public class News : BaseEntity
     {
         public string Topic { get; set; }
+        public string Header { get; set; }
         public string Content { get; set; }
         public string ImageUrl { get; set; }
+        public DateTime PublicDate { get; set; }
     }
 }

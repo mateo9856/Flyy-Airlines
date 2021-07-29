@@ -82,7 +82,7 @@ namespace FlyyAirlines
             services.AddScoped<IMainRepository<Flight>, MainRepository<Flight>>();
             services.AddScoped<IMainRepository<Airplane>, MainRepository<Airplane>>();
             services.AddScoped<IMainRepository<Employee>, MainRepository<Employee>>();
-            services.AddScoped<IMainRepository<QuickNews>, MainRepository<QuickNews>>();
+            services.AddScoped<IMainRepository<News>, MainRepository<News>>();
             services.AddScoped<IReserveData, ReserveData>();
             services.AddScoped<IAirplanesFlightsData, AirplanesFlightsData>();
             services.AddScoped<IEmployeeData, EmployeeData>();

@@ -22,7 +22,8 @@ namespace FlyyAirlines.Models
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Flight> Flights { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
-        public DbSet<QuickNews> QuickNews { get; set; }
+        public DbSet<News> QuickNews { get; set; }
+        public DbSet<Message> Messages { get; set; }
         public override DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,7 +39,7 @@ namespace FlyyAirlines.Models
             .HasColumnName("ReservationId");
             modelBuilder.Entity<User>().Property(b => b.Id)
                 .HasColumnName("UserId");
-            modelBuilder.Entity<QuickNews>().Property(b => b.Id)
+            modelBuilder.Entity<News>().Property(b => b.Id)
                 .HasColumnName("NewsId");
         }
     }

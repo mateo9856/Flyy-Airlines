@@ -12,10 +12,10 @@ namespace FlyyAirlines.Controllers
     [ApiController]
     public class HomePageController : ControllerBase
     {
-        private readonly IMainRepository<QuickNews> _quickNews;
+        private readonly IMainRepository<News> _quickNews;
         private readonly AppDBContext _dbContext;
 
-        public HomePageController(IMainRepository<QuickNews> quickNews, AppDBContext dBContext)
+        public HomePageController(IMainRepository<News> quickNews, AppDBContext dBContext)
         {
             _quickNews = quickNews;
             _dbContext = dBContext;
