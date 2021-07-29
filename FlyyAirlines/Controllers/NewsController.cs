@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FlyyAirlines.Data.Models;
+using FlyyAirlines.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,5 +13,10 @@ namespace FlyyAirlines.Controllers
     [ApiController]
     public class NewsController : ControllerBase
     {
+        private readonly IMainRepository<News> _news;
+        public NewsController(IMainRepository<News> news)
+        {
+            _news = news;
+        }
     }
 }
