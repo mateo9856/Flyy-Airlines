@@ -1,10 +1,14 @@
 ﻿using FlyyAirlines.Data.Models;
+using FlyyAirlines.DTO;
+using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
@@ -14,9 +18,51 @@ namespace FlyyAirlines.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly IMainRepository<Message> _message;
-        public MessagesController(IMainRepository<Message> message)
+        private readonly AppDBContext _dbContext;
+        public MessagesController(IMainRepository<Message> message, AppDBContext dBContext)
         {
             _message = message;
+            _dbContext = dBContext;
+        }
+
+        [HttpGet("id")]
+        public async Task<IActionResult> GetUserMessage(string id)
+        {
+            var GetUser = await _dbContext.Users.Include(d => d.Messages).FirstOrDefaultAsync(d => d.Id == id);
+            return Ok(GetUser.Messages);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> SendMessage([FromBody] MessageDTO message)
+        {
+            if (message == null)
+            {
+                return BadRequest();
+            }
+            var GetReceiverUser = await _dbContext.Users.Include(d => d.Messages).FirstOrDefaultAsync(d => d.Id == message.ReceiverId);
+            //var GetClaim = User.FindFirst(ClaimTypes.Name);//try change to claim values
+            var NewMessage = new Message()
+            {
+                Id = Guid.NewGuid().ToString(),
+                AuthorId = message.AuthorId,
+                Author = message.Author,
+                Content = message.Content,
+                Title = message.Title,
+                User = GetReceiverUser
+                
+            };
+
+            await _message.Add(NewMessage);
+
+            return CreatedAtAction("Get", new {Id = NewMessage.Id}, NewMessage);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMessage(string id)
+        {
+            var GetMessage = await _message.Get(id);
+            await _message.Delete(GetMessage);
+            return NoContent();
         }
     }
 }

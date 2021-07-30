@@ -11,6 +11,7 @@ namespace FlyyAirlines.Models
         public User()
         {
             Reservations = new HashSet<Reservation>();
+            Messages = new HashSet<Message>();
         }
         public override string Id { get; set; }
         public override string UserName { get; set; }
@@ -21,5 +22,6 @@ namespace FlyyAirlines.Models
         public override string Email { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public virtual ICollection<Reservation> Reservations { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }
