@@ -2,6 +2,7 @@
 using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace FlyyAirlines.Controllers
 
         [Route("Bestseller")]
         [HttpGet]
-        public async Task<IActionResult> GetTopFlight()
+        public IActionResult GetTopFlight()
         {
             var GetTopReservation = from reserve in _dbContext.Reservations
                                     group reserve by reserve.Flights.FlightName into flightName
@@ -37,9 +38,10 @@ namespace FlyyAirlines.Controllers
 
         [Route("News")]
         [HttpGet]
-        public async Task<IActionResult> GetNews()
+        public async Task<IActionResult> GetLastNews()
         {
-            return Ok("");
+            var GetLastNews = await _dbContext.QuickNews.OrderBy(d => d.PublicDate).ThenBy(d => d.PublicDate.Second).Take(3).ToListAsync();
+            return Ok(GetLastNews);
         }
     }
 }

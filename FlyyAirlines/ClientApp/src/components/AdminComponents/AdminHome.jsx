@@ -1,6 +1,9 @@
-﻿import React from "react";
+﻿import { Button } from "bootstrap";
+import React, { useContext, useEffect, useState } from "react";
 import { Line } from 'react-chartjs-2';
+import { AppContext } from "../../AppContext";
 import "../../css/Admin.css";
+import FetchDatas from "../../FetchDatas";
 
 const data = {
     labels: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec'],
@@ -33,8 +36,25 @@ const options = {
         ],
     },
 };
-
+//add messages
 export default function AdminHome() {
+
+    const [context, setContext] = useContext(AppContext);
+
+    const [Messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        FetchDatas.Get('api/Messages/' + context.userData.id, setMessages);
+    }, [])
+
+    const handleDelete = (e) => {
+
+    }
+
+    const openMessage = (e) => {
+
+    }
+
     return (
         <div className="homeContainer">
             <div className="reservationChart">
@@ -42,6 +62,23 @@ export default function AdminHome() {
             </div><br />
             <div className="messages">
                 <h3>Wiadomości</h3>
+                <table className="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">From:</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Messages.map(res => (<tr>
+                            <td>{res.author}</td>
+                            <td><button className = "btnReadMessage" value={res.id} onClick={openMessage}>{res.title}</button></td>
+                            <td><button value={res.id} onClick={handleDelete}
+                                className="btn btn-outline-danger">Delete</button></td>
+                        </tr>))}
+                    </tbody>
+                </table>
             </div>
         </div>
         )

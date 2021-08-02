@@ -5,7 +5,7 @@ import Ecology from "../images/ecology.jpg";
 import Progress from "../images/progress.jpg";
 import FetchDatas from "../FetchDatas";
 import axios from "axios";
-
+//change quicknews to api and bestseller
 const quickNews = [
     {
         id: 0,

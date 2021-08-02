@@ -27,6 +27,10 @@ const types = [
     {
         state: "users",
         name: "Użytkownicy"
+    },
+    {
+        state: "news",
+        name: "Newsy"
     }
 ]
 
