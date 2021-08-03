@@ -9,8 +9,7 @@ namespace FlyyAirlines.DTO
     public class MessageDTO
     {
         public string AuthorId { get; set; }
-        public string ReceiverId { get; set; }
-        public string Author { get; set; }
+        public string ReceiverEmail { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
     }

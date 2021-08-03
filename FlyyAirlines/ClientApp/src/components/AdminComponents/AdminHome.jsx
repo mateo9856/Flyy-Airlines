@@ -4,6 +4,7 @@ import { Line } from 'react-chartjs-2';
 import { AppContext } from "../../AppContext";
 import "../../css/Admin.css";
 import FetchDatas from "../../FetchDatas";
+import SendMessage from "./SendMessage";
 
 const data = {
     labels: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec'],
@@ -43,6 +44,8 @@ export default function AdminHome() {
 
     const [Messages, setMessages] = useState([]);
 
+    const [ActiveMessage, setActiveMessage] = useState(false);
+
     useEffect(() => {
         FetchDatas.Get('api/Messages/' + context.userData.id, setMessages);
     }, [])
@@ -62,23 +65,27 @@ export default function AdminHome() {
             </div><br />
             <div className="messages">
                 <h3>Wiadomości</h3>
-                <table className="table">
-                    <thead>
-                        <tr>
-                        <th scope="col">From:</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Messages.map(res => (<tr>
-                            <td>{res.author}</td>
-                            <td><button className = "btnReadMessage" value={res.id} onClick={openMessage}>{res.title}</button></td>
-                            <td><button value={res.id} onClick={handleDelete}
-                                className="btn btn-outline-danger">Delete</button></td>
-                        </tr>))}
-                    </tbody>
-                </table>
+                <button className="btn btn-primary" onClick={() => setActiveMessage(!ActiveMessage)}>{ActiveMessage ? "Wyjdź" : "Nowa wiadomość"}</button>
+                {ActiveMessage ? <SendMessage author={context.userData.id} /> : <>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">From:</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Messages.map(res => (<tr>
+                                <td>{res.author}</td>
+                                <td><button className="btnReadMessage" value={res.id} onClick={openMessage}>{res.title}</button></td>
+                                <td><button value={res.id} onClick={handleDelete}
+                                    className="btn btn-outline-danger">Delete</button></td>
+                            </tr>))}
+                        </tbody>
+                    </table>
+                </>}
+
             </div>
         </div>
         )

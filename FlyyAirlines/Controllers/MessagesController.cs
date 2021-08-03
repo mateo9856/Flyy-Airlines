@@ -39,13 +39,19 @@ namespace FlyyAirlines.Controllers
             {
                 return BadRequest();
             }
-            var GetReceiverUser = await _dbContext.Users.Include(d => d.Messages).FirstOrDefaultAsync(d => d.Id == message.ReceiverId);
+            var GetAuthorName = await _dbContext.Users.FirstOrDefaultAsync(d => d.Id == message.AuthorId);
+            var GetReceiverUser = await _dbContext.Users.Include(d => d.Messages).FirstOrDefaultAsync(d => d.Email == message.ReceiverEmail);
+            
+            if(GetReceiverUser == null) {
+                return BadRequest();
+            }
+
             //var GetClaim = User.FindFirst(ClaimTypes.Name);//try change to claim values
             var NewMessage = new Message()
             {
                 Id = Guid.NewGuid().ToString(),
                 AuthorId = message.AuthorId,
-                Author = message.Author,
+                Author = GetAuthorName.Name + " " + GetAuthorName.Surname,
                 Content = message.Content,
                 Title = message.Title,
                 User = GetReceiverUser

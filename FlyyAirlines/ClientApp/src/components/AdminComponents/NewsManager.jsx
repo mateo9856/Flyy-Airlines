@@ -1,8 +1,10 @@
-﻿import React, { useState } from "react";
+﻿import React, { useRef, useState } from "react";
 
 const NewsManager = () => {
 
     const [activeAdd, setActiveAdd] = useState(false);
+
+    const fileRef = useRef()
 
     const [newsState, setNewsState] = useState({
         title: "",
@@ -24,8 +26,10 @@ const NewsManager = () => {
     }
 
     const handleSubmit = (e) => {
-        //read how add file to db asp.net core 
+        e.preventDefault();
+        console.log(fileRef.current.files[0]);
     }
+        //read how add file to db asp.net core and database and read
 
     return (
         <div>
@@ -44,7 +48,7 @@ const NewsManager = () => {
                     <div className="form-group">
                         Enter IMG URL or Add from your Computer
                         <input className="form-control" onChange={handleChange} type="text" name="imageUrl" value={newsState.imageUrl} />
-                        <input type="file" value={selectedImg} onChange={(e) => setSelectedImg(e.target.files[0])} className="form-control-file" />
+                        <input type="file" ref={fileRef} className="form-control-file" />
                     </div>
                     <input className = "btn btn-primary" type="submit" value="Add" />
                 </form>

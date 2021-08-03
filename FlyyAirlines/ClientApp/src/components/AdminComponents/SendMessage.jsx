@@ -1,6 +1,10 @@
-﻿import React from "react";
+﻿import React, { useContext, useState } from "react";
+import { AppContext } from "../../AppContext";
+import FetchDatas from "../../FetchDatas";
 
-const SendMessage = () => {
+const SendMessage = (props) => {
+
+    const [context, setContext] = useContext(AppContext);
 
     const [Datas, setDatas] = useState({
         email: "",
@@ -10,10 +14,20 @@ const SendMessage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(Datas);
+        FetchDatas.Post('api/Messages', {
+            authorId: context.userData.id,
+            receiverEmail: Datas.email,
+            title: Datas.title,
+            content: Datas.content
+        })
     }
 
     const handleChange = (e) => {
-
+        setDatas({
+            ...Datas,
+            [e.target.name]: e.target.value
+        })
     }
 
     return (
@@ -28,9 +42,9 @@ const SendMessage = () => {
             </div>
             <div className="form-group">
                 Content:
-                <textarea name="content" value={Datas.content} className="form-control" rows="4"></textarea>
+                <textarea name="content" value={Datas.content} className="form-control" rows="4" onChange={handleChange} />
             </div>
-            <input className="btn btn-primary" value= "Send!" />
+            <input type= "submit" className="btn btn-primary" value= "Send!" />
         </form>
         )
 }
