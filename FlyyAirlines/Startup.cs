@@ -74,12 +74,6 @@ namespace FlyyAirlines
 
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
-            services.AddCors(options => {
-                options.AddPolicy("cors", policy => {
-                    policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-                });
-            });
-
             services.AddControllers();
             services.AddDbContext<AppDBContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("FlyyAirlines"), b => b.MigrationsAssembly("FlyyAirlines")));
@@ -118,7 +112,6 @@ namespace FlyyAirlines
                 app.UseHsts();
             }
 
-            app.UseCors("cors");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
