@@ -1,18 +1,17 @@
 ﻿import React, { useRef, useState } from "react";
+import FetchDatas from "../../FetchDatas";
 
 const NewsManager = () => {
 
     const [activeAdd, setActiveAdd] = useState(false);
 
-    const fileRef = useRef()
+    const file = useRef()
 
     const [newsState, setNewsState] = useState({
         title: "",
         content: "",
         imageUrl: ""
     })
-
-    const [selectedImg, setSelectedImg] = useState(null);
 
     const handleChange = (e) => {
         setNewsState({
@@ -27,7 +26,11 @@ const NewsManager = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(fileRef.current.files[0]);
+        console.log(file.current.files[0]);
+        const formData = new FormData();
+        formData.append("file", file.current.files[0]);
+        console.log(formData);
+        FetchDatas.Post('api/News/UploadFile', formData);
     }
         //read how add file to db asp.net core and database and read
 
@@ -48,7 +51,7 @@ const NewsManager = () => {
                     <div className="form-group">
                         Enter IMG URL or Add from your Computer
                         <input className="form-control" onChange={handleChange} type="text" name="imageUrl" value={newsState.imageUrl} />
-                        <input type="file" ref={fileRef} className="form-control-file" />
+                        <input type="file" ref={file} className="form-control-file" />
                     </div>
                     <input className = "btn btn-primary" type="submit" value="Add" />
                 </form>

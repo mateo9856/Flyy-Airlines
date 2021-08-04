@@ -33,6 +33,18 @@ namespace FlyyAirlines.Controllers
             return Ok(GetNews);
         }
 
+        [Route("UploadFile")]
+        [HttpPost]
+        public IActionResult AddFile([FromForm] IFormFile file)
+        {
+            if(file == null)
+            {//tomorrow implement this method and react form
+                return BadRequest();
+            }
+            return Ok();
+        }
+
+        [Route("AddNews")]
         [HttpPost]
         public IActionResult AddNews([FromBody] NewsDTO news)
         {
