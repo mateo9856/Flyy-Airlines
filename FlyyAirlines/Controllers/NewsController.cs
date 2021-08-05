@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +21,11 @@ namespace FlyyAirlines.Controllers
             _news = news;
         }
 
+        public void GetFile()
+        {
+            //File from fb connect (try File.ReadAllBytes())
+        }
+
         [HttpGet]
         public IActionResult GetAllNews()
         {
@@ -33,40 +39,45 @@ namespace FlyyAirlines.Controllers
             return Ok(GetNews);
         }
 
-        [Route("UploadFile")]
+        [Route("AddNews")]
         [HttpPost]
-        public IActionResult AddFile([FromForm] IFormFile file)
+        public IActionResult AddFile([FromForm] NewsDTO news)
         {
-            if(file == null)
+
+            if(news.ImageFile == null && news.ImageUrl == null)
             {//tomorrow implement this method and react form
                 return BadRequest();
             }
-            return Ok();
-        }
-
-        [Route("AddNews")]
-        [HttpPost]
-        public IActionResult AddNews([FromBody] NewsDTO news)
-        {
-            if(news == null)
+            var NewNews = new News();
+            NewNews.Id = Guid.NewGuid().ToString();
+            NewNews.Topic = news.Topic;
+            NewNews.Content = news.Topic;
+            NewNews.PublicDate = DateTime.Now;
+            if (news.ImageFile != null)
             {
-                return BadRequest();
+                try
+                {
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "Images", news.ImageFile.FileName);
+
+                    using (var stream = new MemoryStream())
+                    {
+                        news.ImageFile.CopyTo(stream);
+                        NewNews.FileArr = stream.ToArray();
+                    }
+                    
+                }
+                catch (Exception)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            } else
+            {
+                NewNews.ImageUrl = news.ImageUrl;
             }
-
-            var NewNews = new News()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Topic = news.Topic,
-                Content = news.Content,
-                Header = news.Header,
-                ImageUrl = news.ImageUrl,
-                PublicDate = news.PublicDate
-            };
-
             _news.Add(NewNews);
-            
-            return CreatedAtAction("Get", new { id = NewNews.Id }, NewNews);
+            return StatusCode(StatusCodes.Status201Created);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> EditNews(string id, [FromBody] NewsDTO news)
@@ -79,7 +90,6 @@ namespace FlyyAirlines.Controllers
             var GetNews = await _news.Get(id);
             if(GetNews != null)
             {
-                GetNews.Header = news.Header;
                 GetNews.ImageUrl = news.ImageUrl;
                 GetNews.Content = news.Content;
                 GetNews.Topic = news.Topic;

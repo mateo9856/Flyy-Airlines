@@ -10,7 +10,7 @@ const NewsManager = () => {
     const [newsState, setNewsState] = useState({
         title: "",
         content: "",
-        imageUrl: ""
+        imageUrl: "",
     })
 
     const handleChange = (e) => {
@@ -26,13 +26,14 @@ const NewsManager = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(file.current.files[0]);
         const formData = new FormData();
-        formData.append("file", file.current.files[0]);
+        formData.append("topic", newsState.title);
+        formData.append("content", newsState.content);
+        formData.append("imageUrl", newsState.imageUrl);
+        formData.append("imageFile", file.current.files[0]);
         console.log(formData);
-        FetchDatas.Post('api/News/UploadFile', formData);
+        FetchDatas.Post('api/News/AddNews', formData);
     }
-        //read how add file to db asp.net core and database and read
 
     return (
         <div>
@@ -42,11 +43,11 @@ const NewsManager = () => {
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         Title:
-                        <input className="form-control" type="text" name="title" value={newsState.title} onChange={handleChange} />
+                        <input className="form-control" type="text" name="title" required value={newsState.title} onChange={handleChange} />
                     </div>
                     <div className="form-group">
                         Content:
-                        <textarea onChange={handleChange} name="content" value={newsState.content} className="form-control" rows="5"></textarea>
+                        <textarea onChange={handleChange} name="content" required value={newsState.content} className="form-control" rows="5"></textarea>
                     </div>
                     <div className="form-group">
                         Enter IMG URL or Add from your Computer
