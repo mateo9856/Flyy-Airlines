@@ -12,7 +12,6 @@ namespace FlyyAirlines.Data.Models
         public string Topic { get; set; }
         public string Content { get; set; }
         public string ImageUrl { get; set; }
-        public byte[] FileArr { get; set; }
         public DateTime PublicDate { get; set; }
     }
 }

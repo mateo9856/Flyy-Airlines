@@ -1,4 +1,4 @@
-﻿import React, { useRef, useState } from "react";
+﻿import React, { useEffect, useRef, useState } from "react";
 import FetchDatas from "../../FetchDatas";
 
 const NewsManager = () => {
@@ -6,6 +6,8 @@ const NewsManager = () => {
     const [activeAdd, setActiveAdd] = useState(false);
 
     const file = useRef()
+
+    const [News, setNews] = useState([]);
 
     const [newsState, setNewsState] = useState({
         title: "",
@@ -20,8 +22,12 @@ const NewsManager = () => {
         })
     }
 
+    useEffect(() => {
+        FetchDatas.Get('api/News', setNews);
+    }, [])
+
     const AddNews = () => {
-        setActiveAdd(true);
+        setActiveAdd("post");
     }
 
     const handleSubmit = (e) => {
@@ -32,12 +38,42 @@ const NewsManager = () => {
         formData.append("imageUrl", newsState.imageUrl);
         formData.append("imageFile", file.current.files[0]);
         console.log(formData);
-        FetchDatas.Post('api/News/AddNews', formData);
+        if (activeAdd === "post") {
+            FetchDatas.Post('api/News/AddNews', formData);
+        }
+        else {
+            FetchDatas.Put('api/News/' + activeAdd, formData);
+        }
+        setActiveAdd(false);
+    }
+
+    const handleClick = (e) => {
+        setActiveAdd(e.target.name);
+    }
+
+    const handleDelete = (e) => {
+        FetchDatas.Delete('api/News/' + e.target.name)
     }
 
     return (
         <div>
             <button className="btn btn-primary" onClick={AddNews}>NEW NEWS</button>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Topic</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {News.map(res => <tr>
+                        <td>{res.topic}</td>
+                        <td><button className = "btn btn-primary" name={res.id} onClick={handleClick}>Edit</button>
+                            <button className = "btn btn-danger" name={res.id} onClick={handleDelete}>Delete</button>
+                        </td>
+                    </tr>)}
+                </tbody>
+            </table>
             {activeAdd && <div className="NewsAdd">
                 <button onClick={() => setActiveAdd(false)}>X</button>
                 <form onSubmit={handleSubmit}>

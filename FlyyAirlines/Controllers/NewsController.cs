@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FlyyAirlines.Controllers
@@ -21,9 +23,11 @@ namespace FlyyAirlines.Controllers
             _news = news;
         }
 
-        public void GetFile()
+        public string ReplaceToImageSource(string name)
         {
-            //File from fb connect (try File.ReadAllBytes())
+            string CutStart = Regex.Replace(name, @"^.*?(?=\\images)", "..");
+            string ChangeSlashes = Regex.Replace(CutStart, @"\\", @"/");
+            return ChangeSlashes;
         }
 
         [HttpGet]
@@ -45,26 +49,25 @@ namespace FlyyAirlines.Controllers
         {
 
             if(news.ImageFile == null && news.ImageUrl == null)
-            {//tomorrow implement this method and react form
+            {
                 return BadRequest();
             }
             var NewNews = new News();
             NewNews.Id = Guid.NewGuid().ToString();
             NewNews.Topic = news.Topic;
-            NewNews.Content = news.Topic;
+            NewNews.Content = news.Content;
             NewNews.PublicDate = DateTime.Now;
             if (news.ImageFile != null)
             {
                 try
                 {
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "Images", news.ImageFile.FileName);
-
-                    using (var stream = new MemoryStream())
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "src", "images", news.ImageFile.FileName);
+                    NewNews.ImageUrl = ReplaceToImageSource(path);
+                    using (var stream = new FileStream(path, FileMode.Create))
                     {
                         news.ImageFile.CopyTo(stream);
-                        NewNews.FileArr = stream.ToArray();
                     }
-                    
+
                 }
                 catch (Exception)
                 {
@@ -72,7 +75,11 @@ namespace FlyyAirlines.Controllers
                 }
             } else
             {
-                NewNews.ImageUrl = news.ImageUrl;
+                if(news.ImageUrl == null)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+                NewNews.ImageUrl = ReplaceToImageSource(news.ImageUrl);
             }
             _news.Add(NewNews);
             return StatusCode(StatusCodes.Status201Created);
@@ -80,7 +87,7 @@ namespace FlyyAirlines.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditNews(string id, [FromBody] NewsDTO news)
+        public async Task<IActionResult> EditNews(string id, [FromForm] NewsDTO news)
         {
             if(id == null)
             {
@@ -90,9 +97,34 @@ namespace FlyyAirlines.Controllers
             var GetNews = await _news.Get(id);
             if(GetNews != null)
             {
-                GetNews.ImageUrl = news.ImageUrl;
                 GetNews.Content = news.Content;
                 GetNews.Topic = news.Topic;
+            }
+
+            if (news.ImageFile != null)
+            {
+                try
+                {
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "src", "images", news.ImageFile.FileName);
+                    GetNews.ImageUrl = ReplaceToImageSource(path);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        news.ImageFile.CopyTo(stream);
+                    }
+
+                }
+                catch (Exception)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
+            else
+            {
+                if(news.ImageUrl == null)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+                GetNews.ImageUrl = ReplaceToImageSource(news.ImageUrl);
             }
 
             _news.Update(GetNews);

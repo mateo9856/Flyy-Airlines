@@ -31,11 +31,13 @@ const quickNews = [
 ];
 const Home = () => {
     const [Flights, setFlights] = useState([]);
+    const [News, setNews] = useState([]);
     useEffect(() => {
         FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
+        FetchDatas.Get('api/News', setNews);
         FetchDatas.Get('api/HomePage/BestSeller', setBestSeller);
     }, [])
-
+    console.log(News);
     const [BestSeller, setBestSeller] = useState([]);
     const [isSearched, setIsSearched] = useState(false);
     const [searchedFlight, setSearchedFlight] = useState([]);
@@ -104,10 +106,10 @@ const Home = () => {
                 <h4>Wiadomoœci</h4>
                 <div className="quickNewsFlex">
                     <ul className="flexNewsList">
-                        {quickNews.map((news) => (
+                        {News.map((news) => (
                             <li key={news.id} className="newsCard">
-                                {<img src={news.img} className="imgNewsStyle" alt="image" />}
-                                <h5>{news.title}</h5>
+                                <img src={news.imageUrl} className="imgNewsStyle" alt="image" />
+                                <h5>{news.topic}</h5>
                                 <p>{news.content}</p>
                             </li>
                         ))}
