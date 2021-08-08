@@ -25,7 +25,7 @@ namespace FlyyAirlines.Controllers
 
         public string ReplaceToImageSource(string name)
         {
-            string CutStart = Regex.Replace(name, @"^.*?(?=\\images)", "..");
+            string CutStart = Regex.Replace(name, @"^.*?(?=\\images)", "");
             string ChangeSlashes = Regex.Replace(CutStart, @"\\", @"/");
             return ChangeSlashes;
         }
@@ -61,7 +61,7 @@ namespace FlyyAirlines.Controllers
             {
                 try
                 {
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "src", "images", news.ImageFile.FileName);
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "public", "images", news.ImageFile.FileName);
                     NewNews.ImageUrl = ReplaceToImageSource(path);
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
@@ -105,7 +105,7 @@ namespace FlyyAirlines.Controllers
             {
                 try
                 {
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "src", "images", news.ImageFile.FileName);
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "public", "images", news.ImageFile.FileName);
                     GetNews.ImageUrl = ReplaceToImageSource(path);
                     using (var stream = new FileStream(path, FileMode.Create))
                     {

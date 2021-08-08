@@ -1,34 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../css/Home.css";
-import JoinTheClub from "../images/joinTheClub.jpg";
-import Ecology from "../images/ecology.jpg";
-import Progress from "../images/progress.jpg";
 import FetchDatas from "../FetchDatas";
 import axios from "axios";
-//change quicknews to api and bestseller
-const quickNews = [
-    {
-        id: 0,
-        title: "Klub Flyy!",
-        content:
-            "Do³¹cz do klubu Flyy! Airlines, dodatkowe zni¿ki oraz promocje...",
-        img: JoinTheClub,
-    },
-    {
-        id: 1,
-        title: "Bêdziesz EKO!",
-        content:
-            "Samoloty naszych linii lotniczych przechodz¹ najnowsze normy emisji spalin",
-        img: Ecology,
-    },
-    {
-        id: 2,
-        title: "Jesteœmy coraz lepsi!",
-        content:
-            "Nasze linie stale rozwijaj¹ siê o wyloty do innych pañstw i miast.",
-        img: Progress,
-    },
-];
+
 const Home = () => {
     const [Flights, setFlights] = useState([]);
     const [News, setNews] = useState([]);
@@ -102,20 +76,21 @@ const Home = () => {
                     </>}
                 </div>
             </section>
-            <section className="moreInformations">
-                <h4>Wiadomoœci</h4>
-                <div className="quickNewsFlex">
-                    <ul className="flexNewsList">
-                        {News.map((news) => (
-                            <li key={news.id} className="newsCard">
-                                <img src={news.imageUrl} className="imgNewsStyle" alt="image" />
-                                <h5>{news.topic}</h5>
-                                <p>{news.content}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </section>
+            {News.length >= 1 ?
+                <section className="moreInformations">
+                    <h4>Wiadomoœci</h4>
+                    <div className="quickNewsFlex">
+                        <ul className="flexNewsList">
+                            {News.map((news) => (
+                                <li key={news.id} className="newsCard">
+                                    <img src={window.location.origin + news.imageUrl} className="imgNewsStyle" alt="image" />
+                                    <h5>{news.topic}</h5>
+                                    <p>{news.content}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </section> : ""}
         </div>
     );
 };
