@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react'
+﻿import React, { useContext, useState } from 'react'
 import EmployeeManage from './AdminComponents/EmployeeManage';
 import FlightManage from './AdminComponents/FlightManage';
 import PutManage from './AdminComponents/PutManage';
@@ -13,6 +13,8 @@ import { ReservationsAdmin } from './AdminComponents/ReservationsAdmin';
 import { EmployeesAdmin } from './AdminComponents/EmployeesAdmin';
 import { UsersAdmin } from './AdminComponents/UsersAdmin';
 import { ReturnFrom } from './AdminComponents/ReturnForm';
+import Chat from './Chat';
+import { AppContext } from '../AppContext';
 
 export const AdminContext = React.createContext();
 
@@ -20,6 +22,10 @@ const Admin = (props) => {
     const [activeManage, setActiveManage] = useState("");
 
     const [PostActive, setPostActive] = useState(false);
+
+    const [context, setContext] = useContext(AppContext);
+
+    const [ChatActive, setChatActive] = useState(false);
 
     const [SelectedPost, setSelectedPost] = useState("user");
 
@@ -87,6 +93,7 @@ const Admin = (props) => {
                     </div>
                     <ReturnFrom table={SelectedPost} exit={resetValues} />
                     </div>}
+                {ChatActive && <Chat author={context.userData.id} />}{/*Test this!*/}
                 <div className={PostActive ? "adminBox blurStyle" : "adminBox"}>
                     <div className="sidebar">
                         <Sidebar />
@@ -94,6 +101,7 @@ const Admin = (props) => {
                     <div className="col-sm-12 otherPanel">
                         <div className="createButton">
                             <button onClick={() => setPostActive(true)} className="btnCreate">CREATE <MdCreate style={{ fontSize: "30px" }} /></button>
+                            <button onClick={() => setChatActive(true)}></button>
                         </div>
                         {returnComponent(active)}
                 {/*<ul style={{ listStyleType: "none" }} className="gridAdminBtn d-flex flex-wrap justify-content-around">*/}

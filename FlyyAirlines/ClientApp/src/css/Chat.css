@@ -1,0 +1,14 @@
+﻿.chatBox {
+    width: 470px;
+    height: 610px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    border-radius: 15px;
+    margin: auto;
+}
+
+.btnChatPosition {
+    position: absolute;
+    bottom:5px;
+    right: 3px;
+    z-index: 1;
+}
