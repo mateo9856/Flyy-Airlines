@@ -1,4 +1,5 @@
-﻿import React from "react";
+﻿import React, { useState } from "react";
+import { MdExitToApp } from 'react-icons/md';
 import "../css/Chat.css";
 import FetchDatas from "../FetchDatas";
 
@@ -17,6 +18,7 @@ const Chat = (props) => {
             title: Values.title,
             content: Values.content
         })
+        props.exit(false);
     }
 
     const handleChange = (e) => {
@@ -28,17 +30,25 @@ const Chat = (props) => {
 
     return (
         <div className="chatBox">
-            <form onSubmit={handleSubmit}>
+            <div>
+                <button className="chatExit" onClick={() => props.exit(false)}><MdExitToApp style={{ fontSize: "26px" }} /></button>
+            </div>
+            <form className = "chatFormFlex" onSubmit={handleSubmit}>
                 <div className="form-group">
+                    Email:
                     <input className = "form-control" type="email" name="email" value={Values.email} onChange={handleChange} />
                 </div>
                 <div className="form-group">
+                    Topic:
                     <input className="form-control" type="text" name="title" value={Values.title} onChange={handleChange} />
                 </div>
                 <div className="form-group">
-                    <input className="form-control" type="text" name="content" value={Values.content} onChange={handleChange} />
+                    Content:
+                    <textarea className="form-control" rows="6" type="text" name="content" value={Values.content} onChange={handleChange} />
                 </div>
-                <input type="submit" className ="btn btn-primary btnChatPosition" value="Send!" />
+                <div className= "form-group btnChatPosition">
+                    <input type="submit" className="btn btn-primary" value="Send!" />
+                </div>
             </form>
         </div>)
 }

@@ -25,8 +25,6 @@ const Admin = (props) => {
 
     const [context, setContext] = useContext(AppContext);
 
-    const [ChatActive, setChatActive] = useState(false);
-
     const [SelectedPost, setSelectedPost] = useState("user");
 
     const resetValues = () => {
@@ -93,7 +91,6 @@ const Admin = (props) => {
                     </div>
                     <ReturnFrom table={SelectedPost} exit={resetValues} />
                     </div>}
-                {ChatActive && <Chat author={context.userData.id} />}{/*Test this!*/}
                 <div className={PostActive ? "adminBox blurStyle" : "adminBox"}>
                     <div className="sidebar">
                         <Sidebar />
@@ -101,7 +98,6 @@ const Admin = (props) => {
                     <div className="col-sm-12 otherPanel">
                         <div className="createButton">
                             <button onClick={() => setPostActive(true)} className="btnCreate">CREATE <MdCreate style={{ fontSize: "30px" }} /></button>
-                            <button onClick={() => setChatActive(true)}></button>
                         </div>
                         {returnComponent(active)}
                 {/*<ul style={{ listStyleType: "none" }} className="gridAdminBtn d-flex flex-wrap justify-content-around">*/}

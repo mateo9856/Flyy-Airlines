@@ -69,6 +69,8 @@ namespace FlyyAirlines
                 };
             });
 
+            services.AddSignalR();
+
             var context = new CustomAssemblyLoadContext();
             context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));
 
@@ -123,6 +125,7 @@ namespace FlyyAirlines
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<ChatHub>("/chatHub");//implement client side and messages on other roles
             });
 
             app.UseSpa(spa =>

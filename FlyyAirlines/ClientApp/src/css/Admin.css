@@ -63,3 +63,18 @@
     background:none;
     font-size:24px;
 }
+
+.messageBtn {
+    float:left;
+    color: darkslateblue;
+    font-weight: bold;
+    font-size: 24px;
+    background:none;
+    border:none;
+    cursor:pointer;
+}
+
+.messageBtn:hover {
+    transition: 0.2s;
+    text-shadow: 3px 0px 4px rgba(150, 150, 150, 1);
+}

@@ -66,7 +66,7 @@ export default function AdminHome() {
             <div className="messages">
                 <h3>Wiadomości</h3>
                 <button className="btn btn-primary" onClick={() => setActiveMessage(!ActiveMessage)}>{ActiveMessage ? "Wyjdź" : "Nowa wiadomość"}</button>
-                {ActiveMessage ? <SendMessage author={context.userData.id} /> : <>
+                {ActiveMessage ? <SendMessage author={context.userData.id} exit={setActiveMessage} /> : <>
                     <table className="table">
                         <thead>
                             <tr>

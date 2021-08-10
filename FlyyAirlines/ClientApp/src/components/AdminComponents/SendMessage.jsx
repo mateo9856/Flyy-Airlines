@@ -21,6 +21,7 @@ const SendMessage = (props) => {
             title: Datas.title,
             content: Datas.content
         })
+        props.exit(false);
     }
 
     const handleChange = (e) => {
