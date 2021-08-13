@@ -15,6 +15,8 @@ import { AppContext } from "./AppContext";
 import RegisterSubmit from './components/RegisterSubmit';
 import Logout from './components/Logout';
 import CheckReservation from './components/CheckReservation';
+import { BsFillChatFill } from "react-icons/bs";
+import Chat from './components/Chat';
 
 const CheckIsLocalStorage = () => {
     try {
@@ -36,6 +38,8 @@ function App() {
         userRole: ""
     })
 
+    const [chat, setChat] = useState(false);
+
     useEffect(() => {
         if (CheckIsLocalStorage()) {
             const GetData = JSON.parse(localStorage.getItem('loginUser'));
@@ -50,7 +54,10 @@ function App() {
         <div>
             <AppContext.Provider value={[context, setContext]}>
                 <NavMenu />
+                <button onClick={() => setChat(!chat)} className="chatButton"><BsFillChatFill className="chatIcon" /></button>
                 <Container>
+                    {context.isLogged && chat ? <Chat author={context.userData.id} exit={setChat} /> : ""}
+                    <div style={chat ? { filter:"blur(5px)" } : {}}>
                     <Switch>
                         <Route exact path='/' component={Home} />
                         <Route path='/aboutus' component={AboutUs} />
@@ -62,7 +69,9 @@ function App() {
                         <Route path= '/checkReservation' component={CheckReservation} />
                         <Route path='/registerSubmit' component={RegisterSubmit} />
                         <ProtectedRoute path='/Admin' component={Admin} />
-                    </Switch>
+                        </Switch>
+                    </div>
+                    
                 </Container>
             </AppContext.Provider>
         </div>

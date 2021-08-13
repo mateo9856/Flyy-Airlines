@@ -4,6 +4,7 @@ using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,12 @@ namespace FlyyAirlines.Controllers
     {
         private readonly IMainRepository<Message> _message;
         private readonly AppDBContext _dbContext;
+
         public MessagesController(IMainRepository<Message> message, AppDBContext dBContext)
         {
             _message = message;
             _dbContext = dBContext;
         }
-
         [HttpGet("id")]
         public async Task<IActionResult> GetUserMessage(string id)
         {
@@ -57,11 +58,11 @@ namespace FlyyAirlines.Controllers
                 User = GetReceiverUser
                 
             };
-
             await _message.Add(NewMessage);
 
             return CreatedAtAction("Get", new {Id = NewMessage.Id}, NewMessage);
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(string id)

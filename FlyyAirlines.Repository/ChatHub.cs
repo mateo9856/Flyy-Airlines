@@ -9,14 +9,9 @@ namespace FlyyAirlines.Repository
 {
     public class ChatHub : Hub
     {
-        public async Task ViewMessage(string author, string message, string topic)
+        public async Task SendMessage(string user, string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", author, message, topic);
-        }
-
-        public async Task AlertMessage(string topic, string author)
-        {
-            await Clients.All.SendAsync("AlertMessage", topic, author);
+            await Clients.User(user).SendAsync("ReceiveMessage", message);
         }
     }
 }

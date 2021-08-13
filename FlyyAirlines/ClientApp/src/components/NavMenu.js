@@ -71,11 +71,17 @@ const NavMenu = () => {
                                     ""
                                 )}
                             {context.isLogged ? (
+                                <>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark linkStyle" to="/messages">
+                                            Wiadomoœci
+                                        </NavLink>
+                                    </NavItem>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark linkStyle" to="/logout">
                                         Wyloguj
                   </NavLink>
-                                </NavItem>
+                                </NavItem></>
                             ) : (
                                     <>
                                         <NavItem>
