@@ -13,5 +13,16 @@ namespace FlyyAirlines.Repository
         {
             await Clients.User(user).SendAsync("ReceiveMessage", message);
         }
+
+        public override Task OnConnectedAsync()
+        {//get logged user
+            //ConnectionUsers.Users.Add(Context.ConnectionId);
+            return base.OnConnectedAsync();
+        }
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            ConnectionUsers.Users.Remove(Context.ConnectionId);
+            return base.OnDisconnectedAsync(exception);
+        }
     }
 }

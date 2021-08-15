@@ -79,7 +79,7 @@ namespace FlyyAirlines
             services.AddControllers();
             services.AddDbContext<AppDBContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("FlyyAirlines"), b => b.MigrationsAssembly("FlyyAirlines")));
-            
+            services.AddHttpContextAccessor();
             services.AddScoped<IMainRepository<Reservation>, MainRepository<Reservation>>();
             services.AddScoped<IMainRepository<Flight>, MainRepository<Flight>>();
             services.AddScoped<IMainRepository<Airplane>, MainRepository<Airplane>>();

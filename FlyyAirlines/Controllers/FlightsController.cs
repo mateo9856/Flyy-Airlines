@@ -2,7 +2,7 @@
 using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
 using FlyyAirlines.Repository.FlightsAirplanes;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -19,6 +19,7 @@ namespace FlyyAirlines.Controllers
         private readonly IAirplanesFlightsData _planesData;
         private readonly IMainRepository<Flight> _mainPlanes;
         private readonly IMainRepository<Airplane> _mainAirplanes;
+        private readonly IHttpContextAccessor _accessor;
         public FlightsController(IAirplanesFlightsData planesData, IMainRepository<Flight> mainPlanes, IMainRepository<Airplane> mainAirplanes)
         {
             _planesData = planesData;
@@ -40,6 +41,7 @@ namespace FlyyAirlines.Controllers
         [HttpGet]
         public IActionResult GetFlights()
         {
+
             var child = new string[] {"Airplane", "Reservations" };
             var GetDetails = _mainPlanes.GetAll(child);
             return Ok(GetDetails);
