@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 
@@ -41,7 +42,6 @@ namespace FlyyAirlines.Controllers
         [HttpGet]
         public IActionResult GetFlights()
         {
-
             var child = new string[] {"Airplane", "Reservations" };
             var GetDetails = _mainPlanes.GetAll(child);
             return Ok(GetDetails);

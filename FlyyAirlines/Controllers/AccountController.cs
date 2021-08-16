@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,11 +38,15 @@ namespace FlyyAirlines.Controllers
             _configuration = configuration;
             _dbContext = dbContext;
         }
-
+        [Route("GetUser")]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var GetUser = await _userManager.GetUserAsync(User);
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var claim = claimsIdentity.Claims.Where(c => c.Type.Contains("email")).Select(x => x.Value).FirstOrDefault();
+
+            var GetUser = await _userManager.FindByEmailAsync(claim);
             if(GetUser == null)
             {
                 return Unauthorized();
@@ -183,16 +188,17 @@ namespace FlyyAirlines.Controllers
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
-
-                var authClaims = new List<Claim>
+                
+                var authClaims = new[]
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
-
-                foreach (var userRole in userRoles)
+                string role = "";
+                foreach(var userRole in userRoles)
                 {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                     role = userRole;
                 }
 
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
@@ -209,13 +215,14 @@ namespace FlyyAirlines.Controllers
                 {
                     id = user.Id,
                     user = user.UserName,
-                    userRole = userRoles[0],
+                    userRole = role,
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo
                 });
             }
             return Unauthorized();
         }
+
 
         [Route("UpdateUser/{id}")]
         [HttpPut]

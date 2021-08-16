@@ -1,6 +1,15 @@
 ﻿import axios from 'axios';
 
 class FetchDatas {
+
+    Config(token) {
+        return {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+    }
+
     async Delete(url) {
         await axios.delete(url).
             then(res => {

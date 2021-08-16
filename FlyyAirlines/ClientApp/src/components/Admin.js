@@ -1,4 +1,4 @@
-﻿import React, { useContext, useState } from 'react'
+﻿import React, { useContext, useEffect, useState } from 'react'
 import EmployeeManage from './AdminComponents/EmployeeManage';
 import FlightManage from './AdminComponents/FlightManage';
 import PutManage from './AdminComponents/PutManage';
@@ -14,7 +14,9 @@ import { EmployeesAdmin } from './AdminComponents/EmployeesAdmin';
 import { UsersAdmin } from './AdminComponents/UsersAdmin';
 import { ReturnFrom } from './AdminComponents/ReturnForm';
 import Chat from './Chat';
+import axios from "axios";
 import { AppContext } from '../AppContext';
+import FetchDatas from '../FetchDatas';
 
 export const AdminContext = React.createContext();
 
@@ -30,6 +32,11 @@ const Admin = (props) => {
     const resetValues = () => {
         setPostActive(false);
     }
+
+    useEffect(() => {
+        console.log(context.userData.token);
+        axios.get('api/account/GetUser', FetchDatas.Config(context.userData.token))
+    }, [])
 
     const [active, setActive] = useState("home");
 
