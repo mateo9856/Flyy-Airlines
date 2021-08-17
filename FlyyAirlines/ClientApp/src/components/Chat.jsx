@@ -1,7 +1,10 @@
-﻿import React, { useState } from "react";
+﻿import React, { useContext, useEffect, useState } from "react";
 import { MdExitToApp } from 'react-icons/md';
 import "../css/Chat.css";
 import FetchDatas from "../FetchDatas";
+import "@microsoft/signalr";
+import { HubConnectionBuilder } from '@microsoft/signalr';
+import { AppContext } from "../AppContext";
 
 const Chat = (props) => {
 
@@ -10,6 +13,8 @@ const Chat = (props) => {
         title: "",
         content: ""
     })
+
+    const [context, setContext] = useContext(AppContext);
 
     const handleSubmit = (e) => {
         FetchDatas.Post('api/Messages', {
@@ -21,6 +26,21 @@ const Chat = (props) => {
         props.exit(false);
     }
 
+    const [connection, setConnection] = useState(null);
+
+    useEffect(() => {
+        const newConnection = new HubConnectionBuilder()
+            .withUrl('/chatHub', { accessTokenFactory: () => context.userData.token })
+            .withAutomaticReconnect()
+            .build();
+        setConnection(newConnection);
+    }, [])
+    useEffect(() => {
+        if (connection) {
+            connection.start().then(res => console.log(res)).catch(err => console.log("Error not loading!"));
+        }
+    }, [connection])
+    console.log(connection);
     const handleChange = (e) => {
         setValues({
             ...Values,

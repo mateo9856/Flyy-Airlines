@@ -1,4 +1,5 @@
 ﻿using FlyyAirlines.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace FlyyAirlines.Repository
 {
     public static class ConnectionUsers
     {
-        public static Dictionary<string, User> Users = new Dictionary<string, User>();
+        public static Dictionary<string, HubUserDatas> Users = new Dictionary<string, HubUserDatas>();
     }
 }
