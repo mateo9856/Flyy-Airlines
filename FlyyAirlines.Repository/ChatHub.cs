@@ -11,13 +11,17 @@ namespace FlyyAirlines.Repository
     {
         public async Task SendMessage(string user, string message)
         {
-            await Clients.User(user).SendAsync("ReceiveMessage", message);
+            var GetUser = ConnectionUsers.Users.Where(d => d.Value.UserName == user);
+            await Clients.Client(user).SendAsync("ReceiveMessage", message);
         }
+
+        public string GetConnectionId => Context.ConnectionId;
+
         public override Task OnConnectedAsync()
         {
             var email = Context.User.Claims.SingleOrDefault(d => d.Type.Contains("email")).Value;
             var userName = Context.User.Claims.SingleOrDefault(d => d.Type.Contains("name")).Value;
-            ConnectionUsers.Users.Add(Context.ConnectionId, new HubUserDatas(userName, email));
+            ConnectionUsers.Users.Add(Context.ConnectionId, new HubUserDatas(userName, email, Context.ConnectionId));
             return base.OnConnectedAsync();
         }
         public override Task OnDisconnectedAsync(Exception exception)

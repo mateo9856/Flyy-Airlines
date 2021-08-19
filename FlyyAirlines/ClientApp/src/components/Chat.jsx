@@ -14,16 +14,32 @@ const Chat = (props) => {
         content: ""
     })
 
+    const [UserConnection, setUserConnection] = useState("");
+
+    const ChatHistory = [];
+
     const [context, setContext] = useContext(AppContext);
 
     const handleSubmit = (e) => {
-        FetchDatas.Post('api/Messages', {
-            authorId: props.author,
-            receiverEmail: Values.email,
-            title: Values.title,
-            content: Values.content
+        //FetchDatas.Post('api/Messages', {
+        //    authorId: props.author,
+        //    receiverEmail: Values.email,
+        //    title: Values.title,
+        //    content: Values.content
+        //})
+        //props.exit(false);
+        e.preventDefault();
+        connection.on('ReceiveMessage', message => {
+            setValues({
+                ...Values,
+                content:""
+            })
+            ChatHistory.push(message);
         })
-        props.exit(false);
+    }
+
+    const GetConnectionId = () => {
+        connection.invoke('getconnectionid').then(data => setUserConnection(data)).catch(err => console.log("Web socket Error!"));
     }
 
     const [connection, setConnection] = useState(null);
@@ -33,13 +49,15 @@ const Chat = (props) => {
             .withUrl('/chatHub', { accessTokenFactory: () => context.userData.token })
             .withAutomaticReconnect()
             .build();
+
+        newConnection.start()
+            .then(res => console.log("Succesful load!"))
+            //.then(() => GetConnectionId())//error in this line!
+            .catch(err => console.log("Error not loading!"));
+
         setConnection(newConnection);
     }, [])
-    useEffect(() => {
-        if (connection) {
-            connection.start().then(res => console.log(res)).catch(err => console.log("Error not loading!"));
-        }
-    }, [connection])
+
     console.log(connection);
     const handleChange = (e) => {
         setValues({

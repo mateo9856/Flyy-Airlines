@@ -8,12 +8,14 @@ namespace FlyyAirlines.Repository
 {
     public class HubUserDatas
     {
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public HubUserDatas(string name, string email)
+        public string UserName { get; init; }
+        public string Email { get; init; }
+        public string ConnectionId { get; init; }
+        public HubUserDatas(string name, string email, string connectionid)
         {
             this.UserName = name;
             this.Email = email;
+            this.ConnectionId = connectionid;
         }
     }
 }

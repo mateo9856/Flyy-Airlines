@@ -10,7 +10,7 @@ const ChatRoom = (props) => {
     const [user, setUser] = useState([]);
     const [message, setMessage] = useState("");
     const [connection, setConnection] = useState(null);
-
+    const ChatHistory = [];
 
     useEffect(() => {
         const newConntection = new HubConnectionBuilder()
@@ -23,6 +23,7 @@ const ChatRoom = (props) => {
     useEffect(() => {
         if (connection) {
             connection.start().then(res => console.log('Connect!'))
+
         }
     }, [connection])
 
