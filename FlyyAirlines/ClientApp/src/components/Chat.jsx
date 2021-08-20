@@ -29,17 +29,8 @@ const Chat = (props) => {
         //})
         //props.exit(false);
         e.preventDefault();
-        connection.on('ReceiveMessage', message => {
-            setValues({
-                ...Values,
-                content:""
-            })
-            ChatHistory.push(message);
-        })
-    }
-
-    const GetConnectionId = () => {
-        connection.invoke('getconnectionid').then(data => setUserConnection(data)).catch(err => console.log("Web socket Error!"));
+        connection.invoke("SendMessage", UserConnection, Values.content).catch(err => console.log("Error not send!"))
+        
     }
 
     const [connection, setConnection] = useState(null);
@@ -52,8 +43,17 @@ const Chat = (props) => {
 
         newConnection.start()
             .then(res => console.log("Succesful load!"))
-            //.then(() => GetConnectionId())//error in this line!
+            //WORK WITH THEN !.then(() => newConnection.invoke('getConnectionId').then(data => setConnection(data)).catch(err => console.log("Invoke Error")))
             .catch(err => console.log("Error not loading!"));
+
+        newConnection.on('ReceiveMessage', (user, message) => {
+            setValues({
+                ...Values,
+                content: ""
+            })
+            ChatHistory.push(message);
+            console.log(ChatHistory);
+        })
 
         setConnection(newConnection);
     }, [])
