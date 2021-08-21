@@ -9,8 +9,7 @@ import { AppContext } from "../AppContext";
 const Chat = (props) => {
 
     const [Values, setValues] = useState({
-        email: "",
-        title: "",
+        user: "",
         content: ""
     })
 
@@ -21,17 +20,12 @@ const Chat = (props) => {
     const [context, setContext] = useContext(AppContext);
 
     const handleSubmit = (e) => {
-        //FetchDatas.Post('api/Messages', {
-        //    authorId: props.author,
-        //    receiverEmail: Values.email,
-        //    title: Values.title,
-        //    content: Values.content
-        //})
-        //props.exit(false);
         e.preventDefault();
         connection.invoke("SendMessage", UserConnection, Values.content).catch(err => console.log("Error not send!"))
         
     }
+
+    const [ActiveUsers, SetActiveUsers] = useState([]);
 
     const [connection, setConnection] = useState(null);
 
@@ -43,7 +37,8 @@ const Chat = (props) => {
 
         newConnection.start()
             .then(res => console.log("Succesful load!"))
-            //WORK WITH THEN !.then(() => newConnection.invoke('getConnectionId').then(data => setConnection(data)).catch(err => console.log("Invoke Error")))
+            .then(() => newConnection.invoke("GetConnectionId").then((connectionId) => console.log(connectionId)).catch(err => console.log("Invoke Error")))
+            .then(() => newConnection.invoke("GetConnectedUsers").then((res) => SetActiveUsers(res)))
             .catch(err => console.log("Error not loading!"));
 
         newConnection.on('ReceiveMessage', (user, message) => {
@@ -54,18 +49,19 @@ const Chat = (props) => {
             ChatHistory.push(message);
             console.log(ChatHistory);
         })
-
+        
         setConnection(newConnection);
     }, [])
 
     console.log(connection);
+
     const handleChange = (e) => {
         setValues({
             ...Values,
             [e.target.name]: e.target.value
         })
     }
-
+    
     return (
         <div className="chatBox">
             <div>
@@ -73,12 +69,11 @@ const Chat = (props) => {
             </div>
             <form className = "chatFormFlex" onSubmit={handleSubmit}>
                 <div className="form-group">
-                    Email:
-                    <input className = "form-control" type="email" name="email" value={Values.email} onChange={handleChange} />
-                </div>
-                <div className="form-group">
-                    Topic:
-                    <input className="form-control" type="text" name="title" value={Values.title} onChange={handleChange} />
+                    User:
+                    {ActiveUsers &&
+                        <select className="form-control form-control-sm" value={Values.user} onChange={handleChange}>
+                            {ActiveUsers.map(data => <option value={data.connectionId}>{data.userName}</option>)}
+                        </select>}
                 </div>
                 <div className="form-group">
                     Content:

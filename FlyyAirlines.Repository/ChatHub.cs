@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +16,16 @@ namespace FlyyAirlines.Repository
             await Clients.Client(user).SendAsync("ReceiveMessage", message);
         }
 
-        public string GetConnectionId => Context.ConnectionId;
+        public IEnumerable<HubUserDatas> GetConnectedUsers()
+        {
+            var GetValues = ConnectionUsers.Users.Select(d => d.Value).ToList();
+            return GetValues;
+        }
+
+        public string GetConnectionId()
+        {
+            return Context.ConnectionId;
+        }
 
         public override Task OnConnectedAsync()
         {
