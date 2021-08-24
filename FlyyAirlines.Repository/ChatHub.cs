@@ -28,7 +28,7 @@ namespace FlyyAirlines.Repository
         }
 
         public override Task OnConnectedAsync()
-        {
+        {//add condition to check if user is on list
             var email = Context.User.Claims.SingleOrDefault(d => d.Type.Contains("email")).Value;
             var userName = Context.User.Claims.SingleOrDefault(d => d.Type.Contains("name")).Value;
             ConnectionUsers.Users.Add(Context.ConnectionId, new HubUserDatas(userName, email, Context.ConnectionId));
