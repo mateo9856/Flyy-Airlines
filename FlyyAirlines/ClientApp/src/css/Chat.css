@@ -32,3 +32,21 @@
     padding:10px;
     color: cornflowerblue;
 }
+.messageBox {
+    background-color: white;
+    border: 1px solid black;
+}
+
+.bottomMargin {
+    position: absolute;
+    bottom: 0;
+}
+
+.chatHeight {
+    min-height: 500px;
+}
+
+
+.chatTextStyle {
+    margin-top: 15px;
+}

@@ -1,10 +1,2 @@
-﻿.messageBox {
-    width:50%;
-    border:1px solid black;
-}
-
-.bottomMargin {
-    position:absolute;
-    bottom: 0;
-}
+﻿
 /*change in bootstrap flex h-100 to css height*/
