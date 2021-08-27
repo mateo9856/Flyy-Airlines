@@ -13,7 +13,7 @@ namespace FlyyAirlines.Repository
         public async Task SendMessage(string user, string message)
         {
             var GetUser = ConnectionUsers.Users.Where(d => d.Value.UserName == user);
-            await Clients.Client(user).SendAsync("ReceiveMessage", message);
+            await Clients.Client(user).SendAsync("ReceiveMessage", user, message);
         }
 
         public IEnumerable<HubUserDatas> GetConnectedUsers()

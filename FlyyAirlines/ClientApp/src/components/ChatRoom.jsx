@@ -27,16 +27,6 @@ const ChatRoom = (props) => {
         }
     }, [connection])
 
-    //const MessageSubmit = async (e) => {
-    //    e.preventDefault();
-    //    setMessage('');
-    //    if (connection.connectionStarted) {
-    //        try {
-    //            await connection.send('ReceiveMessage', message);//robic to!
-    //        }
-    //    }
-    //}
-
     const handleMessageUpdate = (e) => {
         setMessage(e.target.value);
     }

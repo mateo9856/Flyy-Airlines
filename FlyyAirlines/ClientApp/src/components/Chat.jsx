@@ -1,4 +1,4 @@
-﻿import React, { useContext, useEffect, useState } from "react";
+﻿import React, { useContext, useEffect, useState, useRef } from "react";
 import { MdExitToApp } from 'react-icons/md';
 import "../css/Chat.css";
 import FetchDatas from "../FetchDatas";
@@ -7,7 +7,7 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import { AppContext } from "../AppContext";
 
 const Chat = (props) => {
-
+    //get username on connection and context to get who send 
     const [Values, setValues] = useState({
         user: "",
         content: ""
@@ -15,21 +15,19 @@ const Chat = (props) => {
 
     const [UserConnection, setUserConnection] = useState("");
 
-    const ChatHistory = [];
+    const [chat, setChat] = useState([]);
+
+    const ChatHistory = useRef(null);
+
+    ChatHistory.current = chat;
 
     const [context, setContext] = useContext(AppContext);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        connection.invoke("SendMessage", UserConnection, Values.content).then(() => 
-            ChatHistory.push({
-                user: selectedUser,
-                content: Values.content
-            })//not load repair!
-        ).catch(err => console.log("Error not send!"))
+        connection.invoke("SendMessage", UserConnection, Values.content).catch(err => console.log("Send Error!"))
         
     }
-    console.log(ChatHistory);
     const [ActiveUsers, SetActiveUsers] = useState([]);
 
     const [selectedUser, setSelectedUser] = useState("");
@@ -41,24 +39,35 @@ const Chat = (props) => {
             .withUrl('/chatHub', { accessTokenFactory: () => context.userData.token })
             .withAutomaticReconnect()
             .build();
-
-        newConnection.start()
-            .then(res => console.log("Succesful load!"))
-            .then(() => newConnection.invoke("GetConnectionId").then((connectionId) => console.log(connectionId)).catch(err => console.log("Invoke Error")))
-            .then(() => newConnection.invoke("GetConnectedUsers").then((res) => SetActiveUsers(res)))
-            .catch(err => console.log("Error not loading!"));
-
-        newConnection.on('ReceiveMessage', (user, message) => {
-            setValues({
-                ...Values,
-                content: ""
-            })
-            ChatHistory.push(message);
-            console.log(ChatHistory);
-        })
         
         setConnection(newConnection);
     }, [])
+
+    useEffect(() => {
+        if (connection) {
+            connection.start()
+                .then(res => console.log("Succesful load!"))
+                .then(() => connection.invoke("GetConnectionId").then((connectionId) => console.log(connectionId)).catch(err => console.log("Invoke Error")))
+                .then(() => connection.invoke("GetConnectedUsers").then((res) => SetActiveUsers(res)))
+                .catch(err => console.log("Error not loading!"));
+
+            connection.on('ReceiveMessage', (user, message) => {
+                const updatedChat = [...ChatHistory.current];
+                console.log(user, message);
+                updatedChat.push({
+                    user: user,
+                    message: message
+                });
+                console.log(updatedChat);
+                setChat(updatedChat);
+                setValues({
+                    ...Values,
+                    content: ""
+                })
+            })
+        }
+    }, [connection])
+
     const ChatExit = () => {
         connection.stop();
         props.exit(false);
@@ -69,6 +78,7 @@ const Chat = (props) => {
             return;
         }
         if (e.target.name === "user") {
+            setUserConnection(e.target.value);
             const GetUserName = ActiveUsers.filter(el => el.connectionId === e.target.value);
             setSelectedUser(GetUserName[0].userName);
         }
@@ -78,7 +88,6 @@ const Chat = (props) => {
             [e.target.name]: e.target.value
         })
     }
-    
     return (
         <div className="chatBox">
             <div>
@@ -97,7 +106,11 @@ const Chat = (props) => {
                             <p className="h5 text-center">{selectedUser ? `Rozmowa z: ${selectedUser}` : "Wybierz osobę"}</p>
                         </div>
                         <div className="messageBox h-50 p-2">
-                            {ChatHistory && ChatHistory.map(data => <></>)}{/*Add messagesStyle*/}
+                            {chat && chat.map(data => <>
+                                <div className={ }>
+
+                                </div>
+                            </>)}{/*Add messagesStyle*/}
                         </div>
                     <textarea className="form-control chatTextStyle" rows="2" type="text" name="content" value={Values.content} onChange={handleChange} />
                     </div>
