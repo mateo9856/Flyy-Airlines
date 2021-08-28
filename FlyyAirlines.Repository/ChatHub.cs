@@ -12,8 +12,9 @@ namespace FlyyAirlines.Repository
     {
         public async Task SendMessage(string user, string message)
         {
-            var GetUser = ConnectionUsers.Users.Where(d => d.Value.UserName == user);
-            await Clients.Client(user).SendAsync("ReceiveMessage", user, message);
+            var GetUserValue = ConnectionUsers.Users.Where(d => d.Key == user);
+            var UserName = GetUserValue.Select(d => d.Value.UserName).ToArray()[0];
+            await Clients.Client(user).SendAsync("ReceiveMessage", UserName, message);
         }
 
         public IEnumerable<HubUserDatas> GetConnectedUsers()
@@ -28,10 +29,13 @@ namespace FlyyAirlines.Repository
         }
 
         public override Task OnConnectedAsync()
-        {//add condition to check if user is on list
+        {
             var email = Context.User.Claims.SingleOrDefault(d => d.Type.Contains("email")).Value;
             var userName = Context.User.Claims.SingleOrDefault(d => d.Type.Contains("name")).Value;
-            ConnectionUsers.Users.Add(Context.ConnectionId, new HubUserDatas(userName, email, Context.ConnectionId));
+            if(!ConnectionUsers.Users.Any(d => d.Value.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                ConnectionUsers.Users.Add(Context.ConnectionId, new HubUserDatas(userName, email, Context.ConnectionId));
+            }
             return base.OnConnectedAsync();
         }
         public override Task OnDisconnectedAsync(Exception exception)

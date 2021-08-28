@@ -7,7 +7,8 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import { AppContext } from "../AppContext";
 
 const Chat = (props) => {
-    //get username on connection and context to get who send 
+    //think how build support card and client to chat
+    //think how get coords with open street map api
     const [Values, setValues] = useState({
         user: "",
         content: ""
@@ -88,6 +89,7 @@ const Chat = (props) => {
             [e.target.name]: e.target.value
         })
     }
+    console.log(chat);
     return (
         <div className="chatBox">
             <div>
@@ -107,10 +109,10 @@ const Chat = (props) => {
                         </div>
                         <div className="messageBox h-50 p-2">
                             {chat && chat.map(data => <>
-                                <div className={ }>
-
+                                <div style={{ marginBottom:"10px" }}>
+                                    <span className={selectedUser === context.userData.user ? "chatBubble mainlyUser" : "chatBubble secondUser"}>{data.message}</span>
                                 </div>
-                            </>)}{/*Add messagesStyle*/}
+                            </>)}
                         </div>
                     <textarea className="form-control chatTextStyle" rows="2" type="text" name="content" value={Values.content} onChange={handleChange} />
                     </div>

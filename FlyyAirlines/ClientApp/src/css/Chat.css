@@ -50,3 +50,16 @@
 .chatTextStyle {
     margin-top: 15px;
 }
+
+
+.mainlyUser {
+    color:white;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: blueviolet;
+    text-align: left;
+}
+
+.secondUser {
+    text-align:right;
+}
