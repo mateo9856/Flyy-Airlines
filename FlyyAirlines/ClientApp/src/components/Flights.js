@@ -6,13 +6,14 @@ const convertString = (string) => {
     return string.replace(regex, " ").substring(0, 16);
 }
 
+
 const FlightsComponent = () => {
     const [Flights, setFlights] = useState([]);
 
     useEffect(() => {
         FetchDatas.GetAll('api/Flights/GetFlights', setFlights);
     }, [])
-    console.log(Flights);
+
     return (
         <>
             <h4 className="text-center">Aktualne wyloty</h4>

@@ -7,12 +7,17 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import { AppContext } from "../AppContext";
 
 const Chat = (props) => {
-    //think how build support card and client to chat
-    //think how get coords with open street map api
+
     const [Values, setValues] = useState({
         user: "",
         content: ""
     })
+
+    const [userType, setUserType] = useState("");
+
+    const GetUser = () => {
+        //implement UserRole and if is employee return work position
+    }
 
     const [UserConnection, setUserConnection] = useState("");
 
