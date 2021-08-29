@@ -54,6 +54,33 @@ namespace FlyyAirlines.Controllers
             }
             return Ok(GetUser);
         }
+
+        [Route("GetUserRole")]
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetUserRole()
+        {
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var claim = claimsIdentity.Claims.Where(c => c.Type.Contains("email")).Select(x => x.Value).FirstOrDefault();
+
+            var GetUser = await _userManager.FindByEmailAsync(claim);
+            if (GetUser == null)
+            {
+                return Unauthorized();
+            }
+
+            if(GetUser.Role == "Employee")
+            {
+                var GetActualUser = await _dbContext.Employees.FirstOrDefaultAsync(d => d.User == GetUser);
+                return Ok(GetActualUser.WorkPosition);
+            }
+            else
+            {
+                return Ok(GetUser.Role);
+            }
+
+        }
+
         [Route("register")]
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] UserRegisterDTO userRegisterDto)
