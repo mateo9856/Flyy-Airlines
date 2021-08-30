@@ -3,9 +3,10 @@ import { MdExitToApp } from 'react-icons/md';
 import "../css/Chat.css";
 import FetchDatas from "../FetchDatas";
 import "@microsoft/signalr";
+import axios from "axios";
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import { AppContext } from "../AppContext";
-
+//think how start contact to support!
 const Chat = (props) => {
 
     const [Values, setValues] = useState({
@@ -16,7 +17,8 @@ const Chat = (props) => {
     const [userType, setUserType] = useState("");
 
     const GetUser = () => {
-        //implement UserRole and if is employee return work position
+        axios.get('api/account/GetUserRole', FetchDatas.Config(context.userData.token))
+            .then(res => setUserType(res.data));
     }
 
     const [UserConnection, setUserConnection] = useState("");
@@ -41,6 +43,7 @@ const Chat = (props) => {
     const [connection, setConnection] = useState(null);
 
     useEffect(() => {
+        GetUser();
         const newConnection = new HubConnectionBuilder()
             .withUrl('/chatHub', { accessTokenFactory: () => context.userData.token })
             .withAutomaticReconnect()
@@ -48,7 +51,7 @@ const Chat = (props) => {
         
         setConnection(newConnection);
     }, [])
-
+    console.log(userType);
     useEffect(() => {
         if (connection) {
             connection.start()
@@ -95,39 +98,55 @@ const Chat = (props) => {
         })
     }
     console.log(chat);
-    return (
-        <div className="chatBox">
-            <div>
-                <button className="chatExit" onClick={ChatExit}><MdExitToApp style={{ fontSize: "26px" }} /></button>
-            </div>
-            <form className="chatFormFlex" onSubmit={handleSubmit}>
+    return userType.length > 0 ? (
+                <div className="chatBox">
+                    <div>
+                        <button className="chatExit" onClick={ChatExit}><MdExitToApp style={{ fontSize: "26px" }} /></button>
+                    </div>
+                    <form className="chatFormFlex" onSubmit={handleSubmit}>
+                {userType === "Support" ?
                 <div className="d-flex chatHeight flex-row align-items-stretch">
-                <div className="w-25 p-2 listUsers">
-                        {ActiveUsers &&
-                            <select style={{ height: "400px", overflow: "hidden" }} multiple className="form-control form-control-sm" value={Values.user} name="user" onChange={handleChange}>
-                                {ActiveUsers.map(data => <option value={data.connectionId}>{data.userName}</option>)}
-                        </select>}
-                </div>
-                    <div className="w-75 p-2 chatContent">
-                        <div className="userInfo">
-                            <p className="h5 text-center">{selectedUser ? `Rozmowa z: ${selectedUser}` : "Wybierz osobę"}</p>
-                        </div>
-                        <div className="messageBox h-50 p-2">
-                            {chat && chat.map(data => <>
-                                <div style={{ marginBottom:"10px" }}>
-                                    <span className={selectedUser === context.userData.user ? "chatBubble mainlyUser" : "chatBubble secondUser"}>{data.message}</span>
+                        <div className="w-25 p-2 listUsers">
+                            {ActiveUsers &&
+                                <select style={{ height: "400px", overflow: "hidden" }} multiple className="form-control form-control-sm" value={Values.user} name="user" onChange={handleChange}>
+                                    {ActiveUsers.map(data => <option value={data.connectionId}>{data.userName}</option>)}
+                                </select>}
+                        </div> 
+                            <div className="w-75 p-2 chatContent">
+                                <div className="userInfo">
+                                    <p className="h5 text-center">{selectedUser ? `Rozmowa z: ${selectedUser}` : "Wybierz osobę"}</p>
                                 </div>
-                            </>)}
+                                <div className="messageBox h-50 p-2">
+                                    {chat && chat.map(data => <>
+                                        <div style={{ marginBottom: "10px" }}>
+                                            <span className={selectedUser === context.userData.user ? "chatBubble mainlyUser" : "chatBubble secondUser"}>{data.message}</span>
+                                        </div>
+                                    </>)}
+                                </div>
+                                <textarea className="form-control chatTextStyle" rows="2" type="text" name="content" value={Values.content} onChange={handleChange} />
                         </div>
-                    <textarea className="form-control chatTextStyle" rows="2" type="text" name="content" value={Values.content} onChange={handleChange} />
-                    </div>
-                </div>
-                <div className= "form-group bottomMargin p-2">
-                    <input type="submit" className="btn btn-primary" value="Send!" />
-                    </div>
-                </form>
+                    </div> : <div className="d-flex chatHeight flex-row align-items-stretch">
+                        <div className="w-100 p-2 chatContent">
+                            <div className="userInfo">
+                                <p className="h5 text-center">Contact to Support</p>
+                            </div>
+                            <div className="messageBox h-50 p-2">
+                                {chat && chat.map(data => <>
+                                    <div style={{ marginBottom: "10px" }}>
+                                        <span className={selectedUser === context.userData.user ? "chatBubble mainlyUser" : "chatBubble secondUser"}>{data.message}</span>
+                                    </div>
+                                </>)}
+                            </div>
+                            <textarea className="form-control chatTextStyle" rows="2" type="text" name="content" value={Values.content} onChange={handleChange} />
+                        </div>
+                    </div>}
+                        <div className="form-group bottomMargin p-2">
+                            <input type="submit" className="btn btn-primary" value="Send!" />
+                        </div>
+                    </form>
 
-        </div>)
+                </div>
+        ) : ""
 }
 
 export default Chat;
