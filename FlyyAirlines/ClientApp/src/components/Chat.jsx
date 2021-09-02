@@ -41,7 +41,7 @@ const Chat = (props) => {
     const [selectedUser, setSelectedUser] = useState("");
 
     const [connection, setConnection] = useState(null);
-
+    console.log(ActiveUsers);
     useEffect(() => {
         GetUser();
         const newConnection = new HubConnectionBuilder()
@@ -109,7 +109,7 @@ const Chat = (props) => {
                         <div className="w-25 p-2 listUsers">
                             {ActiveUsers &&
                                 <select style={{ height: "400px", overflow: "hidden" }} multiple className="form-control form-control-sm" value={Values.user} name="user" onChange={handleChange}>
-                                    {ActiveUsers.map(data => <option value={data.connectionId}>{data.userName}</option>)}
+                                {ActiveUsers.filter(el => el.userName != "ANiedzielaPomoc").map(data => <option value={data.connectionId}>{data.userName}</option>)}
                                 </select>}
                         </div> 
                             <div className="w-75 p-2 chatContent">
