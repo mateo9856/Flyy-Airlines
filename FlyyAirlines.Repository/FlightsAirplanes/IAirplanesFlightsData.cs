@@ -10,6 +10,6 @@ namespace FlyyAirlines.Repository.FlightsAirplanes
     public interface IAirplanesFlightsData
     {
         Task<bool> CheckReservesFromFlights(Reservation reservation, Flight flight);
-        void CalculateFlightTime(string fromCity, string fromCountry, string toCountry, string toCtiy);
+        string CalculateFlightTime(string fromCity, string fromCountry, string toCountry, string toCtiy);
     }
 }

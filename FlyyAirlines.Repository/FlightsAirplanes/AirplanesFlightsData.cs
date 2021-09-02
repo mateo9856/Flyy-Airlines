@@ -3,6 +3,7 @@ using LumenWorks.Framework.IO.Csv;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace FlyyAirlines.Repository.FlightsAirplanes
             _dbContext = dbContext;
         }
 
-        public void CalculateFlightTime(string fromCity, string fromCountry, string toCountry, string toCtiy)
+        public string CalculateFlightTime(string fromCity, string fromCountry, string toCountry, string toCtiy)
         {
             var csvTable = new DataTable();
 
@@ -36,10 +37,14 @@ namespace FlyyAirlines.Repository.FlightsAirplanes
                     searchDatas.Add(csvTable.Rows[i]);
                 }
                 
-                decimal[] fromLatLng = { decimal.Parse(searchDatas[0].ItemArray[2].ToString()), decimal.Parse(searchDatas[0].ItemArray[2].ToString()) };
-                decimal[] toLatLng = { decimal.Parse(searchDatas[1].ItemArray[2].ToString()), decimal.Parse(searchDatas[0].ItemArray[1].ToString()) };
             }
+            decimal[] fromLatLng = { decimal.Parse(searchDatas[0].ItemArray[2].ToString()), decimal.Parse(searchDatas[0].ItemArray[2].ToString()) };
+            decimal[] toLatLng = { decimal.Parse(searchDatas[1].ItemArray[2].ToString()), decimal.Parse(searchDatas[0].ItemArray[1].ToString()) };
             //think pattern to calculate time
+            decimal calc = (fromLatLng[0] / toLatLng[0]) - (toLatLng[1] / fromLatLng[0]);
+            NumberFormatInfo precision = new NumberFormatInfo();
+            precision.NumberDecimalDigits = 2;
+            return calc.ToString("N", precision);
 
         }
 
