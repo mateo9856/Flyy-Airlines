@@ -19,11 +19,18 @@ namespace FlyyAirlines.Repository.FlightsAirplanes
             _dbContext = dbContext;
         }
 
-        public string CalculateFlightTime(string fromCity, string fromCountry, string toCountry, string toCtiy)
+        public string CalculateFlightTime(string[] datas)
         {
+
+            string fromCity = datas[0];
+            string fromCountry = datas[1];
+            string toCity = datas[2];
+            string toCountry = datas[3];
+
+
             var csvTable = new DataTable();
 
-            using (var csvReader = new CsvReader(new StreamReader(File.OpenRead(Path.Combine(Directory.GetCurrentDirectory(), "FlightsCitiesData.csv"))), true))
+            using (var csvReader = new CsvReader(new StreamReader(File.OpenRead(Path.Combine(Directory.GetCurrentDirectory(), "csv","FlightsCitiesData.csv"))), true))
             {
                 csvTable.Load(csvReader);
             }
@@ -32,15 +39,17 @@ namespace FlyyAirlines.Repository.FlightsAirplanes
 
             for(int i = 0; i < csvTable.Rows.Count;i++)
             {
-                if(csvTable.Rows[i][1].ToString() == fromCity && csvTable.Rows[i][4].ToString() == fromCountry || csvTable.Rows[i][1].ToString() == toCtiy && csvTable.Rows[i][4].ToString() == toCountry)
+                if(csvTable.Rows[i][1].ToString() == fromCity && csvTable.Rows[i][4].ToString() == fromCountry || csvTable.Rows[i][1].ToString() == toCity && csvTable.Rows[i][4].ToString() == toCountry)
                 {
                     searchDatas.Add(csvTable.Rows[i]);
                 }
                 
             }
+            //repair to change to english names countries in database
+            Console.WriteLine(searchDatas);
+
             decimal[] fromLatLng = { decimal.Parse(searchDatas[0].ItemArray[2].ToString()), decimal.Parse(searchDatas[0].ItemArray[2].ToString()) };
             decimal[] toLatLng = { decimal.Parse(searchDatas[1].ItemArray[2].ToString()), decimal.Parse(searchDatas[0].ItemArray[1].ToString()) };
-            //think pattern to calculate time
             decimal calc = (fromLatLng[0] / toLatLng[0]) - (toLatLng[1] / fromLatLng[0]);
             NumberFormatInfo precision = new NumberFormatInfo();
             precision.NumberDecimalDigits = 2;

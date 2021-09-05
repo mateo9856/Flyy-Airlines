@@ -123,6 +123,13 @@ namespace FlyyAirlines.Controllers
             return CreatedAtAction("Get", new { id = Flight.Id }, Flight);
         }
 
+        [HttpPost]
+        [Route("CalculateTime")]
+        public IActionResult CalculateFlightTime(string[] data)
+        {
+            return Ok(_planesData.CalculateFlightTime(data));
+        }
+
         //[Authorize(Roles = "Admin, SuperAdmin")]
         [Route("Flight/{id}")]
         [HttpPut]
