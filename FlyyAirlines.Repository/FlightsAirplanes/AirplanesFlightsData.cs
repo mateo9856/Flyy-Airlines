@@ -45,12 +45,16 @@ namespace FlyyAirlines.Repository.FlightsAirplanes
                 }
                 
             }
-            //repair to change to english names countries in database
-            Console.WriteLine(searchDatas);
+            decimal fromLat = Convert.ToDecimal((string)searchDatas[0].ItemArray[2], CultureInfo.InvariantCulture);
+            decimal fromLng = Convert.ToDecimal((string)searchDatas[0].ItemArray[3], CultureInfo.InvariantCulture);
+            decimal toLat = Convert.ToDecimal((string)searchDatas[1].ItemArray[2], CultureInfo.InvariantCulture);
+            decimal toLng = Convert.ToDecimal((string)searchDatas[1].ItemArray[3], CultureInfo.InvariantCulture);
 
-            decimal[] fromLatLng = { decimal.Parse(searchDatas[0].ItemArray[2].ToString()), decimal.Parse(searchDatas[0].ItemArray[2].ToString()) };
-            decimal[] toLatLng = { decimal.Parse(searchDatas[1].ItemArray[2].ToString()), decimal.Parse(searchDatas[0].ItemArray[1].ToString()) };
-            decimal calc = (fromLatLng[0] / toLatLng[0]) - (toLatLng[1] / fromLatLng[0]);
+            var Converter = Convert.ToDecimal(fromLat, CultureInfo.InvariantCulture);
+
+            decimal[] fromLatLng = { fromLat, fromLng };
+            decimal[] toLatLng = { toLat, toLng };
+            decimal calc = (fromLatLng[0] / toLatLng[0]) + (toLatLng[1] / fromLatLng[0]);//think to calculate
             NumberFormatInfo precision = new NumberFormatInfo();
             precision.NumberDecimalDigits = 2;
             return calc.ToString("N", precision);
