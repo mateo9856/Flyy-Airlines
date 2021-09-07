@@ -107,27 +107,6 @@ const Admin = (props) => {
                             <button onClick={() => setPostActive(true)} className="btnCreate">CREATE <MdCreate style={{ fontSize: "30px" }} /></button>
                         </div>
                         {returnComponent(active)}
-                {/*<ul style={{ listStyleType: "none" }} className="gridAdminBtn d-flex flex-wrap justify-content-around">*/}
-                {/*    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("add")}>Dodaj wylot</button></li>*/}
-                {/*    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("remove")}>Usuń wylot</button></li>*/}
-                {/*    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("addPlane")}>Dodaj samolot</button></li>*/}
-                {/*    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("addEmployee")}>Dodaj pracownika</button></li>*/}
-                {/*    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("removeEmployee")}>Usuń pracownika</button></li>*/}
-                {/*    <li><button className="buttWidth btn btn-primary" onClick={() => setActiveManage("editData")}>Edytuj Dane</button></li>*/}
-                {/*</ul>*/}
-                {/*<div className="text-center">*/}
-                {/*    {activeManage === "add" ?*/}
-                {/*        <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}*/}
-                {/*    {activeManage === "remove" ?*/}
-                {/*        <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}*/}
-                {/*    {activeManage === "addEmployee" ?*/}
-                {/*        <EmployeeManage selectedManage={activeManage} exit={resetValues} /> : ""}*/}
-                {/*    {activeManage === "addPlane" ?*/}
-                {/*        <FlightManage selectedManage={activeManage} exit={resetValues} /> : ""}*/}
-                {/*    {activeManage === "removeEmployee" ?*/}
-                {/*        <EmployeeManage selectedManage={activeManage} exit={resetValues} /> : ""}*/}
-                {/*    {activeManage === "editData" ? <PutManage exit={resetValues} /> : ""}*/}
-                {/*</div>*/}
                 </div>
                 </div>
             </AdminContext.Provider>
