@@ -210,7 +210,7 @@ export const ReturnFrom = (props) => {
     }
 
     const handleChange = (e) => {
-
+        console.log(datas);
         if (e.target.name === "departureDate") {
             setDatas({
                 [e.target.name]: convertToDateTimeString(e.target.value)
