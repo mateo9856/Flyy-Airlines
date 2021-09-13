@@ -53,7 +53,7 @@ const Chat = (props) => {
         if (connection) {
             connection.start()
                 .then(() => connection.invoke("GetConnectionId")
-                .then(() => connection.invoke("GetConnectedUsers").then((res) => SetActiveUsers(res)))
+                .then(() => connection.invoke("GetConnectedUsers").then((res) => SetActiveUsers(res))))
                 .catch(err => console.log("Error not loading!"));
 
             connection.on('ReceiveMessage', (user, message) => {
