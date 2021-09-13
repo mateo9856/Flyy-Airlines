@@ -47,7 +47,6 @@ namespace FlyyAirlines.Controllers
                 return BadRequest();
             }
 
-            //var GetClaim = User.FindFirst(ClaimTypes.Name);//try change to claim values
             var NewMessage = new Message()
             {
                 Id = Guid.NewGuid().ToString(),

@@ -34,7 +34,6 @@ const Admin = (props) => {
     }
 
     useEffect(() => {
-        console.log(context.userData.token);
         axios.get('api/account/GetUser', FetchDatas.Config(context.userData.token))
     }, [])
 

@@ -37,7 +37,6 @@ const NewsManager = () => {
         formData.append("content", newsState.content);
         formData.append("imageUrl", newsState.imageUrl);
         formData.append("imageFile", file.current.files[0]);
-        console.log(formData);
         if (activeAdd === "post") {
             FetchDatas.Post('api/News/AddNews', formData);
         }

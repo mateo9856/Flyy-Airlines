@@ -150,8 +150,6 @@ const PutManage = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(changedData);
-        console.log(sendedData);
         switch (changedData) {
             case "reservation":
                 if (Reservations.some(el => el.seat === sendedData.seat)) {

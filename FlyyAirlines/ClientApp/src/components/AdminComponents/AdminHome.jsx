@@ -37,7 +37,7 @@ const options = {
         ],
     },
 };
-//add messages
+
 export default function AdminHome() {
 
     const [context, setContext] = useContext(AppContext);

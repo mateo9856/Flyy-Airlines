@@ -6,7 +6,6 @@ import "@microsoft/signalr";
 import axios from "axios";
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import { AppContext } from "../AppContext";
-//think how start contact to support!
 const Chat = (props) => {
 
     const [Values, setValues] = useState({
@@ -41,7 +40,6 @@ const Chat = (props) => {
     const [selectedUser, setSelectedUser] = useState("");
 
     const [connection, setConnection] = useState(null);
-    console.log(ActiveUsers);
     useEffect(() => {
         GetUser();
         const newConnection = new HubConnectionBuilder()
@@ -51,23 +49,19 @@ const Chat = (props) => {
         
         setConnection(newConnection);
     }, [])
-    console.log(userType);
     useEffect(() => {
         if (connection) {
             connection.start()
-                .then(res => console.log("Succesful load!"))
-                .then(() => connection.invoke("GetConnectionId").then((connectionId) => console.log(connectionId)).catch(err => console.log("Invoke Error")))
+                .then(() => connection.invoke("GetConnectionId")
                 .then(() => connection.invoke("GetConnectedUsers").then((res) => SetActiveUsers(res)))
                 .catch(err => console.log("Error not loading!"));
 
             connection.on('ReceiveMessage', (user, message) => {
                 const updatedChat = [...ChatHistory.current];
-                console.log(user, message);
                 updatedChat.push({
                     user: user,
                     message: message
                 });
-                console.log(updatedChat);
                 setChat(updatedChat);
                 setValues({
                     ...Values,
@@ -97,7 +91,6 @@ const Chat = (props) => {
             [e.target.name]: e.target.value
         })
     }
-    console.log(chat);
     return userType.length > 0 ? (
                 <div className="chatBox">
                     <div>

@@ -54,7 +54,7 @@ namespace FlyyAirlines.Repository.FlightsAirplanes
 
             decimal[] fromLatLng = { fromLat, fromLng };
             decimal[] toLatLng = { toLat, toLng };
-            decimal calc = (fromLatLng[0] / toLatLng[0]) + (toLatLng[1] / fromLatLng[0]);//think to calculate
+            decimal calc = (fromLatLng[0] / toLatLng[0]) + (toLatLng[1] / fromLatLng[0]);
             NumberFormatInfo precision = new NumberFormatInfo();
             precision.NumberDecimalDigits = 2;
             return calc.ToString("N", precision);

@@ -11,10 +11,7 @@ class FetchDatas {
     }
 
     async Delete(url) {
-        await axios.delete(url).
-            then(res => {
-                console.log(res);
-            })
+        await axios.delete(url);
     }
 
     async GetAll(url, state) {
@@ -28,21 +25,18 @@ class FetchDatas {
         await axios.get(url)
             .then(res => {
                 state(res.data);
-                console.log(res.data);
             })
     }
     async Post(url, val) {
-        await axios.post(url, val)
-            .then(res => {
-                console.log(res);
-            })
+        await axios.post(url, val);
+    }
+
+    async PostReturn(url, val) {
+        return await axios.post(url, val);
     }
 
     async Put(url, val) {
-        await axios.put(url, val)
-            .then(res => {
-                console.log(res);
-            })
+        await axios.put(url, val);
     }
 }
 

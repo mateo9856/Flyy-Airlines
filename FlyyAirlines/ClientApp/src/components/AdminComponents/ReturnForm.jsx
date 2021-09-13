@@ -73,8 +73,6 @@ export const ReturnFrom = (props) => {
     }, [props.table])
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(props.put);
-        console.log(datas);
         switch (props.table) {
             case "user":
                 if (props.put) {
