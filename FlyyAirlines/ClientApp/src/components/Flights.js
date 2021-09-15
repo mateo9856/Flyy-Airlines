@@ -17,14 +17,14 @@ const FlightsComponent = () => {
 
     return (
         <>
-            <h4 className="text-center">Aktualne wyloty</h4>
+            <h4 className="text-center">Actual flights</h4>
             <table className="table table-stripped">
                 <thead>
                     <tr>
-                        <th scope="col">Wylot z</th>
-                        <th scope="col">Cel</th>
-                        <th scope="col">Data wylotu</th>
-                        <th scope="col">Miejsca</th>
+                        <th scope="col">Flight of</th>
+                        <th scope="col">Destination</th>
+                        <th scope="col">Departure date</th>
+                        <th scope="col">Seats</th>
                     </tr>
                 </thead>
                 <tbody>

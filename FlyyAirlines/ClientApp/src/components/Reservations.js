@@ -24,7 +24,6 @@ const ReservationComponent = () => {
         };
 
         const currentAirplane = val[0].airplane.numberOfSeats;
-        console.log(val[0]);
         for (let i = 0; i < currentAirplane; i++) {
             arr.push(
                 <button
@@ -43,7 +42,6 @@ const ReservationComponent = () => {
     };
 
     useEffect(() => {
-        console.log(context);
         FetchDatas.GetAll('api/Flights/GetFlights', setFlights)
         FetchDatas.Get('api/Reservation/' + context.userData.id, setReservations);
     }, [])
@@ -86,7 +84,6 @@ const ReservationComponent = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const checkFreeFlight = reservationVal.flight[0];
-        console.log(checkFreeFlight.id);
         const sendDatas = {
             name: reservationVal.name,
             surname: reservationVal.surname,
@@ -95,12 +92,11 @@ const ReservationComponent = () => {
             flight: checkFreeFlight.id,
             user: context.userData.id
         };
-        console.log();
         if (checkFreeFlight.reservations.some(el => el.seat === buttonValue)) {
-            alert("Miejsce zajęte");
+            alert("Seat busy");
         } else {
         FetchDatas.Post('api/Reservation', sendDatas)
-            alert("Zarezerwowano");
+            alert("Reserved!");
             setButtonValue(0);
             setReservationVal({
                 name: "",
@@ -115,7 +111,7 @@ const ReservationComponent = () => {
     
     return (
         <>
-            {context.isLogged ? <h1>Moje rezerwacje</h1> : <h1>Zaloguj się!</h1>}
+            {context.isLogged ? <h1>My reservations</h1> : <h1>Log In!</h1>}
             {context.isLogged && (
                 <div className="row">
                     <div className="col-sm">
@@ -123,16 +119,16 @@ const ReservationComponent = () => {
                             className="btn btn-outline-primary"
                             onClick={NewReservation}
                         >
-                            Nowa rezerwacja
+                            New reservation
             </button>
                         <table className="table table-stripped">
                             <thead>
                                 <tr>
-                                    <th scope="col">Imię</th>
-                                    <th scope="col">Nazwisko</th>
-                                    <th scope="col">Identyfikator</th>
-                                    <th scope="col">Nazwa lotu</th>
-                                    <th scope="col">Miejsce</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Surname</th>
+                                    <th scope="col">Identity</th>
+                                    <th scope="col">Flight Name</th>
+                                    <th scope="col">Seat</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -173,7 +169,7 @@ const ReservationComponent = () => {
                                         </select>
                                     </div>
                                     <div className="form-group">
-                                        Imię:
+                                        Name:
                     <input
                                             onChange={handleChange}
                                             type="text"
@@ -183,7 +179,7 @@ const ReservationComponent = () => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        Nazwisko:
+                                        Surname:
                     <input
                                             onChange={handleChange}
                                             type="text"
@@ -193,7 +189,7 @@ const ReservationComponent = () => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        Identyfikator:
+                                        Identity:
                     <input
                                             onChange={handleChange}
                                             type="number"
@@ -207,7 +203,7 @@ const ReservationComponent = () => {
                                             type="submit"
                                             style={{ marginTop: "5px" }}
                                             className="btn btn-primary"
-                                            value="Zarezerwuj!"
+                                            value="Reserve!"
                                         />
                                     </div>
                                 </form>

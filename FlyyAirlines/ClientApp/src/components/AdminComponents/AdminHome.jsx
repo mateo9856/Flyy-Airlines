@@ -7,10 +7,10 @@ import FetchDatas from "../../FetchDatas";
 import SendMessage from "./SendMessage";
 
 const data = {
-    labels: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec'],
+    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
     datasets: [
         {
-            label: 'Rezerwacje w miesiącu',
+            label: 'Reservations in mounth',
             data: [12, 19, 3, 5, 2, 3],
             fill: false,
             backgroundColor: [

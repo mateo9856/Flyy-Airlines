@@ -6,31 +6,31 @@ import { AdminContext } from "../Admin";
 const types = [
     {
         state: "home",
-        name: "Menu główne"
+        name: "Main"
     },
     {
         state: "flights",
-        name: "Wyloty"
+        name: "Flights"
     },
     {
         state: "airplanes",
-        name: "Samoloty"
+        name: "Airplanes"
     },
     {
         state: "reservations",
-        name: "Rezerwacje"
+        name: "Reservations"
     },
     {
         state: "employees",
-        name: "Pracownicy"
+        name: "Employees"
     },
     {
         state: "users",
-        name: "Użytkownicy"
+        name: "Users"
     },
     {
         state: "news",
-        name: "Newsy"
+        name: "News"
     }
 ]
 

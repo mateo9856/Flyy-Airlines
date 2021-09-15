@@ -36,29 +36,29 @@ const NavMenu = () => {
                         <ul className="navbar-nav flex-grow">
                             <NavItem>
                                 <NavLink tag={Link} className="text-dark linkStyle" to="/">
-                                    Strona g³ówna
+                                    Main Page
                 </NavLink>
                             </NavItem>
                             {context.userRole === "User" &&
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark linkStyle" to="/reservations">
-                                        Rezerwacje
+                                        Reservations
                 </NavLink>
                                 </NavItem>}
                             {context.userRole === "Employee" &&
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark linkStyle" to="/checkReservation">
-                                        SprawdŸ rezerwacje
+                                        Check reservations
                 </NavLink>
                                 </NavItem>}
                             <NavItem>
                                 <NavLink tag={Link} className="text-dark linkStyle" to="/flights">
-                                    Wyloty
+                                    Flights
                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink tag={Link} className="text-dark linkStyle" to="/aboutus">
-                                    O nas
+                                    About us
                 </NavLink>
                             </NavItem>
                             {context.userRole === "Admin" ? (
@@ -74,24 +74,24 @@ const NavMenu = () => {
                                 <>
                                     <NavItem>
                                         <NavLink tag={Link} className="text-dark linkStyle" to="/messages">
-                                            Wiadomoœci
+                                            News
                                         </NavLink>
                                     </NavItem>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark linkStyle" to="/logout">
-                                        Wyloguj
+                                        Logout
                   </NavLink>
                                 </NavItem></>
                             ) : (
                                     <>
                                         <NavItem>
                                             <NavLink tag={Link} className="text-dark linkStyle" to="/login">
-                                                Zaloguj siê
+                                                Login
                     </NavLink>
                                         </NavItem>
                                         <NavItem>
                                             <NavLink tag={Link} className="text-dark linkStyle" to="/register">
-                                                Zarejestruj siê
+                                                Sign In
                     </NavLink>
                                         </NavItem>
                                     </>

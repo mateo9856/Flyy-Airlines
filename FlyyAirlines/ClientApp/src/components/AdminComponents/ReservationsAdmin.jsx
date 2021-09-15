@@ -36,11 +36,11 @@ export const ReservationsAdmin = function () {
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Imię i nazwisko</th>
-                    <th scope="col">Identyfikator</th>
-                    <th scope="col">Miejsce</th>
-                    <th scope="col">Wylot</th>
-                    <th scope="col">Akcja</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Identity</th>
+                    <th scope="col">Seat</th>
+                    <th scope="col">Flight</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,8 +51,8 @@ export const ReservationsAdmin = function () {
                     <td>{res.seat}</td>
                     <td>{res.flights.flightName}</td>
                     <td>
-                        <button value={res.id} onClick={Edit}>Edytuj</button>
-                        <button onClick={() => Delete(res.id)}>Usuń</button>
+                        <button value={res.id} onClick={Edit}>Edit</button>
+                        <button onClick={() => Delete(res.id)}>Delete</button>
                     </td>
                 </tr>)}
             </tbody>

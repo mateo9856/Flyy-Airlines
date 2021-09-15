@@ -11,7 +11,6 @@
             const getUser = JSON.parse(localStorage.getItem("login"));
             this.userData = getUser;
             this.userRole = this.userData.userRole;
-            console.log(this.userRole);
         } catch(error) {
             return "USER_IS_NOT_LOGGED";
         }
@@ -25,7 +24,6 @@
     checkIsLogged() {
         try {
             const getUser = JSON.parse(localStorage.getItem('login'));
-            console.log(getUser.getUser);
             if (getUser.user.length <= 0 || getUser.user === undefined) {
                 this.authenticated = false;
                 return false;

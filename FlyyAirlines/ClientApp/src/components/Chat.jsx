@@ -54,7 +54,6 @@ const Chat = (props) => {
             connection.start()
                 .then(() => connection.invoke("GetConnectionId")
                 .then(() => connection.invoke("GetConnectedUsers").then((res) => SetActiveUsers(res))))
-                .catch(err => console.log("Error not loading!"));
 
             connection.on('ReceiveMessage', (user, message) => {
                 const updatedChat = [...ChatHistory.current];
@@ -107,7 +106,7 @@ const Chat = (props) => {
                         </div> 
                             <div className="w-75 p-2 chatContent">
                                 <div className="userInfo">
-                                    <p className="h5 text-center">{selectedUser ? `Rozmowa z: ${selectedUser}` : "Wybierz osobę"}</p>
+                                    <p className="h5 text-center">{selectedUser ? `Chat with: ${selectedUser}` : "Select User"}</p>
                                 </div>
                                 <div className="messageBox h-50 p-2">
                                     {chat && chat.map(data => <>

@@ -158,16 +158,15 @@ const CheckReservation = () => {
             })
         }
     }
-    console.log(checkedData);
     return (
         <div className="row">
             <div className="col-sm">
                 <div className="buttonsFlex">
                     <button className="btn btn-outline-primary" onClick={() => setSelectedOption("check")}>
-                        Sprawdź rezerwacje
+                        Check reservation
                     </button>
                     <button className="btn btn-outline-primary" onClick={() => setSelectedOption("add")}>
-                        Dodaj rezerwacje
+                        Add reservation
                     </button>
                 </div>
             </div>
@@ -177,12 +176,12 @@ const CheckReservation = () => {
                         <table className="table table-stripped">
                             <thead>
                                 <tr>
-                                    <th scope="col">Imię</th>
-                                    <th scope="col">Nazwisko</th>
-                                    <th scope="col">Identyfikator</th>
-                                    <th scope="col">Nazwa lotu</th>
-                                    <th scope="col">Miejsce</th>
-                                    <th scope="col">Akcja</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Surname</th>
+                                    <th scope="col">Identity</th>
+                                    <th scope="col">Flight name</th>
+                                    <th scope="col">Seat</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -195,7 +194,7 @@ const CheckReservation = () => {
                                         <td>{res.seat}</td>
                                         <td>
                                             <button className="btn btn-outline-primary" name={res.id} onClick={handleCheckClick}>
-                                                Sprawdź dane
+                                                Check data
                                             </button>
                                         </td>
                                     </tr>
@@ -242,12 +241,12 @@ const CheckReservation = () => {
                                     <input
                                         className="btn btn-primary"
                                         type="submit"
-                                        value="Sprawdź"
+                                        value="Check"
                                     />
                                 </form>
                                 {checkedData && <a onClick={() => setCheckedData(false)} target='_blank'
                                     href={"api/Pdf/reservationId=" + checkedData.reservation + "&employeeId=" + context.userData.id}
-                                    className="btn btn-outline-primary">Generuj PDF</a>}
+                                    className="btn btn-outline-primary">Generate PDF</a>}
                             </div>
                         )}
                     </div>   
@@ -273,7 +272,7 @@ const CheckReservation = () => {
                                 </select>
                             </div>
                             <div className="form-group">
-                                Imię:
+                                Name:
                                 <input
                                     onChange={handleChange}
                                     type="text"
@@ -283,7 +282,7 @@ const CheckReservation = () => {
                                 />
                             </div>
                             <div className="form-group">
-                                Nazwisko:
+                                Surname:
                                 <input
                                     onChange={handleChange}
                                     type="text"
@@ -293,7 +292,7 @@ const CheckReservation = () => {
                                 />
                             </div>
                             <div className="form-group">
-                                Identyfikator:
+                                Identity:
                                 <input
                                     onChange={handleChange}
                                     type="number"
@@ -316,7 +315,7 @@ const CheckReservation = () => {
                             setSelectedOption("");
                         }} target='_blank'
                             href={"api/Pdf/reservationId=" + checkedData.reservation + "&employeeId=" + context.userData.id}
-                            className="btn btn-outline-primary">Generuj PDF</a>}
+                            className="btn btn-outline-primary">Generate PDF</a>}
                         {checkDatas.flight ? (
                             <div className="reservationTable">
                                 {buttonRows(checkDatas.flight)}

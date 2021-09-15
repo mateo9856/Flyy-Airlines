@@ -329,27 +329,27 @@ export const ReturnFrom = (props) => {
                 return (
                     <>
                         <div className="form-group">
-                            Wylot z:<br />
-                        Miasto
+                            Flight of:<br />
+                        City
                         <input value={datas.fromCity} className="form-control" type="text" name="fromCity" onChange={handleChange} />
-                        Państwo
+                        Country
                         <input value={datas.fromCountry} className="form-control" type="text" name="fromCountry" onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            Wylot do:<br />
-                        Miasto
+                            Flight to:<br />
+                        City
                         <input value={datas.toCity} className="form-control" type="text" name="toCity" onChange={handleChange} />
-                        Państwo
+                        Country
                         <input value={datas.toCountry} className="form-control" type="text" name="toCountry" onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            Samolot
+                            Airplane
                         <select value={datas.airplane} onChange={handleChange} name="airplane" className="form-control">
                                 {Airplanes.map(res => <option value={res.id}>{res.planeName}</option>)}
                             </select>
                         </div>
                         <div className="form-group">
-                            Data wylotu:
+                            Departure date:
                         <input className="form-control" type="datetime-local" name="departureDate" onChange={handleChange} />
                         </div>
                     </>)

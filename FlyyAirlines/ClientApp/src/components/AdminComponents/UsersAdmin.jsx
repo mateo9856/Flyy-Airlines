@@ -36,11 +36,11 @@ export const UsersAdmin = function () {
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Nazwa użytkownika</th>
-                    <th scope="col">Imię i nazwisko</th>
-                    <th scope="col">Rola</th>
+                    <th scope="col">User Name</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Role</th>
                     <th scope="col">E-mail</th>
-                    <th scope="col">Akcja</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>

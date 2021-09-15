@@ -32,17 +32,14 @@ const Register = () => {
                 name: data.name,
                 surname: data.surname
             }).then(res => {
-                alert("Zarejestrowany");
+                alert("Sign In!");
                 history.push("/")
-            }).catch(err => {
-                console.log(err);
-                alert("B³¹d z zaptaniem!")
             })
     }
 
     return (
         <div>
-            <h4 className="text-center">Podaj swoje dane by w celu rejestracji!</h4>
+            <h4 className="text-center">Enter your datas to register!</h4>
             <div className="form-box">
                 <form className="registerLoginForm" onSubmit={handleSubmit}>
                     <label>
@@ -96,7 +93,7 @@ const Register = () => {
                         <input
                             className="input-field"
                             placeholder="Password"
-                            type="text"
+                            type="password"
                             name="password"
                             value={data.password}
                             onChange={handleChange}
@@ -109,7 +106,7 @@ const Register = () => {
                         style={{ marginTop: "15px", color: "white" }}
                         type="submit"
                         className="submit-btn"
-                        value="Zarejestruj"
+                        value="Sign in!"
                     />
                 </form>
             </div>

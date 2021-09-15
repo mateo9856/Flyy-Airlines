@@ -48,10 +48,10 @@ export const FlightAdmin = function () {
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Wylot</th>
-                    <th scope="col">Data wylotu</th>
-                    <th scope="col">Samolot</th>
-                    <th scope="col">Akcja</th>
+                    <th scope="col">Departure</th>
+                    <th scope="col">Departure date</th>
+                    <th scope="col">Airplane</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,8 +61,8 @@ export const FlightAdmin = function () {
                     <td>{res.departureDate}</td>
                     <td>{res.airplane.planeName}</td>
                     <td>
-                        <button value={res.id} onClick={Edit}>Edytuj</button>
-                        <button onClick={() => Delete(res.id)}>Usuń</button>
+                        <button value={res.id} onClick={Edit}>Edit</button>
+                        <button onClick={() => Delete(res.id)}>Delete</button>
                     </td>
                 </tr>)}
             </tbody>

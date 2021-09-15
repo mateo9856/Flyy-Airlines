@@ -4,13 +4,16 @@ const AboutUs = () => {
     return (
         <div className="aboutBackground">
             <div className="aboutBlock text-center">
-                <h1 className="text-center">Kim jesteśmy ?</h1>
-                <p>Jesteśmy nową marką, zajmujemy się wylotami do różnych krajów. Lecimy fo krajów takich jak np.
-            Wielka Brytania, Włochy, Hiszpania itp.<br />
-        Nasza firma stale rozwija się w zakresie wylotów i dąży do dalszego rozwoju z zakresu podróży.</p>
-                <h1 className="text-center">Jak to wszystko się zaczęło ?</h1>
-                <p>Naszym planem było i jest nadal stworzenie alternatywy dla każdego, oferując wsparcie najlepszych ludzi oraz konkurencyjność, staramy się być jak najlepsi dla państwa.<br />
-            To co nas uczy to państwo, to opinie klientów oraz porady są dla nas podstawą do rozwoju firmy!
+                <h1 className="text-center">Who we are ?</h1>
+                <p>
+                    We are a new brand, we create outlets to different countries. We fly to countries such as
+            UK, Italy, Spain etc.<br />
+        
+Our company is constantly evolving in terms of departures and strives to further expand in the field of travel.</p>
+                <h1 className="text-center">
+                    How did it all start ?</h1>
+                <p>Our plan was and still is to create an alternative for everyone, offering the support of the best people and competitiveness, we strive to be the best for the state. <br />
+            What the state teaches us is the opinions of customers and advice are the basis for our company's development!
             </p>
             </div>
         </div>

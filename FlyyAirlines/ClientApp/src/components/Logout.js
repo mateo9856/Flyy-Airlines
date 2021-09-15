@@ -17,7 +17,7 @@ const Logout = () => {
     })
 
     return (
-        <h1>Wylogowano!</h1>    
+        <h1>Logout!</h1>    
     )
 }
 

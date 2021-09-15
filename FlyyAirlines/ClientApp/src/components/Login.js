@@ -38,7 +38,7 @@ const Login = () => {
 
     return (
         <div>
-            <h4 className="text-center">Zaloguj siê do Flyy!</h4>
+            <h4 className="text-center">Login to Flyy!</h4>
             <div className="form-box">
                 <form className="registerLoginForm" onSubmit={handleSubmit}>
                     <label>
@@ -53,7 +53,7 @@ const Login = () => {
                     </label>
                     <label>
                         <input
-                            type="text"
+                            type="password"
                             placeholder="Password"
                             className="input-field"
                             name="password"
@@ -65,7 +65,7 @@ const Login = () => {
                         style={{ marginTop: "15px", color: "white" }}
                         type="submit"
                         className="submit-btn"
-                        value="Zaloguj!"
+                        value="LogIn!"
                     />
                 </form>
             </div>

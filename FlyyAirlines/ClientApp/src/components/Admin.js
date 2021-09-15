@@ -1,7 +1,4 @@
 ﻿import React, { useContext, useEffect, useState } from 'react'
-import EmployeeManage from './AdminComponents/EmployeeManage';
-import FlightManage from './AdminComponents/FlightManage';
-import PutManage from './AdminComponents/PutManage';
 import NewsManager from "./AdminComponents/NewsManager";
 import { MdCreate, MdExitToApp } from 'react-icons/md';
 import "../css/Admin.css";

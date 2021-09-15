@@ -68,11 +68,11 @@ const Home = () => {
                 </div>
             </div>
             <section className="bestFlights text-center">
-                <h3 style={{ marginTop: "5px" }}>Nasz Bestseller</h3>
+                <h3 style={{ marginTop: "5px" }}><b>Bestseller</b></h3>
                 <div className="bestFlightsFlex">
                     {Object.keys(BestSeller).length > 0 && <>
                         <h4>{BestSeller.flight}</h4>
-                        <h6>Popularnoœæ: {BestSeller.count}</h6>
+                        <h6>Popularity: {BestSeller.count}</h6>
                     </>}
                 </div>
             </section>
