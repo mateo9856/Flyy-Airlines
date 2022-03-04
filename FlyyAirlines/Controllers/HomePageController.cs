@@ -26,14 +26,21 @@ namespace FlyyAirlines.Controllers
         [HttpGet]
         public IActionResult GetTopFlight()
         {
-            var GetTopReservation = from reserve in _dbContext.Reservations
-                                    group reserve by reserve.Flights.FlightName into flightName
-                                    select new
-                                    {
-                                        Flight = flightName.Key,
-                                        Count = flightName.Count()
-                                    };
-            return Ok(GetTopReservation.First());
+            try
+            {
+                var GetTopReservation = from reserve in _dbContext.Reservations
+                                        group reserve by reserve.Flights.FlightName into flightName
+                                        select new
+                                        {
+                                            Flight = flightName.Key,
+                                            Count = flightName.Count()
+                                        };
+                return Ok(GetTopReservation.First());
+            } catch (Exception ex)
+            {
+                throw new Exception("Reservations doesn't exist");
+            }
+
         }
 
         [Route("News")]

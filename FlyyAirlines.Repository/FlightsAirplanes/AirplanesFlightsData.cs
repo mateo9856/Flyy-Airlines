@@ -1,5 +1,6 @@
 ﻿using FlyyAirlines.Models;
 using LumenWorks.Framework.IO.Csv;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -70,6 +71,12 @@ namespace FlyyAirlines.Repository.FlightsAirplanes
                 return true;
             }
             return false;
+        }
+
+        public async Task<List<Flight>> FindFlightByPhrase(string phrase)
+        {
+            var FindFlight = await _dbContext.Flights.Where(c => (c.FromCity == phrase || c.ToCity == phrase)).ToListAsync();
+            return FindFlight;
         }
     }
 }
