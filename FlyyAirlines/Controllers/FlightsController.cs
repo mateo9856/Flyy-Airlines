@@ -123,6 +123,14 @@ namespace FlyyAirlines.Controllers
             return CreatedAtAction("Get", new { id = Flight.Id }, Flight);
         }
 
+        [HttpGet]
+        [Route("Name/{name}")]
+        public async Task<IActionResult> FindFlight(string name)
+        {
+            var find = await _planesData.FindFlightByPhrase(name);
+            return find.Count > 0 ? Ok(find) : NotFound();
+        }
+
         [HttpPost]
         [Route("CalculateTime")]
         public IActionResult CalculateFlightTime(string[] data)

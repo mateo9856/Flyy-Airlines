@@ -1,3 +1,4 @@
+using FlyyAirlines.Repository.FlightsAirplanes;
 using NUnit.Framework;
 
 namespace FlyyAirlines.Tests
@@ -10,7 +11,7 @@ namespace FlyyAirlines.Tests
         }
 
         [Test]
-        public void Test1()
+        public void FindValueFlights()
         {
             Assert.Pass();
         }

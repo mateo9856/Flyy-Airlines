@@ -1,2 +1,40 @@
-﻿body {
+﻿.quickReservations {
+    position:absolute;
+    line-height: 20px;
+    border-radius: 10px;
+    background-color: rgba(78, 0, 131, 100);
+    color: rgba(16, 16, 16, 100);
+    font-size: 14px;
+}
+
+.quickSearchText {
+    color: rgba(136, 136, 136, 100);
+    font-size: 14px;
+    text-align: left;
+    font-family: Roboto;
+    border: 1px solid rgba(187, 187, 187, 100);
+}
+
+/*
+    Media max 721px mobile Phone
+    Min 722 PC/Tablet
+*/
+
+@media (min-width:722px) {
+    .quickReservations {
+        left: 1370px;
+        top: 0px;
+        width: 276px;
+        height: 203px;
+    }
+    .quickSearchText {
+        width: 200px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 721px) {
+    .quickReservations {
+
+    }
 }
