@@ -2,7 +2,7 @@
 import { MdDragHandle } from 'react-icons/md';
 import FetchDatas from '../../FetchDatas';
 import "../css/Header/quickSearch.css";
-const QuickSearch = () => {
+const QuickSearch = ({ type }) => {
     const [value, setValue] = useState({
         text1: "",
         text2: ""
@@ -20,17 +20,18 @@ const QuickSearch = () => {
             changedValue: e.target.value
         })
         if (changedValue.value >= 3) {
-            FetchDatas.Get('api/Flights/Name/' + changedValue.value, setFindValue);//implement new on fetchdatas.js
+            FetchDatas.GetAll('api/Flights/Name/' + changedValue.value, setFindValue);//if doesnt work implement in fetchDatas
         }
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        //redirect to concrete summary url
+        //redirect to concrete summary url with parameters
+        //build summary component
     }
 
     return (
-        <div className="">
+        <div className="quickSearchPosition">
             <div className="quickReservations">
                 <h6 className="text-white text-center text-uppercase">SZYBKIE WYSZUKIWANIE</h6>
                     <form onSubmit={handleSubmit}>

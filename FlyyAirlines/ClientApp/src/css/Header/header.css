@@ -1,2 +1,11 @@
-﻿body {
+﻿.headerContainer {
+    background-image:url("../../images/airplane.jpg");
+}
+
+@media (min-width:722px) {
+
+}
+
+@media (max-width:721px) {
+
 }
