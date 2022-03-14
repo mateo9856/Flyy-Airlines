@@ -244,6 +244,7 @@ namespace FlyyAirlines.Controllers
                     id = user.Id,
                     user = user.UserName,
                     userRole = role,
+                    permissions = role,
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo
                 });

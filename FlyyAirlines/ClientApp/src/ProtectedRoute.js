@@ -6,7 +6,7 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => {
     const [context, setContext] = useContext(AppContext);
     return (
         <Route {...rest} render={props => {
-            if (context.isLogged && context.userRole === "Admin") {
+            if (context.isLogged && context.userRole === "Admin" || context.userRole === "Employee") {
                 return <Component {...props} />;
             } else {
                 return <Redirect to={{

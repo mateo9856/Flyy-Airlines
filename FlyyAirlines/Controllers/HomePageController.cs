@@ -2,6 +2,7 @@
 using FlyyAirlines.Models;
 using FlyyAirlines.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -36,9 +37,14 @@ namespace FlyyAirlines.Controllers
                                             Count = flightName.Count()
                                         };
                 return Ok(GetTopReservation.First());
-            } catch (Exception ex)
+            }
+            catch (SqlException sqlEx)
             {
-                throw new Exception("Reservations doesn't exist");
+                return StatusCode(500, "Cannot load Sql server!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Error!");
             }
 
         }

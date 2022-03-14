@@ -3,28 +3,28 @@
         id: 0,
         name: 'Pomoc techniczna',
         icon: 'fa-solid fa-comment',
-        permissions: "ALL",
+        permissions: ["ALL"],
         to: '/helpdesk'
     },
     {
         id: 1,
         name: 'Zaloguj/Wyloguj',
         icon: 'fa-solid fa-user',
-        permissions: "ALL",
+        permissions: ["ALL"],
         to: '/login'
     },
     {
         id: 2,
         name: 'Moje rezerwacje',
         icon: 'fa-solid fa-clipboard-list',
-        permissions: ["USER"],
+        permissions: ["USER", "EMPLOYEE", "ADMIN", "SUPERADMIN"],
         to: '/myReservations'
     },
     {
         id: 3,
         name: 'O nas',
         icon: 'fa-solid fa-users',
-        permissions: "ALL",
+        permissions: ["ALL"],
         to: '/aboutus'
 
     },
@@ -32,14 +32,14 @@
         id: 4,
         name: 'Aktualne wyloty',
         icon: 'fa-solid fa-plane',
-        permissions: "ALL",
+        permissions: ["ALL"],
         to: '/flights'
     },
     {
         id: 5,
         name: 'Aktualności',
         icon: 'fa-solid fa-newspaper',
-        permissions: "ALL",
+        permissions: ["ALL"],
         to: '/messages'
     },
     {

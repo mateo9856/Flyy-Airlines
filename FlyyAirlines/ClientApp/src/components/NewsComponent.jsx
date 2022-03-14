@@ -2,7 +2,7 @@
 import { AppContext } from "../AppContext";
 import FetchDatas from "../FetchDatas";
 
-const Messages = (props) => {
+const NewsComponent = (props) => {
     const [context, setContext] = useContext(AppContext);
 
     const [Messages, setMessages] = useState([]);
@@ -31,4 +31,4 @@ const Messages = (props) => {
     )
 }
 
-export default Messages;
+export default NewsComponent;

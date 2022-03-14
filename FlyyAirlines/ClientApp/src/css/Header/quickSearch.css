@@ -7,15 +7,15 @@
     font-size: 14px;
 }
 
-.quickSearchPosition {
 
-}
 
 .quickSearchText {
     color: rgba(136, 136, 136, 100);
     font-size: 14px;
     text-align: left;
     font-family: Roboto;
+    font-weight:bold;
+    text-align:center;
     border: 1px solid rgba(187, 187, 187, 100);
 }
 
@@ -26,19 +26,20 @@
 
 @media (min-width:722px) {
     .quickReservations {
-        left: 1370px;
+        right: 0px;
         top: 0px;
-        width: 276px;
-        height: 203px;
     }
     .quickSearchText {
         width: 200px;
         height: 30px;
     }
+    .quickSearchPosition {
+    }
 }
 
 @media (max-width: 721px) {
     .quickReservations {
-
+        top:100px;
+        width:100%;
     }
 }
