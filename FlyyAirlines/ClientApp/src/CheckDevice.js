@@ -1,16 +1,16 @@
 ﻿class CheckDevice {
 
     constructor() {
-        this.height = window.innerWidth;
+        this.width = window.innerWidth;
+        this.mobile = false;
     }
 
     SetDeviceWidth() {
-        this.height = window.innerWidth;
-        console.log(this.height);
+        this.width = window.innerWidth;
+        this.mobile = this.isAMobile();
     }
 
     isAMobile() {
-        console.log("render mobile");
         return window.innerWidth < 722 ? true : false;
     }
 }

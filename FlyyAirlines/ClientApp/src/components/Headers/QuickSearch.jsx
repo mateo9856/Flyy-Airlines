@@ -14,6 +14,8 @@ const QuickSearch = ({ type }) => {
         val2: ""
     });
 
+    const [search, setSearch] = useState(false);
+
     const handleChange = (e) => {
         const targetname = [e.target.name];
         setValue({
@@ -25,9 +27,6 @@ const QuickSearch = ({ type }) => {
         }
     }
 
-    const handleClick = () => {
-
-    }
 
     const RenderType = () => {
         const SearchLayout = (<div className="quickSearchPosition">
@@ -35,12 +34,12 @@ const QuickSearch = ({ type }) => {
                 <h6 className="text-white text-center text-uppercase">SZYBKIE WYSZUKIWANIE</h6>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="leavings">
-                        <input type="text" className="quickSearchText" value={value.text1} name="text1" onChange={handleChange} placeholder="Wylot z:" />
+                        <input type="text" className="quickSearchText form-control inputWidth" value={value.text1} name="text1" onChange={handleChange} placeholder="Wylot z:" />
                     </label>
                     <label htmlFor="destiantion">
-                        <input type="text" className="quickSearchText" value={value.text2} name="text2" onChange={handleChange} placeholder="Wylot do:" />
+                        <input type="text" className="quickSearchText form-control inputWidth" value={value.text2} name="text2" onChange={handleChange} placeholder="Wylot do:" />
                     </label>
-                    <input className="btn btn-primary" disabled type="submit" value="Przejdź!" />
+                    <input className="btn btn-primary inputWidth" disabled type="submit" value="Przejdź!" />
                 </form>
             </div>
         </div>);
@@ -48,8 +47,8 @@ const QuickSearch = ({ type }) => {
         switch (type) {
             case "mobile":
                 return (<>
-                    <FontAwesomeIcon icon="magnifying-glass" onClick={handleClick} />
-                    {SearchLayout}
+                    <FontAwesomeIcon icon="magnifying-glass" className = "searchIconPos" onClick={() => setSearch(!search)} />
+                    {search ? SearchLayout : ""}
                 </>)
             case "standard":
                 return (<>{SearchLayout}</>);

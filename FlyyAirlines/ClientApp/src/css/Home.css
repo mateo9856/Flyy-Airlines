@@ -33,9 +33,6 @@
     flex-direction: column;
     justify-content: center;
 }
-.quickReservations form input {
-    width:180px;
-}
 
 .searchDiv {
     background-image: url("../images/airplane.jpg");

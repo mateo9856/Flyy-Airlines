@@ -1,13 +1,21 @@
 ﻿.quickReservations {
     position:absolute;
     line-height: 20px;
-    border-radius: 10px;
+    
     background-color: rgba(78, 0, 131, 100);
     color: rgba(16, 16, 16, 100);
     font-size: 14px;
 }
 
+.quickReservations form {
+    position:relative;
+}
 
+.searchIconPos {
+    position:absolute;
+    right:5px;
+    top:5px;
+}
 
 .quickSearchText {
     color: rgba(136, 136, 136, 100);
@@ -28,6 +36,7 @@
     .quickReservations {
         right: 0px;
         top: 0px;
+        border-radius: 10px;
     }
     .quickSearchText {
         width: 200px;
@@ -35,11 +44,18 @@
     }
     .quickSearchPosition {
     }
+    .inputWidth {
+        width:180px;
+    }
 }
 
 @media (max-width: 721px) {
     .quickReservations {
-        top:100px;
-        width:100%;
+        bottom:0;
+        height:90vh;
+        min-width:100%;
+    }
+    .quickReservations form {
+        margin-left:auto;
     }
 }
