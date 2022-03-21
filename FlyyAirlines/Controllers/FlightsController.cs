@@ -47,6 +47,14 @@ namespace FlyyAirlines.Controllers
             return Ok(GetDetails);
         }
 
+        [Route("RandomFlight")]
+        [HttpGet]
+        public IActionResult GetRandomFlight()
+        {
+            var rndFlight = _planesData.RandomFlight();
+            return rndFlight != null ? Ok(rndFlight) : NotFound();
+        }
+
         [Route("GetAirplanes")]
         [HttpGet]
         public IActionResult GetAirplanes()

@@ -31,6 +31,6 @@
     .menuLayout {
         width:100%;
         height:90vh;
-        bottom:0;
+        top:180px;
     }
 }

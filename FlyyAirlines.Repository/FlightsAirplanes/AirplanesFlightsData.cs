@@ -78,5 +78,13 @@ namespace FlyyAirlines.Repository.FlightsAirplanes
             var FindFlight = await _dbContext.Flights.Where(c => (c.FromCity == phrase || c.ToCity == phrase)).ToListAsync();
             return FindFlight;
         }
+
+        public Flight RandomFlight()
+        {
+            var rnd = new Random().Next(0, _dbContext.Flights.Count() - 1);
+            var Flight = _dbContext.Flights.ElementAt(rnd);
+            return Flight;
+
+        }
     }
 }

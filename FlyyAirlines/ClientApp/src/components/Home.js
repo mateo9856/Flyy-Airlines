@@ -33,30 +33,31 @@ const Home = () => {
     };
     return (
         <div className="homePage">
-            <section className="bestFlights text-center">
-                <h3 style={{ marginTop: "5px" }}><b>Bestseller</b></h3>
-                <div className="bestFlightsFlex">
-                    {Object.keys(BestSeller).length > 0 && <>
-                        <h4>{BestSeller.flight}</h4>
-                        <h6>Popularity: {BestSeller.count}</h6>
-                    </>}
+            <section className="bestFlights">
+                <div className="FlightProposals">
+                    <span className="textSpacing">POLECANE</span><br />
+                    <span style={{ marginLeft:"75px" }} className="textSpacing">WYLOTY<span className="yellowDot">.</span></span>
+                </div>
+                <div className="flightsSlide">
+                    <p></p>
+                    <p></p>
                 </div>
             </section>
-            {News.length >= 1 ?
-                <section className="moreInformations">
-                    <h4>Wiadomoœci</h4>
-                    <div className="quickNewsFlex">
-                        <ul className="flexNewsList">
-                            {News.map((news) => (
-                                <li key={news.id} className="newsCard">
-                                    <img src={window.location.origin + news.imageUrl} className="imgNewsStyle" alt="image" />
-                                    <h5>{news.topic}</h5>
-                                    <p>{news.content}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </section> : ""}
+            <section className="moreInformations">
+                {News.length >= 1 &&
+                    <ul className="flexNewsList">
+                        {News.map((news) => (
+                            <li key={news.id} className="newsCard text-center">
+                                <img src={window.location.origin + news.imageUrl} className="imgNewsStyle" alt="image" />
+                                <h6 className = "newsFont">{news.topic}</h6>
+                            </li>
+                        ))}
+                    </ul>
+                }</section>
+            <section className="usersOpinion">
+                <div className="commentUser"></div>
+                <div className="commentContent"></div>
+            </section>
         </div>
     );
 };

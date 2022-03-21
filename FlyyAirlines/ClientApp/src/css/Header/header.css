@@ -1,6 +1,7 @@
 ﻿.headerContainer {
-    background-image:url("../../images/airplane.jpg");
+    background:url('../../images/airplane.jfif');
     min-height:180px;
+    position:relative;
 }
 
 .barsIcon {

@@ -46,8 +46,8 @@ function App() {
     return (
         <div>
             <AppContext.Provider value={[context, setContext]}>
-                <Header />
                 <Container>
+                    <Header />
                     <RouteSwitches />
                 </Container>
             </AppContext.Provider>

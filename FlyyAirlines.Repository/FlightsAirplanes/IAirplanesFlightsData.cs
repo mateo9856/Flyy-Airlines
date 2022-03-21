@@ -12,5 +12,6 @@ namespace FlyyAirlines.Repository.FlightsAirplanes
         Task<List<Flight>> FindFlightByPhrase(string phrase);
         Task<bool> CheckReservesFromFlights(Reservation reservation, Flight flight);
         string CalculateFlightTime(string[] datas);
+        Flight RandomFlight();
     }
 }
