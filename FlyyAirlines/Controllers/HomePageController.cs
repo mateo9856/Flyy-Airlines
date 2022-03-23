@@ -46,7 +46,13 @@ namespace FlyyAirlines.Controllers
             {
                 return StatusCode(500, "Internal Error!");
             }
+        }
 
+        [Route("RandomComment")]
+        [HttpGet]
+        public IActionResult GetRandomComment()
+        {//implement comments service
+            return Ok();
         }
 
         [Route("News")]

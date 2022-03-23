@@ -3,13 +3,28 @@
     position: absolute;
 }
 
+.navMenuList {
+    display: flex;
+    position:relative;
+    flex-direction:column;
+    max-height:180px;
+    flex-wrap: wrap;
+}
+
+.blockLeft {
+    position:absolute;
+    left:0;
+}
+
+.blockRight {
+    position:absolute;
+    right:0;
+}
+
 .listClass {
     list-style-type: none;
     color: white;
     text-decoration: none;
-    display: flex;
-    flex-wrap:wrap;
-    justify-content:space-between;
 }
 
 .menuLayout a {
