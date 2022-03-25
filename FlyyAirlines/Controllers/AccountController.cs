@@ -1,15 +1,13 @@
 ﻿using FlyyAirlines.Data.Models;
 using FlyyAirlines.DTO;
 using FlyyAirlines.Models;
+using FlyyAirlines.Repository.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -23,20 +21,10 @@ namespace FlyyAirlines.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
-
-        private readonly SignInManager<User> _signInManager;
-
-        private readonly AppDBContext _dbContext;
-
-        private readonly IConfiguration _configuration;
-
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, AppDBContext dbContext)
+        private readonly IAccountRepository _accountRepository;
+        public AccountController(IAccountRepository accountRepository)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
-            _dbContext = dbContext;
+            _accountRepository = accountRepository;
         }
 
         [Route("GetUser")]
@@ -45,9 +33,9 @@ namespace FlyyAirlines.Controllers
         public async Task<IActionResult> GetCurrentUser()
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var claim = claimsIdentity.Claims.Where(c => c.Type.Contains("email")).Select(x => x.Value).FirstOrDefault();
 
-            var GetUser = await _userManager.FindByEmailAsync(claim);
+            var GetUser = await _accountRepository.GetCurrentUser(claimsIdentity);
+
             if(GetUser == null)
             {
                 return Unauthorized();
@@ -61,24 +49,13 @@ namespace FlyyAirlines.Controllers
         public async Task<IActionResult> GetUserRole()
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var claim = claimsIdentity.Claims.Where(c => c.Type.Contains("email")).Select(x => x.Value).FirstOrDefault();
+            var GetUser = await _accountRepository.GetUserRole(claimsIdentity);
 
-            var GetUser = await _userManager.FindByEmailAsync(claim);
             if (GetUser == null)
             {
                 return Unauthorized();
             }
-
-            if(GetUser.Role == "Employee")
-            {
-                var GetActualUser = await _dbContext.Employees.FirstOrDefaultAsync(d => d.User == GetUser);
-                return Ok(GetActualUser.WorkPosition);
-            }
-            else
-            {
-                return Ok(GetUser.Role);
-            }
-
+            return Ok(GetUser);
         }
 
         [Route("register")]
@@ -212,44 +189,9 @@ namespace FlyyAirlines.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
-            {
-                var userRoles = await _userManager.GetRolesAsync(user);
-                
-                var authClaims = new[]
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-                string role = "";
-                foreach(var userRole in userRoles)
-                {
-                     role = userRole;
-                }
+            var Login = await _accountRepository.Login(model);
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-                var token = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddYears(3),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
-
-                return Ok(new
-                {
-                    id = user.Id,
-                    user = user.UserName,
-                    userRole = role,
-                    permissions = role,
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
-            }
-            return Unauthorized();
+            return Login != null ? Ok(Login) : Unauthorized(); 
         }
 
 
